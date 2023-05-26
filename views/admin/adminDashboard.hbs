@@ -1,0 +1,233 @@
+<body class="cbp-spmenu-push">
+    <div class="main-content" style="background-color:#1A1A1A ;">
+        <div class="container-fluid py-4 bg-dark text-white mt-5" style="background-color: #1A1A1A;padding: 5%;">    
+            <div class="row mt-5" style="padding-left: 24rem;"> 
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style="  border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: #1A1A1A;">{{productCount}}</span> <br>
+                            <span>Total Products</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: #1A1A1A;">{{orderCount}}</span> <br>
+                            <span>Total Orders</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: #1A1A1A;">Rs.{{totalRevenue}}</span> <br>
+                            <span>Total Revenue</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5" style="padding-left: 14rem;">
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: #1A1A1A;">{{category}}</span> <br>
+                            <span>Total Categories</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: #1A1A1A;">{{cancelCount}}</span> <br>
+                            <span>Total Cancels</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                        <div class="stats">
+                            <span style="color: rgb(228, 235, 243);">Rs.{{totalCoupon}}</span> <br>
+                            <span>Total Coupons</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <section class="py-5 mx-3 container-fluid" style="background-color: #1A1A1A; padding: 5%;">
+            <div class="row" style="margin-left: 12rem;">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
+                        <canvas id="bar-chart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
+                        <canvas id="circleChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
+                        <canvas id="paymentChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
+
+<!-- Include Chart.js library -->
+{{!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
+{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script> --}}
+
+<script>
+    const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const weekName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const monthlyProfit = Array(12).fill(0);
+    const weekly = Array(7).fill(0);
+
+    const barChart = document.getElementById("bar-chart").getContext('2d');
+    const circleChart = document.getElementById("circleChart").getContext('2d');
+    const catChart = document.getElementById("categoryChart").getContext('2d');
+    const paymentChart = document.getElementById("paymentChart").getContext('2d');
+
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/admin/chart-data', {
+                method: 'get',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(res => res.json())
+            .then(res => {
+                const {
+                    data,
+                    weeklyReport,
+                    catData,
+                    paymentData
+                } = res;
+
+                data.forEach(item => {
+                    monthlyProfit[item.month - 1] = item.total;
+                });
+
+                const months = monthName;
+                const monthlyData = {
+                    labels: months,
+                    datasets: [{
+                        label: 'Monthly sales',
+                        backgroundColor: "blue",
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: monthlyProfit,
+                    }]
+                };
+                const monthlyConfig = {
+                    type: 'line',
+                    data: monthlyData,
+                    options: {}
+                };
+                const chart1 = new Chart(barChart, monthlyConfig);
+
+                weeklyReport.forEach(item => {
+                    weekly[item.date - 1] = item.total;
+                });
+
+                const labels = weekName;
+                const weeklyData = {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Weekly sales',
+                        backgroundColor: 'red',
+                        borderColor: 'red',
+                        data: weekly,
+                    }]
+                };
+                const weeklyConfig = {
+                    type: 'bar',
+                    data: weeklyData,
+                    options: {}
+                };
+                const chart2 = new Chart(circleChart, weeklyConfig);
+
+                const catLabels = ["Monsoon", "Winter", "Spring"];
+                const catValues = catLabels.map((label) => {
+                    const cat = catData.find((item) => item._id === label);
+                    return cat ? cat.total : 0;
+                });
+                const catColors = ["green", "orange", "purple"]; // Define colors for each category
+                const catDataChart = {
+                    labels: catLabels,
+                    datasets: [{
+                        label: 'Incoming data',
+                        backgroundColor: catColors,
+                        borderColor: catColors,
+                        data: catValues,
+                    }]
+                };
+                const catConfig = {
+                    type: 'doughnut',
+                    data: catDataChart,
+                    options: {}
+                };
+                const chart3 = new Chart(catChart, catConfig);
+
+
+                // Process payment data
+                const paymentLabels = paymentData.map(item => {
+                    if (item.PaymentMethod === "Razorpay") {
+                        return "Razorpay";
+                    } else if (item.PaymentMethod === "cod") {
+                        return "COD";
+                    } else if (item.PaymentMethod === "wallet") {
+                        return "Wallet";
+                    } else {
+                        return item.PaymentMethod;
+                    }
+                });
+                const paymentValues = paymentData.map(item => item.total);
+
+                const paymentColors = ["green", "orange", "purple"]; // Define colors for payment methods
+                const paymentDataChart = {
+                    labels: paymentLabels,
+                    datasets: [{
+                        label: 'Payment methods',
+                        backgroundColor: paymentColors,
+                        borderColor: paymentColors,
+                        data: paymentValues,
+                    }]
+                };
+                const paymentConfig = {
+                    type: 'pie',
+                    data: paymentDataChart,
+                    options: {}
+                };
+                const chart4 = new Chart(paymentChart, paymentConfig);
+            });
+    });
+</script>
+
+
+<!-- Additional scripts for amcharts -->
+<script src="js/amcharts.js"></script>
+<script src="js/serial.js"></script>
+<script src="js/export.min.js"></script>
+<link rel="stylesheet" href="css/export.css" type="text/css" media="all" />
+<script src="js/light.js"></script>
+<script src="js/index1.js"></script>
+<!-- Additional scripts for amcharts -->

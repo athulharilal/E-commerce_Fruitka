@@ -1,0 +1,102 @@
+<div class="container-fluid" style="padding: 2%; margin-left: 2%;">
+  <div class="row px-xl-5 pt-5">
+    <div class="table-responsive mb-5">
+      <div class="justify-content-end d-flex mb-3" style="margin: 2rem;">
+        <a class="btn btn-info" href="/admin/add-coupon">Add Coupon</a>
+      </div>
+      {{#if coupExistErr}}
+      <p class="error text-danger">{{coupExistErr}}</p>
+      {{/if}}
+      <div class="table-responsive mb-5" style="overflow-x: auto;">
+        <table class="table text-center" id="myTable">
+          <thead class="thead-light">
+            <tr>
+              <th class="d-none d-md-table-cell">No</th>
+              <th class="d-none d-md-table-cell">Date</th>
+              <th class="d-none d-md-table-cell">Delivery Address</th>
+              <th class="d-none d-md-table-cell">Mobile</th>
+              <th class="d-none d-md-table-cell">Amount</th>
+              <th class="d-none d-sm-table-cell">Payment</th>
+              <th>Status</th>
+              <th class="d-none d-sm-table-cell">Options</th>
+              <th class="d-none d-md-table-cell">Products</th>
+            </tr>
+          </thead>
+
+          <tbody class="align-middle">
+            {{#each orderData}}
+            <tr>
+              <td>{{inc @index}}</td>
+              <td class="align-middle">{{this.date}}</td>
+              <td class="align-middle">{{this.deliveryDetails.address}}</td>
+              <td class="align-middle">{{this.deliveryDetails.mobile}}</td>
+              <td class="align-middle">Rs.{{this.totalAmount}}</td>
+              <td class="align-middle">{{this.PaymentMethod}}</td>
+              <td class="align-middle">{{this.status}}</td>
+              <td>
+                {{#if this.is_Cancelled}}
+                <p class="text-danger font-weight-bold text-center">Cancelled Successfully</p>
+                {{else}}
+                {{#if this.is_delivered}}
+                <p class="text-success font-weight-bold text-center">Delivered Successfully</p>
+                {{else}}
+                <form action="/admin/change-order-status" method="post">
+                  <input type="text" name="OrderId" value="{{this._id}}" hidden>
+                  <select name="status" class="form-select" aria-label="Default select example">
+                    <option selected>Select status</option>
+                    <option value="Shipped">Shipped</option>
+                    <option value="Delivered">Delivered</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Placed">Placed</option>
+                    <option value="Pending">Pending</option>
+                  </select>
+                  <input type="text" name="user" value="{{../userDetails._id}}" hidden>
+                  <button type="submit" class="btn btn-dark">Submit</button>
+                </form>
+                {{/if}}
+                {{/if}}
+              </td>
+              <td class="align-middle">
+                <a class="btn btn-dark" href="/admin/view-order-products/{{this._id}}">
+                  <i class="fa fa-eye" aria-hidden="true"></i>
+                </a>
+              </td>
+              {{#if this.is_Cancelled}}
+              <td class="align-middle"></td>
+              {{else}}
+              {{#if this.is_delivered}}
+              {{#if this.is_returned}}
+              <!-- Handle returned products -->
+              {{else}}
+              <!-- Handle non-returned delivered products -->
+              {{/if}}
+              {{else}}
+              <!-- Handle pending or shipped products -->
+              {{/if}}
+              {{/if}}
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script>
+  // Initialize DataTable
+  $(document).ready(function () {
+    $('#myTable').DataTable();
+  });
+</script>
+
+<style>
+  .table td,
+  .table th {

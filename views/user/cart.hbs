@@ -1,0 +1,147 @@
+<div class="cart-section mt-150 mb-150">
+  <div class="container">
+    {{#if products}}
+    <div class="row">
+      <div class="col-lg-8 col-md-12">
+        <div class="cart-table-wrap">
+          <table class="cart-table">
+            <thead class="cart-table-head">
+              <tr class="table-head-row">
+                <th class="product-image">Product Image</th>
+                <th class="product-name">Name</th>
+                <th class="product-price">Price</th>
+                <th class="product-quantity">Quantity</th>
+                <th class=""></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each products}}
+              <tr class="table-body-row">
+                <td class="product-image"><img style="width:70px;height:70px;" src="/product-images/{{this.product.images.[0]}}" alt="" /></td>
+                <td class="product-name">{{this.product.Name}}</td>
+                <td class="product-price">Rs{{this.product.Price}}</td>
+                <td>
+                  <div class="input-group quantity mx-auto" style="max-width: 200px;">
+                    <div class="input-group-btn">
+                      {{#if quantity}}
+                      <button class="btn btn-sm btn-dark btn-minus" onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',-1)">
+                        <i class="fa fa-minus"></i>
+                      </button>
+                      {{/if}}
+                    </div>
+                    <input type="text" id="{{this.product._id}}" class="form-control form-control-sm bg-light border-0 text-center" value="{{this.quantity}}" />
+                    <div class="input-group-btn">
+                      <button class="btn btn-sm btn-dark btn-plus" id onclick="changeQuantity('{{this._id}}','{{this.product._id}}','{{../user._id}}',1)">
+                        <i class="fa fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </td>
+                <td><a class="btn btn-danger" onclick="deleteCartItem('{{this.product._id}}','{{this._id}}')">Delete</a></td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="total-section">
+          <table class="total-table">
+            <thead class="total-table-head">
+              <tr class="table-total-row">
+                <th>Total</th>
+                <th>Price</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="total-data">
+                <td><strong>Shipping: </strong></td>
+                <td>Free Shipping</td>
+              </tr>
+              <tr class="total-data">
+                <td><strong>Total: </strong></td>
+                <td id=""><i class="fa fa-light fa-indian-rupee-sign"></i><span id="total">Rs.{{totalValue}}</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="cart-buttons">
+            <a href="/placeorder" class="float-right boxed-btn black">Checkout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {{else}}
+    <div class="cart-section mt-150 mb-150 align-items-center">
+      <div class="container d-flex justify-content-center">
+        <h3>Your <span class="orange-text text-center  border mt-2 ml-auto mr-auto ">Cart Is Empty..!!</span></h3>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>
+<!-- end cart -->
+<script>
+  // JavaScript code...
+</script>
+
+<style>
+  /* Additional CSS styles for responsiveness */
+
+  /* Cart table responsiveness */
+  .cart-section {
+    overflow-x: auto;
+  }
+
+  /* Cart table column widths */
+  .cart-table th.product-image {
+    width: 20%;
+  }
+
+  .cart-table th.product-name {
+    width: 25%;
+  }
+
+  .cart-table th.product-price {
+    width: 15%;
+  }
+
+  .cart-table th.product-quantity {
+    width: 20%;
+  }
+
+  /* Cart table image size */
+  .cart-table .product-image img {
+    max-width: 70px;
+    max-height: 70px;
+  }
+
+  /* Quantity input responsiveness */
+  .quantity .input-group-btn {
+    white-space: nowrap;
+  }
+
+  /* Total table responsiveness */
+  .total-section {
+    overflow-x: auto;
+  }
+
+  /* Media queries for smaller screens */
+  @media (max-width: 767px) {
+    .cart-table th.product-image,
+    .cart-table th.product-name,
+    .cart-table th.product-price,
+    .cart-table th.product-quantity {
+      width: auto;
+    }
+
+    .cart-table .product-image img {
+      max-width: 50px;
+      max-height: 50px;
+    }
+
+    .quantity .input-group {
+      max-width: 150px;
+    }
+  }
+</style>

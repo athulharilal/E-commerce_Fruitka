@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+</head>
+<body>
+    <div class="form-grids row form-grids-right vh-1000 gradient-custom header-center" style="margin-top: 18%">
+        <div class="widget-shadow container py-5 h-100" data-example-id="basic-forms">
+            <div class="form-title">
+                <h4>Login Form:</h4>
+            </div>
+            <div class="form-body">
+                <form class="form-horizontal" action="/admin/adminlogin" method="post" onsubmit="return validateForm()">
+                    <div class="form-group">
+                        <label for="inputEmail" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-9">
+                            <input type="email" name="Email" class="form-control" id="inputEmail" placeholder="Email" onkeyup="validateEmail()" required>
+                            <span id="emailError" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputPassword" class="col-sm-2 control-label">Password</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" name="Password" id="inputPassword" placeholder="Password" onkeyup="validatePassword()" required>
+                            <span id="passwordError" class="error"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox"> Remember me
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-2">
+                        <button type="submit" class="btn btn-default">Sign in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function validateEmail() {
+            var emailInput = document.getElementById('inputEmail');
+            var emailError = document.getElementById('emailError');
+            var email = emailInput.value.trim();
+
+            if (email === '') {
+                emailError.innerHTML = "This field is required";
+                return false;
+            }
+            if (!email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+                emailError.innerHTML = "Invalid email format";
+                return false;
+            }
+            emailError.innerHTML = '';
+            return true;
+        }
+
+        function validatePassword() {
+            var passwordInput = document.getElementById('inputPassword');
+            var passwordError = document.getElementById('passwordError');
+            var password = passwordInput.value.trim();
+
+            if (password === '') {
+                passwordError.innerHTML = "This field is required";
+                return false;
+            }
+            if (password.length < 6) {
+                passwordError.innerHTML = "Minimum 6 characters required";
+                return false;
+            }
+            if (!password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)) {
+                passwordError.innerHTML = "Password must contain at least 1 special character and 1 number";
+                return false;
+            }
+            passwordError.innerHTML = '';
+            return true;
+        }
+
+        function validateForm() {
+            var isValidEmail = validateEmail();
+            var isValidPassword = validatePassword();
+
+            return isValidEmail && isValidPassword;
+        }
+    </script>
+</body>
+</html>

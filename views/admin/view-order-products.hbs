@@ -1,0 +1,50 @@
+<div class="container-fluid" style="margin: 5rem auto; margin-left: 15rem;">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center font-weight-bold mb-4">Ordered Products</h2>
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover text-center">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Product</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Coupon</th>
+                            <th scope="col">Discount</th>
+                            <th scope="col">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each products}}
+                        <tr>
+                            <th scope="row">{{inc @index}}</th>
+                            <td>
+                                <img src="/product-images/{{this.product.images.[0]}}" alt="Product Image"
+                                    style="width: 50px;">
+                            </td>
+                            <td>{{this.product.Name}}</td>
+                            <td>{{this.quantity}}</td>
+                            <td>
+                                {{#if this.CouponName}}
+                                {{this.CouponName}}
+                                {{else}}
+                                NIL
+                                {{/if}}
+                            </td>
+                            <td>
+                                {{#if this.discountValue}}
+                                {{this.discountValue}}
+                                {{else}}
+                                NIL
+                                {{/if}}
+                            </td>
+                            <td>Rs.{{this.product.Price}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="container" style="margin: 17rem; margin-top: 8rem;">
+  <div class="row">
+    <a href="/admin/add-categories" class="btn btn-success ml-auto mt-2">Add Categories</a>
+  </div>
+
+  
+  <table class="table table-striped mt-4" id="categoryTable">
+    <thead>
+      <tr>
+        <th scope="col">No</th>
+        <th scope="col">Category</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each category}}
+      <tr>
+        <th scope="row">{{inc @index}}</th>
+        <td>{{this.category}}</td>
+        <td>
+          <a href="/admin/edit-category/{{this._id}}" class="btn btn-success">Edit Category</a>
+          <a href="#" class="btn btn-danger delete-category" data-id="{{this._id}}"
+            data-name="{{this.category}}">Delete</a>
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+  
+</div>
+
+<!-- Add popup modal -->
+<div id="deleteConfirmationModal" class="modal fade" tabindex="-1" role="dialog"
+  aria-labelledby="deleteConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteConfirmationModalLabel">Confirm Delete</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Do you want to delete <span id="categoryName"></span>?</p>
+        <div id="errorMessage" class="text-danger"></div>
+        <div id="successMessage" class="text-success">
+          {{#if deleteResponse.message}}
+          {{deleteResponse.message}}
+          {{/if}}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="deleteButton" type="button" class="btn btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+  // AJAX request for deleting a category
+  jQuery(document).on("click", ".delete-category", function () {
+    const categoryId = jQuery(this).data("id");
+    const categoryName = jQuery(this).data("name");
+    console.log(categoryId," categoryId "+ categoryName," categoryName")
+
+    // Update category name in the modal
+    jQuery("#categoryName").text(categoryName);
+
+    // Clear previous error and success messages
+    jQuery("#errorMessage").empty();
+    jQuery("#successMessage").empty();
+
+    // Show the popup modal
+    jQuery("#deleteConfirmationModal").modal("show");
+
+    // Handle delete button click
+    jQuery("#deleteButton").click(function () {
+      jQuery.ajax({
+        url: `/admin/delete-categories/${categoryId}`,
+        type: "post",
+        success: function (response) {
+          console.log(response.message," message")
+          console.log(' api call')
+          jQuery("#successMessage").text(response.message);
+          jQuery("#successMessage").show();
+          // Hide the modal after a delay
+          setTimeout(function () {
+            jQuery("#deleteConfirmationModal").modal("hide");
+          }, 2000);
+
+          // Redirect to the view category page
+          window.location.href = "/admin/view-category";
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+          // Display the error message in the modal
+          jQuery("#errorMessage").text(jqXHR.responseText);
+        }
+      });
+    });
+  });
+</script>

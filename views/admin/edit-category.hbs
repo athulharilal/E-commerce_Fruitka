@@ -1,0 +1,21 @@
+{{! form to add products }}
+<section>
+  <div class="container " style="margin: 25rem; margin-top: 13rem;">
+    <div class="row">
+      <div class="col-md-6 mt-5">
+        <h2 class="text-center text-primary mt-2">Edit Category</h2>
+
+        <form action="/admin/edit-category" method="post" enctype="multipart/form-data">
+
+          {{! entype is used to upload file }}
+          <input type="text" name="id" value="{{category._id}}" hidden />
+          <label for="">Category</label>
+          <input type="text" name="category" class="form-control" value="{{category.category}}" />
+
+          <button type="submit" class="btn btn-success mt-4 mb-4">SUBMIT</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

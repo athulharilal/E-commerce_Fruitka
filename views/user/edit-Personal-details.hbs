@@ -1,0 +1,387 @@
+{{!-- <div class="ml-auto" style="width:74%"> --}}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 col-lg-12 mt-5">
+            <!-- ANOTHER PROFILE VIEW -->
+            <section class="container mt-5 mb-5 ">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <div class="shadow p-3 rounded">
+
+                            <table class="table table-borderless ">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" class="border-0 ">
+                                            <div class="cart-section mt-80 mb-80 align-items-center">
+                                                <div class="container d-flex justify-content-center">
+                                                    <h3>Your <span
+                                                            class="orange-text text-center border mt-2 ml-auto mr-auto">
+                                                            Profile Details </span></h3>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <form action="/edit-Personal-details" method="post">
+                                        <tr>
+                                            <td class="border-0 text-dark mb-1" width="30%">
+                                                <h3>User Name</h3>
+                                            </td>
+                                            <td class="border-0 text-dark"> <span class="ms-2">
+                                                    <input type="text" name="Name" value="{{userDetails.Name}}"
+                                                        class="form-control form-control-lg" required />
+                                                </span> </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-dark mb-1">
+                                                <h3>Email</h3>
+                                            </td>
+                                            <td class="text-dark"> <span class="ms-2">
+                                                    <input type="text" name="Email" value="{{userDetails.Email}}"
+                                                        class="form-control form-control-lg" required />
+                                                </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-dark mb-1">
+                                                <h3>Mobile Number</h3>
+                                            </td>
+                                            <td class="text-dark"> <span class="ms-2">
+                                                    <input type="text" name="Number" value="{{userDetails.Number}}"
+                                                        class="form-control form-control-lg" required />
+                                                </span>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <h3>Wallet:</h3>
+                                            </td>
+                                            <td><span>
+                                                    <h3>Rs.{{userDetails.wallet}}</h3>
+                                                </span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class=" text-center pt-3" colspan="2">
+                                                <button class="btn btn-success" type="submit">Edit &
+                                                    Update</button>
+                                            </td>
+                                        </tr>
+                                    </form>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                {{#if userDetails.address.length}}
+
+                <div id="address" class="ps-3 pt-3 overflow-auto " style=" width: 100%; height: auto; ">
+                    <div class="cart-section mt-80 mb-80 align-items-center">
+                                    <div class="container d-flex justify-content-center">
+                                        <h3>Your <span class="orange-text text-center border mt-2 ml-auto mr-auto">
+                                                 Address </span></h3>
+                                    </div>
+                                </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">No</th>
+                                <th scope="col">Address</th>
+                                <th class="scope">Edit</th>
+                                <th scope="col">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each userDetails.address}}
+                            <tr>
+                                <th scope="row">{{inc @index}}</th>
+                                <td>
+                                    name: {{this.name}}<br>
+                                    Address: {{this.address}}<br>
+                                    Town:{{this.town}}<br>
+                                    district:{{this.district}}<br>
+                                    state: {{this.state}}<br>
+                                    PIN: {{this.pincode}}<br>
+                                    Mobile:{{this.phone}}
+                                </td>
+                                </td>
+                                <td>
+                                    <a href="/edit-address/{{this.id}}"
+                                        onclick="editAddress('{{this.id}}','{{this.name}}','{{this.address}}','{{this.town}}','{{this.district}}','{{this.state}}','{{this.pincode}}','{{this.phone}}')"
+                                        data-toggle="modal" data-target="#editAddress">
+                                        <i class="fa fa-edit fa-3x text-dark custom-icon" aria-hidden="true"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a onclick="deleteAddress(event)" href="/deleteAddress/{{this._id}}">
+                                        <i class="fas fa-trash fa-3x custom-icon"></i>
+                                    </a>
+                                </td>
+                                <style>
+                                    .custom-icon {
+                                        font-size: 3x;
+                                    }
+                                </style>
+                            </tr>
+                            {{/each}}
+                            {{else}}
+                            <tr>
+                                <div class="cart-section mt-80 mb-80 align-items-center">
+                                    <div class="container d-flex justify-content-center">
+                                        <h3>Your <span class="orange-text text-center border mt-2 ml-auto mr-auto">
+                                                Haven't Added Any Address </span></h3>
+                                    </div>
+                                </div>
+            </section>
+        </div>
+
+        </tr>
+        {{/if}}
+        </tbody>
+        </table>
+
+        <button type="button" style="background-color: rgb(55, 142, 63); width: 20rem;"
+            class="removeMb btn  text-light border mt-2 ml-auto mr-auto mb-3" data-toggle="modal"
+            data-target="#addAddress">
+            Add New Address
+        </button>
+
+    </div>
+
+    <!--Add Address Modal -->
+    <div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark  ">
+                    <h5 class="modal-title text-white text-center " id="exampleModalLabel">Add Address
+                    </h5>
+                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/add-address" method="post" id="checkout-form">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <input type="text" class="form-control mb-3 d-none" name="id" id="id" value=""
+                                    placeholder="Name">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="name" id="name" value=""
+                                    placeholder="Name">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="address" id="street_address"
+                                    placeholder="Address" value="">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="town" id="" placeholder="Town"
+                                    value="">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="district" id=""
+                                    placeholder="District" value="">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="state" id="" placeholder="State"
+                                    value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control mb-3" id="" name="pincode" placeholder="Pin Code"
+                                    value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control mb-3" name="phone" id="phone_number" min="0"
+                                    placeholder="Phone No" value="" minlength="10" maxlength="10">
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-dark w-100" type="submit">Add
+                                Address</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{!-- edit address modal --}}
+    <div class="modal fade" id="editAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-dark  ">
+                    <h5 class="modal-title text-white text-center " id="exampleModalLabel">Edit Address
+                    </h5>
+                    <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/edit-address" method="post" id="edit-address">
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <input type="text" class="form-control mb-3 d-none" name="id" id="id1" value=""
+                                    placeholder="Name">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="name" id="name1" value=""
+                                    placeholder="Name" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="address" id="address1"
+                                    placeholder="Address" value="" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="town" id="town1" placeholder="Town"
+                                    value="" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="district" id="district1"
+                                    placeholder="District" value="">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="text" class="form-control mb-3" name="state" id="state1"
+                                    placeholder="State" value="">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control mb-3" id="pincode1" name="pincode"
+                                    placeholder="Pin Code" value="" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <input type="text" class="form-control mb-3" name="phone" id="phone1" min="0"
+                                    placeholder="Phone No" value="" minlength="10" maxlength="10" required>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-dark w-100" type="submit">Edit & Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{!-- End --}}
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Modal-for-change-password -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-dark">
+                <h5 class="modal-title text-white ml-auto" id="exampleModalLabel">Change Password</h5>
+                <button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="/change-password" method="post" id="changePassword">
+
+                    <div class="form-outline mb-3">
+
+                        <label class="form-label text-center" for="form2Example27">Enter your Password</label>
+                        <input type="password" name="password" id="form2Example27" class="form-control form-control-lg"
+                            required />
+                    </div>
+                    <div class="form-outline mb-3">
+                        <label class="form-label" for="form2Example27">New Password</label>
+                        <input type="password" name="newpassword" id="form2Example27"
+                            class="form-control form-control-lg" required />
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-outline-dark">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- Modal-for-change-password-end -->
+<script>
+    function deleteAddress(event) {
+        event.preventDefault();
+
+        var link = event.currentTarget.href;
+        var addressId = link.split('/').pop(); // Extract the address ID from the URL
+
+        $.ajax({
+            url: '/deleteAddrsess/' + addressId,
+            method: 'get',
+            success: function (response) {
+                if (response.status) {
+                    Swal.fire({
+                        title: 'Address deleted!',
+                        text: 'Your address has been deleted successfully.',
+                        icon: 'success'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Failed to delete address.',
+                        icon: 'error'
+                    });
+                }
+            },
+            error: function (xhr, status, error) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Failed to delete address.',
+                    icon: 'error'
+                });
+            }
+        });
+    }
+</script>
+<script>
+    let uniqueId = Date.now()
+    console.log(uniqueId)
+    document.getElementById("id").value = uniqueId;
+</script>
+
+<script>
+    function editAddress(id, name, address, town, district, state, pincode, phone) {
+        document.getElementById('id1').value = id
+        document.getElementById('name1').value = name
+        document.getElementById('address1').value = address
+        document.getElementById('town1').value = town
+        document.getElementById('district1').value = district
+        document.getElementById('state1').value = state
+        document.getElementById('pincode1').value = pincode
+        document.getElementById('phone1').value = phone
+    }
+</script>
+<script>
+    $("#edit-address").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/edit-address',
+            method: 'post',
+            data: $('#edit-address').serialize(),
+            success: (response) => {
+                if (response.status) {
+                    Swal.fire({
+                        position: "",
+                        icon: "success",
+                        title: "Address Edited Successfully",
+                        showConfirmButton: true,
+                        confirmButtonColor: 'black',
+                    }).then(() => {
+                        location.reload()
+                    })
+                } else {
+                    location.reload()
+                }
+            }
+        })
+    })
+</script>

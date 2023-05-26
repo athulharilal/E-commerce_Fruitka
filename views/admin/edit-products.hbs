@@ -1,0 +1,97 @@
+<section>
+  <div class="container mt-3" style="margin: 10rem; margin-left: 15rem;">
+    <div class="row">
+      <div class="col-md-6 mt-5 border border-primary">
+        <h2 class="text-center text-primary mt-2">Edit Existing Products</h2>
+        <form action="/admin/edit-products/{{products._id}}" method="post">
+          <label for="">Name</label>
+          <input type="text" required name="Name" class="form-control" value="{{products.Name}}" />
+
+          <label for="">Price</label>
+          <input type="text" required name="Price" class="form-control" value="{{products.Price}}" />
+
+          <label for="">Description</label>
+          <input type="text" required name="Description" class="form-control" value="{{products.Description}}" />
+          <label for="">Offerprice</label>
+          <input type="text" required name="Offerprice" class="form-control" value="{{products.Offerprice}}" />
+          <label for="">Quantity</label>
+          <input type="text" required name="Quantity" class="form-control" value="{{products.Quantity}}" />
+
+          <label for="">Category</label>
+          <input type="text" required name="category" class="form-control" value="{{products.category}}">
+          <div class="mt-">
+            <div class="mt-5">
+              <button type="submit" class="btn btn-success mt-4 mb-4">Submit</button>
+
+            </div>
+        </form>
+
+        <label for="">Images:</label>
+
+        <div class="container">
+
+          <div class="row col-xs-2">
+            <img class="" style="width:100px; height:100px" src="/product-images/{{products.images.[0]}} " alt="Image">
+            <label for="imageInput1">Image 1:</label>
+            <form action="/admin/edit-products-images/{{products._id}}" method="post" enctype="multipart/form-data">
+              <input type="file" name="images" id="imageInput1">
+              <button type="submit" name="index" value="0" class="btn btn-sucess ">Submit</button>
+
+            </form>
+            <form action="/admin/delete-productImage/{{products._id}}" method="post">
+              <button type="submit" name="delete" value="0" class="btn btn-danger">Delete</button>
+            </form>
+            {{!-- <a href="/admin/delete-image/{{../products._id}}/{{products.images.[0]}}" class="btn btn-danger mt-2"><i class="fa fa-trash"></i> Delete</a> --}}
+
+          </div>
+
+          <div class="row col-xs-2">
+            <img class="" style="width:100px; height:100px" src="/product-images/{{products.images.[1]}} " alt="Image">
+            <label for="imageInput1">Image 2:</label>
+            <form action="/admin/edit-products-images/{{products._id}}" method="post" enctype="multipart/form-data">
+              <input type="file" name="images" id="imageInput2">
+              <button type="submit" name="index" value="1" class="btn btn-sucess ">Submit</button>
+            </form>
+            <form action="/admin/delete-productImage/{{products._id}}" method="post">
+              <button type="submit" name="delete" value="1" class="btn btn-danger">Delete</button>
+          </div>
+          </form>
+          {{!-- <a href="/admin/delete-image/{{../products._id}}/{{this}}" class="btn btn-danger mt-2"><i class="fa fa-trash"></i> Delete</a> --}}
+          <div class="row col-xs-2">
+            <img class="" style="width:100px; height:100px" src="/product-images/{{products.images.[2]}} " alt="Image">
+            <label for="imageInput1">Image 3:</label>
+            <form action="/admin/edit-products-images/{{products._id}}" method="post" enctype="multipart/form-data">
+              <input type="file" name="images" id="imageInput3">
+              <button type="submit" name="index" value="2" class="btn btn-sucess ">Submit</button>
+
+            </form>
+            <form action="/admin/delete-productImage/{{products._id}}" method="post">
+              <button type="submit" name="delete" value="2" class="btn btn-danger">Delete</button>
+            </form>
+            {{!-- <a href="/admin/delete-image/{{../products._id}}/{{this}}" class="btn btn-danger mt-2"><i class="fa fa-trash"></i> Delete</a> --}}
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  </div>
+</section>
+
+<script>
+  function previewImage(event) {
+    var reader = new FileReader();
+    reader.onload = function () {
+      var output = document.getElementById('previewImg');
+      output.src = reader.result;
+      output.style.display = 'block';
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  }
+</script>
+
+<script>
+  < script defer src = "https://cdn.crop.guide/loader/l.js?c=TKPSBC" >
+</script>
+</script>

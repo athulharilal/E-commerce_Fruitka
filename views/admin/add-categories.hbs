@@ -1,0 +1,64 @@
+<div class="d-flex align-items-center justify-content-center vh-100" style="margin: 35rem;margin-top: 10rem;">
+  <div class="form-container">
+    <div class="form-title">
+      <h4>Add Categories:</h4>
+    </div>
+    <div class="form-body">
+      <form action="/admin/add-categories" method="post">
+        <div class="form-group">
+          {{#if catAddErr}}
+          <p class="text-danger">{{catAddErr}}</p>
+          {{/if}}
+          <label for="category" class="control-label">Category</label>
+          <input type="text" name="category" class="form-control" id="category" placeholder="Category" onkeyup="validateCategory()" required>
+          <label class="form-label text-dark"></label>
+        </div>
+
+        <div class="text-center mt-3">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  .form-container {
+    width: 400px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .form-body {
+    margin-bottom: 20px;
+  }
+</style>
+
+<script>
+  var catAddErr = document.getElementById('catAddErr');
+
+  function validateCategory() {
+    var category = document.getElementById('category').value;
+
+    if (category.length === 0) {
+      catAddErr.innerHTML = "This field is required";
+      return false;
+    }
+
+    catAddErr.innerHTML = '';
+    return true;
+  }
+
+  function validateForm() {
+    if (!validateCategory()) {
+      return false;
+    }
+  }
+</script>

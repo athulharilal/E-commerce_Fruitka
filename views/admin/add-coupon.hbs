@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Coupon</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <style>
+        .confirmation-dialog {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 300px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .confirmation-dialog h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .confirmation-dialog p {
+            margin-bottom: 20px;
+        }
+
+        .confirmation-dialog .btn-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .confirmation-dialog .btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .confirmation-dialog .btn.cancel {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+
+<body>
+    <section>
+        <div class="container" style="margin: 19rem; margin-top: 8rem;">
+            <div class="row">
+                <div class="col-md-6 justify-content-center">
+                    <h2>Add coupon</h2>
+                    <form action="/admin/add-coupon" id="addCoupon" method="post">
+                        <label for="coupon">Coupon Name:</label>
+                        <input type="text" id="coupon" name="coupon" onkeyup="validateCoupon()" class="form-control">
+                        <div id="couponError"></div>
+
+                        <label for="starting">Starting Date:</label>
+                        <input type="date" id="startDate" onkeyup="validateStartDate()" name="starting" class="form-control" required>
+                        <div id="startDateError"></div>
+
+                        <label for="expiry">Expire Date:</label>
+                        <input type="date" id="endDate" onkeyup="validateEndDate()" name="expiry" class="form-control" required>
+                        <div id="endDateError"></div>
+
+                        <label for="minPurchase">Min Purchase:</label>
+                        <input type="number" id="minPurchase" onkeyup="validateMinPurchase()" min="0" name="minPurchase" class="form-control" required>
+                        <div id="minPurchaseError"></div>
+
+                        <label for="maxDiscountValue">Max Discount:</label>
+                        <input type="number" id="maxDiscountValue" onkeyup="validateMaxDiscount()" min="0" name="maxDiscountValue" class="form-control" required>
+                        <div id="maxDiscountValueError"></div>
+
+                        <label for="offer">Offer:</label>
+                        <input type="number" id="offer" name="offer" class="form-control" onkeyup="validatePercentage()">
+                        <div id="percentageError"></div>
+
+                        <button type="submit" class="btn btn-info border mt-4" style="margin-top: 2rem;">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<script>
+    function confirmDelete(coupon, couponId) {
+        var dialog = document.createElement('div');
+        dialog.classList.add('confirmation-dialog');
+        dialog.innerHTML = `
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete the coupon: <strong>${coupon}</strong>?</p>
+            <div class="btn-container">
+                <button class="btn btn-danger" onclick="deleteCoupon('${couponId}')">Delete</button>
+                <button class="btn btn-secondary cancel" onclick="cancelDelete()">Cancel</button>
+            </div>
+        `;
+        document.body.appendChild(dialog);
+        return false; // Prevent default link behavior
+    }
+
+    function deleteCoupon(couponId) {
+        // Delete the coupon logic using the couponId
+        console.log('Deleting coupon with ID:', couponId);
+        removeConfirmationDialog();
+        // Perform the deletion request using AJAX or other methods
+        // ...
+    }
+
+    function cancelDelete() {
+        removeConfirmationDialog();
+    }
+
+    function removeConfirmationDialog() {
+        var dialog = document.querySelector('.confirmation-dialog');
+        if (dialog) {
+            dialog.parentNode.removeChild(dialog);
+        }
+    }
+
+    function validateCoupon() {
+            var couponInput = document.getElementById("coupon");
+            var couponError = document.getElementById("couponError");
+            if (couponInput.value.trim() === "") {
+                couponError.innerHTML = "Coupon name is required.";
+                couponInput.classList.add("is-invalid");
+            } else if (couponInput.value.length < 3) {
+                couponError.innerHTML = "Coupon name must be at least 3 characters long.";
+                couponInput.classList.add("is-invalid");
+            } else {
+                couponError.innerHTML = "";
+                couponInput.classList.remove("is-invalid");
+            }
+    }
+
+    function validateStartDate() {
+        var startDateInput = document.getElementById("startDate");
+        var startDateError = document.getElementById("startDateError");
+        var endDateInput = document.getElementById("endDate");
+        if (startDateInput.value >= endDateInput.value) {
+            startDateError.innerHTML = "Starting date must be before the expiry date.";
+            startDateInput.classList.add("is-invalid");
+        } else {
+            startDateError.innerHTML = "";
+            startDateInput.classList.remove("is-invalid");
+        }
+    }
+
+    function validateEndDate() {
+        var endDateInput = document.getElementById("endDate");
+        var endDateError = document.getElementById("endDateError");
+        var startDateInput = document.getElementById("startDate");
+        if (endDateInput.value <= startDateInput.value) {
+            endDateError.innerHTML = "Expiry date must be after the starting date.";
+            endDateInput.classList.add("is-invalid");
+        } else {
+            endDateError.innerHTML = "";
+            endDateInput.classList.remove("is-invalid");
+        }
+    }
+
+    function validateMinPurchase() {
+        var minPurchaseInput = document.getElementById("minPurchase");
+        var minPurchaseError = document.getElementById("minPurchaseError");
+        if (minPurchaseInput.value < 0) {
+            minPurchaseError.innerHTML = "Min purchase value must be a positive number.";
+            minPurchaseInput.classList.add("is-invalid");
+        } else {
+            minPurchaseError.innerHTML = "";
+            minPurchaseInput.classList.remove("is-invalid");
+        }
+    }
+
+    function validateMaxDiscount() {
+        var maxDiscountInput = document.getElementById("maxDiscountValue");
+        var maxDiscountError = document.getElementById("maxDiscountValueError");
+        if (maxDiscountInput.value < 0) {
+            maxDiscountError.innerHTML = "Max discount value must be a positive number.";
+            maxDiscountInput.classList.add("is-invalid");
+        } else {
+            maxDiscountError.innerHTML = "";
+            maxDiscountInput.classList.remove("is-invalid");
+        }
+    }
+
+    function
+

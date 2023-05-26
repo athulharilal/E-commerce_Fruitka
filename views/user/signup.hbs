@@ -1,0 +1,203 @@
+<div class="login-container">
+    <h2 class="login-title">Create A New Account</h2>
+    <p class="text-dark">Please enter your Email and password!</p>
+    <form class="login-form" action="/signup" method="post">
+        <div class="form-outline form-white">
+            <div class="text-danger" id="nameError"></div>
+            <input type="text" name="Name" placeholder="Name" id="Name"
+                class="form-control form-control-lg  text-center" onkeyup="validateName()" required />
+            <label class="form-label text-dark"></label>
+        </div>
+        <div class="form-outline form-white ">
+            <div class="text-danger" id="email-error"></div>
+            <input type="email" id="typeEmailX" name="Email" placeholder="Email"
+                class="form-control form-control-lg  text-center" onkeyup="validateEmail()" required />
+            <label class="form-label text-dark"></label>
+        </div>
+
+        <div class="form-outline form-white ">
+            <div class="text-danger" id="passwordError"></div>
+            <input type="password" name="Password" id="typePasswordX" placeholder="Password"
+                class="form-control form-control-lg  text-center" onkeyup="validatePassword()" required />
+            <label class="form-label text-dark"></label>
+        </div>
+
+        <div class="form-outline form-white ">
+            <div class="text-danger" id="numberError"></div>
+            <input type="text" name="Number" id="" placeholder="Number"
+                class="form-control form-control-lg  text-center" onkeyup="validatePassword()" required />
+            <label class="form-label text-dark"></label>
+        </div>
+
+        <div class="form-group">
+            <div class="text-danger" id="referalErr"></div>
+            <input type="text" class="form-control form-control-lg  text-center" name="referalCode"
+                onkeyup="validateRefferal()" id="referal" placeholder="Referral Code">
+        </div>
+
+        <button class="btn btn-outline-secondary btn-lg px-5 text-dark  text-center" type="submit">Create
+            Account</button>
+
+        <div class="mt-3">
+            <p class="login-cta">Don't have an account? <a href="/login">Sign Up</a></p>
+        </div>
+    </form>
+</div>
+
+
+
+
+<style>
+    <style>body {
+        background-color: #f2f2f2;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .login-container {
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 200px auto;
+        max-width: 400px;
+        padding: 40px;
+        text-align: center;
+    }
+
+    .login-title {
+        color: #333333;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .login-form input {
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        display: block;
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .login-form button {
+        background-color: #F28123;
+        border: none;
+        border-radius: 4px;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    .login-form button:hover {
+        background-color: #e56d18;
+    }
+
+    .login-cta {
+        color: #666666;
+        font-size: 14px;
+        margin-top: 20px;
+    }
+
+    .login-cta a {
+        color: #F28123;
+        text-decoration: none;
+    }
+
+    .login-cta a:hover {
+        text-decoration: underline;
+    }
+</style>
+</style>
+<script>
+    let emailerror = document.getElementById('email-error');
+    let passworderror = document.getElementById('passwordError');
+    let nameerror = document.getElementById('nameError');
+    let referalErr = document.getElementById('referalErr');
+
+
+
+    function validateName() {
+        let Name = document.getElementById("Name").value;
+        if (Name.length == 0) {
+            nameerror.innerHTML = " This Field is Required !";
+            return false;
+        }
+        if (Name.length < 4) {
+            nameerror.innerHTML = " Minimum 4 characters required  !";
+            return false;
+        }
+        if (!Name.match(/^[a-zA-Z]{4,}(?: [a-zA-Z]*){0,2}$/)) {
+            nameerror.innerHTML = "Username should not contain any special characters and numbers !";
+            return false;
+        }
+        nameerror.innerHTML = '';
+        return true;
+    }
+
+    function validateEmail() {
+        var emails = document.getElementById('typeEmailX').value;
+
+        if (emails.length == "") {
+
+            emailerror.innerHTML = " This field is required";
+            return false;
+
+        }
+        if (!emails.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+            emailerror.innerHTML = "Invalid";
+            return false;
+        }
+
+        emailerror.innerHTML = '';
+        return true;
+
+
+    }
+
+    function validatePassword() {
+        let password = document.getElementById("typePasswordX").value;
+        if (password.length == 0) {
+            passworderror.innerHTML = " This Field is Required !";
+            return false;
+        }
+        if (password.length < 6) {
+            passworderror.innerHTML = " Minimum 6 characters required  !";
+            return false;
+        }
+        if (!password.match(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)) {
+            passworderror.innerHTML = "password must contain atleast 1 special character and number !";
+            return false;
+        }
+
+
+        passworderror.innerHTML = '';
+        return true;
+    }
+
+    {{!-- function validateRefferal() {
+        let referal = document.getElementById("referal").value;
+        if (referal.length == 0) {
+            referalErr.innerHTML = " This Field is Required !";
+            return false;
+        }
+        if (referal.length < 6) {
+            referalErr.innerHTML = " Minimum 6 characters required  !";
+            return false;
+        }
+
+
+        passworderror.innerHTML = '';
+        return true;
+    } --}}
+
+
+    function validateForm() {
+        if (!validateName() || !validateEmail() || !validatePassword() || ) {
+
+            return false;
+        }
+    }
+</script>

@@ -1,0 +1,92 @@
+<section>
+    <div class="container" style="margin: 17rem; margin-top: 8rem;">
+        <div class="row">
+            <div class="col-md-6 justify-content-center">
+                <h2>Add Banner</h2>
+                {{#if bannerExistErr}}
+                <p class="error text-danger">{{bannerExistErr}}</p>
+                {{/if}}
+                <form action="/admin/add-banner" method="post" enctype="multipart/form-data">
+
+                    <label for="name">Name</label>
+                    <input type="text" id="BannerName" onkeyup="validateBanner()" name="name" class="form-control">
+                    <div id="bannerError"></div>
+                    <label for="name">SubName</label>
+                    <input type="text" id="SubBannerName" onkeyup="validateSubBanner()" name="suBname"
+                        class="form-control">
+                    <div id="SubbannerError"></div>
+                    <label for="offer">offer</label>
+                    <input type="text" id="OfferPercent" onkeyup="validatePercentage()" name="offer"
+                        class="form-control">
+                    <div id="offerError"></div>
+
+                    <label for="image">image</label>
+                    <img src="" style="width: 100px;height:auto;" id="imageInput1" class="pt-3">
+                    <img src="" id="images" alt="" class="p-2" style="height: 80px; width: 80px; display: none;" />
+                    <input type="file" id="imageInput1" name="images" class="form-control">
+
+                    <button type="submit" onsubmit="formsubmit()" class="btn btn-info border mt-4">submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    var bannerError = document.getElementById('bannerError')
+    var offerError = document.getElementById('offerError')
+    var SubbannerError = document.getElementById('SubbannerError')
+
+
+    function validateBanner() {
+        var BannerName = document.getElementById('BannerName').value.trim()
+        if (BannerName.length < 4) {
+            bannerError.innerHTML = "need minimum 4 characters"
+            bannerError.style.color = "red"
+            return false;
+        }
+        console.log(BannerName + " coupon")
+        bannerError.innerHTML = 'valid';
+        bannerError.style.color = 'green'
+        return true;
+    }
+
+    function validateSubBanner() {
+        var SubBannerName = document.getElementById('SubBannerName').value.trim()
+        if (SubBannerName.length < 4) {
+            SubbannerError.innerHTML = "need minimum 4 characters"
+            SubbannerError.style.color = "red"
+            return false;
+        }
+        console.log(BannerName + " coupon")
+        SubbannerError.innerHTML = 'valid';
+        SubbannerError.style.color = 'green'
+        return true;
+    }
+
+    function validatePercentage() {
+        var OfferPercent = document.getElementById('OfferPercent').value.trim();
+        if (OfferPercent > 95 || OfferPercent.length == 0) {
+            offerError.innerHTML = "Value must be less than 90"
+            offerError.style.color = "red";
+            return false;
+        }
+        console.log(OfferPercent + " percentage")
+        offerError.innerHTML = 'valid';
+        offerError.style.color = 'green'
+        return true;
+    }
+
+    $(document).on("submit", "form", function (e) {
+        validateBanner()
+        validatePercentage()
+        if (validateBanner() && validatePercentage() && validateSubBanner()) {
+            console.log("")
+            alert('banner added')
+        } else {
+            e.preventDefault();
+            return false;
+        }
+    })
+</script>

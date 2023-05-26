@@ -1,0 +1,204 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Responsive Bootstrap4 Shop Template, Created by Imran Hossain from https://imransdesign.com/" />
+
+  <!-- title -->
+  <title>Fruitkha</title>
+
+  <!-- favicon -->
+  <link rel="shortcut icon" type="image/png" href="assets/img/favicon.png" />
+  <!-- google font -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet" />
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="assets/css/all.min.css" />
+  <!-- bootstrap -->
+  <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" />
+
+  <!-- owl carousel -->
+  <link rel="stylesheet" href="assets/css/owl.carousel.css" />
+  <!-- magnific popup -->
+  <link rel="stylesheet" href="assets/css/magnific-popup.css" />
+  <!-- animate css -->
+  <link rel="stylesheet" href="assets/css/animate.css" />
+  <!-- mean menu css -->
+  <link rel="stylesheet" href="assets/css/meanmenu.min.css" />
+  <!-- main style -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <!-- responsive -->
+  <link rel="stylesheet" href="assets/css/responsive.css" />
+
+
+
+</head>
+
+<body>
+
+  <!--PreLoader-->
+  <div class="loader">
+    <div class="loader-inner">
+      <div class="circle"></div>
+    </div>
+  </div>
+  <!--PreLoader Ends-->
+
+  <!-- header -->
+  <div class="top-header-area" id="sticker">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12 col-sm-12 text-center">
+          <div class="main-menu-wrap">
+            <!-- logo -->
+            <div class="site-logo" style="margin-left: rem;">
+              <a href="/">
+                <img src="assets/img/logo.png" alt="" />
+              </a>
+            </div>
+            <!-- logo -->
+
+            <!-- menu start -->
+            <!-- menu start -->
+          <nav class="main-menu" style="margin-left: 13rem;">
+            <ul class="menu-list">
+              {{#if user}}
+              <li class="menu-item"><a href="/">Home</a></li>
+              <li class="menu-item"><a href="/about">About</a></li>
+              <li class="menu-item">
+                <a href="#">Shop <i class="fas fa-chevron-down"></i></a>
+                <ul class="sub-menu">
+                  <li><a href="/products">Shop</a></li>
+                  <li><a href="/placeorder">Check Out</a></li>
+                </ul>
+              </li>
+              <li class="menu-item"><a href="/orders">Orders</a></li>
+              <li class="menu-item">
+                <a href="/cart">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span class="badge badge-sucess" id="cart-count">{{cartCount}}</span>
+                </a>
+              </li>
+              <li class="menu-item">
+                <form action="/search" method="post" class="search-form">
+                  <input type="text" id="search" name="search" required>
+                  <button type="submit" class="btn btn-dark"><i class="fas fa-search"></i></button>
+                </form>
+              </li>
+              <li class="menu-item">
+                <a href="#">
+                  {{user.Name}}
+                  <i class="fas fa-chevron-down"></i>
+                </a>
+                <ul class="sub-menu">
+                  <li><a href="/my-profile">View Profile</a></li>
+                  <li><a href="/logout">Logout</a></li>
+                </ul>
+              </li>
+              {{else}}
+              <li class="menu-item"><a href="login">Log in</a></li>
+              {{/if}}
+            </ul>
+          </nav>
+            <a class="mobile-show search-bar-icon" href="#"><i class="fas fa-search"></i></a>
+            <div class="mobile-menu"></div>
+            <!-- menu end -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- end header -->
+
+  <!-- search area -->
+  <!-- search area -->
+<div class="search-area">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <span class="close-btn"><i class="fas fa-window-close"></i></span>
+        <div class="search-bar">
+          <div class="search-bar-tablecell">
+            <div class="row">
+              <div class="col-md-4">
+                <h3>Search For:</h3>
+              </div>
+              <div class="col-md-8">
+                <div class="row">
+                  <div class="col-sm-9">
+                    <input type="text" placeholder="Keywords" />
+                  </div>
+                  <div class="col-sm-3">
+                    <button type="submit">Search <i class="fas fa-search"></i></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end search area -->
+
+  <!-- end search area -->
+  <!-- hero area -->
+  <div class="hero-area hero-bg ">
+    <div class="container ">
+      <div class="row">
+        <div class="col-lg-9 text-center" style="margin-left: 10%;">
+          <div class="hero-text">
+            <div class="hero-text-tablecell">
+              <p class="subtitle">Fresh & Organic</p>
+              <h1>Delicious Seasonal Fruits</h1>
+              <div class="hero-btns">
+                <a href="/" class="boxed-btn">Fruit Collection</a>
+                <a href="/contact" class="bordered-btn">Contact Us</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- end hero area -->
+
+  <!-- home page slider -->
+
+  <!-- jquery -->
+  <script src="assets/js/jquery-1.11.3.min.js"></script>
+  <!-- bootstrap -->
+  <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+  <!-- count down -->
+  <script src="assets/js/jquery.countdown.js"></script>
+  <!-- isotope -->
+  <script src="assets/js/jquery.isotope-3.0.6.min.js"></script>
+  <!-- waypoints -->
+  <script src="assets/js/waypoints.js"></script>
+  <!-- owl carousel -->
+  <script src="assets/js/owl.carousel.min.js"></script>
+  <!-- magnific popup -->
+  <script src="assets/js/jquery.magnific-popup.min.js"></script>
+  <!-- mean menu -->
+  <script src="assets/js/jquery.meanmenu.min.js"></script>
+  <!-- sticker js -->
+  <script src="assets/js/sticker.js"></script>
+  <!-- main js -->
+  <script src="assets/js/main.js"></script>
+
+</body>
+
+</html>
+
+
+<script>
+  function toggleSearch() {
+    document.getElementById("search-form").classList.toggle("d-none");
+  }
+</script>

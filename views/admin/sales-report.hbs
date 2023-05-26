@@ -1,0 +1,82 @@
+<section>
+  <div class="container-fluid" style="padding: 6%; margin-left: 8%; margin-top: rem;">
+    <div class="px-xl-5 pt-5">
+      <div>
+        <div class="row justify-content-end d-flex">
+           <div class="col-12 col-lg-12 ">
+                         <div style="margin-top: 2rem;">
+                    <form action="/admin/sales-report-data" method="POST"
+                        class="d-flex align-items-center  mb-2 flex-wrap" style="
+                         width: 20%;margin-top: 1rem ">
+                        <h2>Date Filter:</h2>
+                        <div class="mx-3 flex-wrap mt-4">
+                            <label for="">From:</label>
+                            <input type="date" name="startdate" id="startdate" class="form-control">
+                        </div>
+                        <div class="mx-3 flex-wrap mt-4">
+                            <label for="">Till:</label>
+
+                            <input type="date" name="enddate" id="enddate" class="form-control">
+                        </div>
+                        <div class="mx-3 flex-wrap mt-4 " style="margin-top: 1rem;">
+                            <button class="btn btn-primary " type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+        </div>
+        {{#if salesReport.length}}
+        <div class="table-responsive mb-5">
+          <table class="table text-center" id="myTable">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">OrderID</th>
+                <th scope="col">Date</th>
+                <th scope="col">Name</th>
+                <th scope="col">Products</th>
+                <th scope="col">Price</th>
+                <th scope="col">Total Amount</th>
+                <th scope="col">Payment</th>
+                <th scope="col">Status</th>
+                <th scope="col">Contact</th>
+              </tr>
+            </thead>
+            <tbody id="myTable" class="text-50">
+              {{#each salesReport}}
+              <tr>
+                <th scope="row" class="fs-bold">{{inc @index}}</th>
+                <td>{{this._id}}</td>
+                <td class="text-center">{{this.date}}</td>
+                <td>{{this.user.Name}}</td>
+                <td>{{this.product.Name}}</td>
+                <td>{{this.product.Price}}</td>
+                <td>{{this.totalAmount}}</td>
+                <td>{{this.PaymentMethod}}</td>
+                <td>{{this.status}}</td>
+                <td>{{this.user.Email}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+        {{else}}
+        <p>No sales report available.</p>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script>
+  // Initialize DataTable
+  $(document).ready(function () {
+    $('#myTable').DataTable();
+  });
+</script>

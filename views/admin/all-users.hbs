@@ -1,0 +1,75 @@
+<section>
+    <div class="container" style="margin: 15rem; margin-top: 8rem;">
+        <table id="myTable" class="table table-hover table-striped mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email-id</th>
+                    <th scope="col">View User Profile</th>
+                    <th scope="col">Block/Unblock User</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each user}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>
+                        <a href="/admin/userProfile/{{this._id}}" class="btn btn-success">View User Profile</a>
+                    </td>
+                    <td>
+                        {{#if this.isBlocked}}
+                        <a href="/admin/unblock-user/{{this._id}}" class="btn btn-success">Unblock</a>
+                        {{else}}
+                        <a href="/admin/block-user/{{this._id}}" class="btn btn-danger">Block</a>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+        
+        {{!-- Display a message if no users are found --}}
+        {{#unless user}}
+        <p>No users found.</p>
+        {{/unless}}
+    </div>
+</section>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> --}}
+{{!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+
+<script>
+    // Initialize DataTable
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+</script>
+
+<!-- Search function -->
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Index 1 for Name column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
