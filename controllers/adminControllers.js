@@ -22,10 +22,10 @@ module.exports = {
       let cancelCount = await dashboardHelpers.canelTotal()
       let totalCoupon = await couponHelpers.getAllCoupons()
       let totalRevenue = await dashboardHelpers.totalRevenue()
-      let dailySales = await dashboardHelpers.dailySales()
-      const options = {weekday: 'short' };
-      const formattedDate = dailySales.toLocaleDateString('en-GB', options).replace(/\//g, '-');
-        console.log(" Posted admin login credentials, which is: ");
+      // let dailySales = await dashboardHelpers.dailySales()
+      // const options = {weekday: 'short' };
+      // const formattedDate = dailySales.toLocaleDateString('en-GB', options).replace(/\//g, '-');
+      //   console.log(" Posted admin login credentials, which is: ");
         adminHelpers.doLogin(req.body).then(({ status, admin }) => {
       
             req.session.adminLoggedIn = true;
@@ -38,7 +38,7 @@ module.exports = {
                 orderCount,
                 cancelCount,
                 totalRevenue,  
-                formattedDate,
+                // formattedDate,
                 category,
                 totalCoupon             
               });          
