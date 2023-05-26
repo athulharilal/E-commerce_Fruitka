@@ -1,99 +1,173 @@
 <body class="cbp-spmenu-push">
-    <div class="main-content" style="background-color:#1A1A1A ;">
-        <div class="container-fluid py-4 bg-dark text-white mt-5" style="background-color: #1A1A1A;padding: 5%;">    
-            <div class="row mt-5" style="padding-left: 24rem;"> 
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style="  border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: #1A1A1A;">{{productCount}}</span> <br>
-                            <span>Total Products</span>
+    <div class="main-content">
+        <!-- main content start-->
+        <div id="page-wrapper" style="background-color: #1A1A1A;">
+            <div class="main-page">
+                <div class="col_3">
+                    <div class="col-md-3 widget widget1" style="margin-top: 2rem; background-color: #1A1A1A;">
+                        <div class="r3_counter_box"
+                            style="background-color: #1A1A1A;">
+                            <i class="pull-left fa fa-users dollar2 icon-rounded"></i>
+                            <div class="stats">
+                                <span style="color: rgb(231, 240, 247);" >{{userCount}}</span> <br>
+                                <span>Total Users</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: #1A1A1A;">{{orderCount}}</span> <br>
-                            <span>Total Orders</span>
+                    <div class="col-md-3 widget widget1" style="margin-top: 2rem; background-color: #1A1A1A;" >
+                        <div class="r3_counter_box"
+                            style="background-color: #1A1A1A; ">
+                            <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
+                            <div class="stats">
+                                <span style="color: rgb(231, 240, 247);" >{{productCount}}</span> <br>
+                                <span>Total Products</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: #1A1A1A;">Rs.{{totalRevenue}}</span> <br>
-                            <span>Total Revenue</span>
+                    <div class="col-md-3 widget widget1" style="margin-top: 2rem; background-color: #1A1A1A;" >
+                        <div class="r3_counter_box"
+                            style="background-color: #1A1A1A; ">
+                            <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                            <div class="stats">
+                                <span style="color: rgb(231, 240, 247);" >{{orderCount}}</span> <br>
+                                <span>Total Orders</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row mt-5" style="padding-left: 14rem;">
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-laptop user1 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: #1A1A1A;">{{category}}</span> <br>
-                            <span>Total Categories</span>
+                    <div class="col-md-3 widget widget1" style="margin-top: 2rem; background-color: #1A1A1A;" >
+                        <div class="r3_counter_box"
+                            style="background-color: #1A1A1A; ">
+                            <i class="pull-left fa fa-solid fa-ban dollar1 icon-rounded"></i>
+                            <div class="stats">
+                                <span style="color: rgb(231, 240, 247);">{{cancelCount}}</span> <br>
+                                <span>Odrs Canclld</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: #1A1A1A;">{{cancelCount}}</span> <br>
-                            <span>Total Cancels</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div class="r3_counter_box" style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
-                        <i class="pull-left fa fa-money user2 icon-rounded"></i>
-                        <div class="stats">
-                            <span style="color: rgb(228, 235, 243);">Rs.{{totalCoupon}}</span> <br>
-                            <span>Total Coupons</span>
+                    <div class="col-md-3 widget" style="margin-top: 2rem; background-color: #1A1A1A;" >
+                        <div class="r3_counter_box"
+                            style="background-color: #1A1A1A; ">
+                            <i class="pull-left fa fa-money user2 icon-rounded"></i>
+                            <div class="stats">
+                                <span style="color: rgb(231, 240, 247);" >Rs.{{totalRevenue}}</span> <br>
+                                <span>Total Revenue</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <section class="py-5 mx-3 container-fluid" style="background-color: #1A1A1A; padding: 5%;">
-            <div class="row" style="margin-left: 12rem;">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
-                        <canvas id="bar-chart"></canvas>
-                    </div>
+    </div>
+    <div class="col-md- " style="background-color: #1A1A1A;">
+        <div class="container-fluid">
+            <div class="row">
+
+            </div>
+        </div>
+    </div>
+    <section class="py-5 mx-3 container-fluid" style="background-color: #1A1A1A;">
+        <div class="row" style="margin-left: 14rem;">
+            <div class="flex-container">
+                <div class="ms-auto me-auto bg-white mb-5 col-6"
+                    style="width: 50%; border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                    <canvas id="bar-chart"></canvas>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
-                        <canvas id="circleChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
-                        <canvas id="categoryChart"></canvas>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="bg-white mb-5 " style=" border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);" >
-                        <canvas id="paymentChart"></canvas>
-                    </div>
+                <div class="col-lg-5 mt-5 ms-auto me-auto bg-white col-6"
+                    style="width: 50%; border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                    <canvas id="circle-chart"></canvas>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+        <div class="row" style="margin-left: 14rem;">
+            <div class="flex-container">
+                <div class="ms-auto me-auto bg-white mb-5 col-6"
+                    style="width: 50%; border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                    <canvas id="cat-chart"></canvas>
+                </div>
+                <div class="ms-auto me-auto bg-white mb-5 col-6"
+                    style="width: 50%; border-radius: 20px; border: solid 3px rgba(255, 26, 104, 1);">
+                    <canvas id="payment-chart"></canvas>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .flex-container {
+            display: flex;
+            flex-wrap: nowrap;
+            background-color: #161414;
+        }
+
+        .flex-container>div {
+            background-color: #161414;
+            width: 100px;
+            margin: 10px;
+            text-align: center;
+            line-height: 75px;
+            font-size: 30px;
+        }
+    </style>
+
 </body>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-{{!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 
-<!-- Include Chart.js library -->
-{{!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> --}}
-{{!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script> --}}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('revenueChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Daily', 'Weekly', 'Yearly', 'Total'],
+            datasets: [{
+                label: 'Revenue',
+                data: [{
+                    {
+                        dailyRevenue
+                    }
+                }, {
+                    {
+                        weeklyRevenue
+                    }
+                }, {
+                    {
+                        yearlyRevenue
+                    }
+                }, {
+                    {
+                        totalRevenue
+                    }
+                }],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 206, 86, 0.5)',
+                    'rgba(75, 192, 192, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
 <script>
     const monthName = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -102,9 +176,9 @@
     const weekly = Array(7).fill(0);
 
     const barChart = document.getElementById("bar-chart").getContext('2d');
-    const circleChart = document.getElementById("circleChart").getContext('2d');
-    const catChart = document.getElementById("categoryChart").getContext('2d');
-    const paymentChart = document.getElementById("paymentChart").getContext('2d');
+    const circleChart = document.getElementById("circle-chart").getContext('2d');
+    const catChart = document.getElementById("cat-chart").getContext('2d');
+    const paymentChart = document.getElementById("payment-chart").getContext('2d');
 
     document.addEventListener('DOMContentLoaded', () => {
         fetch('/admin/chart-data', {
@@ -165,7 +239,7 @@
                 };
                 const chart2 = new Chart(circleChart, weeklyConfig);
 
-                const catLabels = ["Monsoon", "Winter", "Spring"];
+                const catLabels = ["MONSOON", "WINTER", "SPRING","SUMMER"];
                 const catValues = catLabels.map((label) => {
                     const cat = catData.find((item) => item._id === label);
                     return cat ? cat.total : 0;

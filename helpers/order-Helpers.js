@@ -57,6 +57,7 @@ module.exports = {
         console.log(order," order");
     
         const deliveryAddressId = order.deliveryAddress;
+        console.log(" api call");
         const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
         const addressArray = user.address;
         const deliveryAddress = addressArray.find((address) => String(address._id) === deliveryAddressId);

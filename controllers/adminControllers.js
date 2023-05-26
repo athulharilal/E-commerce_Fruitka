@@ -321,26 +321,21 @@ module.exports = {
 
   getChartData: async (req, res) => {
     try {
-
       dashboardHelpers.getChartData().then(async (obj) => {
-        let catData = await dashboardHelpers.catData()
-        let paymentData = await dashboardHelpers.paymentData()
-        let result = obj.result
-     
-        let weeklyReport = obj.weeklyReport
+        const catData = await dashboardHelpers.catData();
+        console.log(catData," catData");
+
+        const paymentData = await dashboardHelpers.paymentData();
+        const { result } = obj;
+        const { weeklyReport } = obj;
         res.json({
-          data: result,
-          weeklyReport,
-          catData,
-          paymentData,
-        })
-
-      })
-
+          data: result, weeklyReport, catData, paymentData,
+        });
+      });
     } catch (error) {
-
+      console.error('An error occurred:', error);
     }
-  },
+  }  ,
   getSalesReport: async (req, res) => {
 
     await adminHelpers.getSalesReport().then((response) => {
