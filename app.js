@@ -14,7 +14,7 @@ const Handlebars = require('handlebars');
 const crypto = require('crypto');
 
 const secret = crypto.randomBytes(32).toString('hex');
-console.log(secret)
+console.log(secret);
 
 // For indexing
 Handlebars.registerHelper("inc", function(value, options) {
@@ -60,21 +60,13 @@ const hbsInstance = hbs.create({
 });
 
 app.engine("hbs", hbsInstance.engine);
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({secret:'key',cookie:{maxAge:6000000}}));
-
-app.use(session({
-  resave: false, // Add the resave option
-  saveUninitialized: false, // Add the saveUninitialized option
-  // Other session options...
-}));
-
+app.use(session({ secret: secret, cookie: { maxAge: 6000000 } }));
 
 db.connect((err) => {
   if (err) {
