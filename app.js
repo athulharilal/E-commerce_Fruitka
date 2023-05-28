@@ -64,6 +64,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({secret:'key',cookie:{maxAge:6000000}}));
 
+app.use(session({
+  resave: false, // Add the resave option
+  saveUninitialized: false, // Add the saveUninitialized option
+  // Other session options...
+}));
+
+
 db.connect((err) => {
   if (err) {
     console.log("Connection error: " + err);
