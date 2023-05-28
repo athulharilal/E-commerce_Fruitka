@@ -1,70 +1,47 @@
-let db = require("../config/connection");
-let collection = require("../config/collection");
-let ObjectId = require("mongodb").ObjectId;
+const db = require("../config/connection");
+const collection = require("../config/collection");
+const ObjectId = require("mongodb").ObjectId;
 const moment = require('moment');
-const {
-  resolve
-} = require("path");
-const {
-  error
-} = require("console");
-
-
 
 module.exports = {
   getUserOrders: async (userId) => {
     return new Promise(async (resolve, reject) => {
-      
-      let distinctUserIds = await db
-        .get()
-        .collection(collection.ORDER_COLLECTION)
-        .distinct("userId", {
+      try {
+        const distinctUserIds = await db.get().collection(collection.ORDER_COLLECTION).distinct("userId", {
           userId: ObjectId(userId)
         });
 
-      
+        if (distinctUserIds.length > 0) {
+          const orders = await db.get().collection(collection.ORDER_COLLECTION)
+            .find({ userId: ObjectId(userId) })
+            .sort({ date: -1 })
+            .toArray();
 
-      if (distinctUserIds.length > 0) {
-        let orders = await db
-          .get()
-          .collection(collection.ORDER_COLLECTION)
-          .find({
-            userId: ObjectId(userId)
-          })
-          .sort({
-            date: -1
-          })
-          .toArray();
+          for (let index = 0; index < orders.length; index++) {
+            orders[index].date = moment(orders[index].date).format("DD-MM-YYYY");
+          }
 
-        
-
-        for (let index = 0; index < orders.length; index++) {
-          orders[index].date = moment(orders[index].date).format("DD-MM-YYYY");
+          resolve(orders);
+        } else {
+          resolve(0);
         }
-
-        resolve(orders);
-      } else {
-        resolve(0);
+      } catch (error) {
+        reject(error);
       }
-    }).catch((error) => {
-      
     });
   },
 
   placeOrder: async (order, products, total, userId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(order," order");
-    
         const deliveryAddressId = order.deliveryAddress;
-        console.log(" api call");
         const user = await db.get().collection(collection.USER_COLLECTION).findOne({ _id: ObjectId(userId) });
         const addressArray = user.address;
         const deliveryAddress = addressArray.find((address) => String(address._id) === deliveryAddressId);
 
-        let status = order['PaymentMethod'] === 'COD' || order['PaymentMethod'] === 'Wallet' ? 'placed' : 'pending';
-  
-        let orderObj = {
+        const status = order['PaymentMethod'] === 'COD' || order['PaymentMethod'] === 'Wallet' ? 'placed' : 'pending';
+
+        const orderObj = {
           deliveryDetails: {
             name: deliveryAddress ? deliveryAddress.name : order.firstName || user.name || '',
             mobile: deliveryAddress ? deliveryAddress.phone : order.mobile || user.mobile || '',
@@ -81,86 +58,81 @@ module.exports = {
           status: status,
           date: new Date()
         };
-  
-        db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj).then((response) => {
-          for (let i = 0; i < products.length; i++) {
-            const productId = products[i].item;
-            const productQuantity = products[i].quantity;
-  
-            db.get().collection(collection.PRODUCT_COLLECTION).updateOne({
-              _id: ObjectId(productId)
-            }, {
-              $inc: {
-                Quantity: -parseInt(productQuantity)
-              }
-            });
-          }
-          db.get().collection(collection.CART_COLLECTION).deleteOne({
-            user: ObjectId(userId)
-          });
-          resolve(response.insertedId);
-        }).catch((error) => {
-          
-          reject(error);
-        });
-      } catch (error) {
-        
-        reject(error);
-      }
-    });
-  }
-  
-  ,
-  cancelOrders: async (userId, products) => {
-    return new Promise(async (resolve, reject) => {
-      db.get().collection(collection.ORDER_COLLECTION).updateOne({
-        _id: ObjectId(userId)
-      }, {
-        $set: {
-          is_Cancelled: true,
-          status: 'canceled'
-        }
-      }).then(() => {
+
+        const response = await db.get().collection(collection.ORDER_COLLECTION).insertOne(orderObj);
+
         for (let i = 0; i < products.length; i++) {
           const productId = products[i].item;
           const productQuantity = products[i].quantity;
-          
 
-
-          db.get().collection(collection.PRODUCT_COLLECTION).updateOne({
-              _id: ObjectId(productId)
-            }, {
-              $inc: {
-                Quantity: productQuantity
-              }
+          await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({
+            _id: ObjectId(productId)
+          }, {
+            $inc: {
+              Quantity: -parseInt(productQuantity)
             }
-
-          )
+          });
         }
-        resolve()
-      }).catch((error) => {
-        
-      })
 
-    }).catch((error) => {
-      
-    })
+        await db.get().collection(collection.CART_COLLECTION).deleteOne({
+          user: ObjectId(userId)
+        });
 
+        resolve(response.insertedId);
+      } catch (error) {
+        reject(error);
+      }
+    });
   },
 
-  returnOrder: (orderId) => {
+  cancelOrders: async (orderId, products) => {
     return new Promise(async (resolve, reject) => {
-      let order = await db.get().collection(collection.ORDER_COLLECTION).findOne({
-        _id: ObjectId(orderId)
-      })
-      db.get().collection(collection.USER_COLLECTION).updateOne({
-        _id: ObjectId(order.userId)
-      }, {
-        $inc: {
-          wallet: order.totalAmount
+      try {
+        await db.get().collection(collection.ORDER_COLLECTION).updateOne({
+          _id: ObjectId(orderId)
+        }, {
+          $set: {
+            is_Cancelled: true,
+            status: 'canceled'
+          }
+        });
+
+        for (let i = 0; i < products.length; i++) {
+          const productId = products[i].item;
+          const productQuantity = products[i].quantity;
+
+          await db.get().collection(collection.PRODUCT_COLLECTION).updateOne({
+            _id: ObjectId(productId)
+          }, {
+            $inc: {
+              Quantity: productQuantity
+            }
+          });
         }
-      }).then(() => {
-        db.get().collection(collection.ORDER_COLLECTION).updateOne({
+
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+
+  returnOrder: async (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const order = await db.get().collection(collection.ORDER_COLLECTION).findOne({
+          _id: ObjectId(orderId)
+        });
+
+        await db.get().collection(collection.USER_COLLECTION).updateOne({
+          _id: ObjectId(order.userId)
+        }, {
+          $inc: {
+            wallet: order.totalAmount
+          }
+        });
+
+        await db.get().collection(collection.ORDER_COLLECTION).updateOne({
           _id: ObjectId(orderId)
         }, {
           $set: {
@@ -168,51 +140,54 @@ module.exports = {
             status: 'returned',
             returnedDate: new Date()
           }
-        }).then(() => {
-          resolve()
-        })
-      }).catch((error) => {
-        
-      })
-    })
-  },
-  getNeedtoCancelPrds: async (OrderId) => {
-    return new Promise(async (resolve, reject) => {
-      let order = await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
-          $match: {
-            _id: ObjectId(OrderId)
-          }
-        },
-        {
-          $unwind: "$products"
+        });
 
-        },
-        {
-          $project: {
-            _id: '$products.item',
-            quantity: "$products.quantity"
-          }
-        }
-      ]).toArray()
-      resolve(order)
-      
-    }).catch((error) => {
-      
-    })
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
   },
+
+  getNeedtoCancelPrds: async (orderId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const order = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+          {
+            $match: { _id: ObjectId(orderId) }
+          },
+          {
+            $unwind: "$products"
+          },
+          {
+            $project: {
+              _id: '$products.item',
+              quantity: "$products.quantity"
+            }
+          }
+        ]).toArray();
+
+        resolve(order);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  },
+
   getAllOrders: async () => {
     return new Promise(async (resolve, reject) => {
       try {
-        const allProducts = await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
+        const allProducts = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+          {
             $lookup: {
               from: "user",
               localField: "userId",
               foreignField: "_id",
               as: "user"
-            },
+            }
           },
           {
-            $unwind: "$user",
+            $unwind: "$user"
           },
           {
             $lookup: {
@@ -220,7 +195,7 @@ module.exports = {
               localField: "products.item",
               foreignField: "_id",
               as: "product"
-            },
+            }
           },
           {
             $unwind: "$product"
@@ -236,61 +211,35 @@ module.exports = {
               "product.Price": 1,
               "products.quantity": 1,
               deliveryDetails: 1,
-              billingaddress: 1, // Include billingaddress field
+              billingaddress: 1,
               totalAmount: 1,
               PaymentMethod: 1,
               status: 1,
               date: 1,
               deliveredDate: 1,
-              is_delivered: 1,
+              is_delivered: 1
             }
           },
           {
-            $sort: {
-              date: -1
-            }
+            $sort: { date: -1 }
           },
           {
             $group: {
               _id: "$_id",
-              userId: {
-                $first: "$userId"
-              },
-              user: {
-                $first: "$user"
-              },
-              product: {
-                $push: "$product"
-              },
-              products: {
-                $first: "$products"
-              },
-              totalAmount: {
-                $first: "$totalAmount"
-              },
-              PaymentMethod: {
-                $first: "$PaymentMethod"
-              },
-              status: {
-                $first: "$status"
-              },
-              date: {
-                $first: "$date"
-              },
-              deliveredDate: {
-                $first: "$deliveredDate"
-              },
-              is_delivered: {
-                $first: "$is_delivered"
-              },
-              deliveryDetails: {
-                $first: "$deliveryDetails"
-              }, // Include deliveryDetails field
-              billingaddress: {
-                $first: "$billingaddress"
-              }, // Include billingaddress field
+              userId: { $first: "$userId" },
+              user: { $first: "$user" },
+              product: { $push: "$product" },
+              products: { $first: "$products" },
+              totalAmount: { $first: "$totalAmount" },
+              PaymentMethod: { $first: "$PaymentMethod" },
+              status: { $first: "$status" },
+              date: { $first: "$date" },
+              deliveredDate: { $first: "$deliveredDate" },
+              is_delivered: { $first: "$is_delivered" },
+              deliveryDetails: { $first: "$deliveryDetails" },
+              billingaddress: { $first: "$billingaddress" }
             }
-          },
+          }
         ]).toArray();
 
         if (allProducts) {
@@ -303,11 +252,8 @@ module.exports = {
           resolve([]);
         }
       } catch (error) {
-        
         reject(error);
       }
     });
   }
-
-
-}
+};

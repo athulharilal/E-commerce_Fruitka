@@ -1,223 +1,218 @@
-let db = require('../config/connection')
-let collection = require('../config/collection');
-let ObjectId = require('mongodb').ObjectId
-let moment = require('moment');
-const { COUPON_COLLECTION } = require('../config/collection');
-const { response } = require('../app');
+const db = require('../config/connection');
+const collection = require('../config/collection');
+const ObjectId = require('mongodb').ObjectId;
+const moment = require('moment');
 
-module.exports={
-    getAllCoupons:async()=>{
-            return new Promise(async(resolve, reject) => {
-                let coupon = await db.get().collection(collection.COUPON_COLLECTION).find().toArray()
-                resolve(coupon)
-            }).catch((error)=>{
-                
-            })
-    },
-    addCoupon:async (data)=> {       
-        try {
-            return new Promise(async (resolve, reject) => {
-              let coupon = await db
-                .get()
-                .collection(collection.COUPON_COLLECTION)
-                .findOne({ coupon: data.coupon.toLowerCase() }); // Convert coupon to lowercase for case-insensitive comparison
-              if (coupon) {
-                // Coupon already exists
-                reject("Coupon already exists");
-              } else {
-                let startDateIso = new Date(data.starting);
-                let endDateIso = new Date(data.expiry);
-                let expiry = moment(data.expiry).format("YYYY-MM-DD");
-                let starting = moment(data.starting).format("YYYY-MM-DD");
-                let couponObj = {
-                  coupon: data.coupon.toLowerCase(), // Convert coupon to lowercase before saving
-                  offer: parseInt(data.offer),
-                  minPurchase: parseInt(data.minPurchase),
-                  maxDiscountValue: parseInt(data.maxDiscountValue),
-                  starting: starting,
-                  expiry: expiry,
-                  startDateIso: startDateIso,
-                  endDateIso: endDateIso,
-                  users: [],
-                };
-                db.get()
-                  .collection(collection.COUPON_COLLECTION)
-                  .insertOne(couponObj)
-                  .then(() => {
-                    resolve();
-                  })
-                  .catch(() => {
-                    reject();
-                  });
+module.exports = {
+  getAllCoupons: async () => {
+    try {
+      const coupons = await db.get().collection(collection.COUPON_COLLECTION).find().toArray();
+      return coupons;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  addCoupon: async (data) => {
+    try {
+      const coupon = await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .findOne({ coupon: data.coupon.toLowerCase() });
+
+      if (coupon) {
+        throw new Error('Coupon already exists');
+      } else {
+        const startDateIso = new Date(data.starting);
+        const endDateIso = new Date(data.expiry);
+        const expiry = moment(data.expiry).format('YYYY-MM-DD');
+        const starting = moment(data.starting).format('YYYY-MM-DD');
+        const couponObj = {
+          coupon: data.coupon.toLowerCase(),
+          offer: parseInt(data.offer),
+          minPurchase: parseInt(data.minPurchase),
+          maxDiscountValue: parseInt(data.maxDiscountValue),
+          starting: starting,
+          expiry: expiry,
+          startDateIso: startDateIso,
+          endDateIso: endDateIso,
+          users: [],
+        };
+
+        await db
+          .get()
+          .collection(collection.COUPON_COLLECTION)
+          .insertOne(couponObj);
+
+        return;
+      }
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  editCoupon: async (data) => {
+    try {
+      const startDateIso = new Date(data.starting);
+      const endDateIso = new Date(data.expiry);
+
+      await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .updateOne(
+          { _id: ObjectId(data.id) },
+          {
+            $set: {
+              coupon: data.coupon,
+              starting: data.starting,
+              expiry: data.expiry,
+              offer: data.offer,
+              startDateIso: startDateIso,
+              endDateIso: endDateIso,
+            },
+          }
+        );
+
+      return;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  deleteCoupon: async (couponId) => {
+    try {
+      await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .deleteOne({ _id: ObjectId(couponId) });
+
+      return;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  getCoupon: async (couponId) => {
+    try {
+      const coupon = await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .findOne({ _id: ObjectId(couponId) });
+
+      return coupon;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  validateCoupon: async (data, userID, totalAmount) => {
+    try {
+      const obj = {};
+      const date = new Date();
+      const formattedDate = moment(date).format('YYYY-MM-DD');
+      const coupon = await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .findOne({ coupon: data.coupon, Available: true });
+
+      if (coupon) {
+        const users = coupon.users;
+        const userCheck = users.includes(userID);
+
+        if (userCheck) {
+          obj.couponUsed = true;
+        } else {
+          let discountValue;
+          const total = parseInt(totalAmount);
+
+          if (formattedDate <= coupon.expiry) {
+            if (total >= coupon?.minPurchase) {
+              const percentage = parseInt(coupon.offer);
+              discountValue = ((total * percentage) / 100).toFixed();
+
+              if (discountValue > coupon?.maxDiscountValue) {
+                discountValue = coupon?.maxDiscountValue;
               }
-            });
-          } catch (error) {}
-       
-    },
-    editCoupon:(data)=>{     
-            return new Promise(async(resolve, reject) => {
-            
-                    let startDateIso = new Date(data.starting)
-                    let endDateIso = new Date(data.expiry)
-                    db.get().collection(collection.COUPON_COLLECTION).updateOne({_id:ObjectId(data.id)},{
-                        $set:{
-                            coupon:data.coupon,
-                            starting:data.starting,
-                            expiry:data.expiry,
-                            offer:data.offer,
-                            startDateIso:startDateIso,
-                            endDateIso:endDateIso,
-                        }
-                    }).then(()=>{
-                        resolve()
-                    }).catch((error)=>{
-                        
-                    })
-            });
-    },
-    deleteCoupon:(couponId)=>{
-        
-            return new Promise(async(resolve, reject) => {
-                db.get().collection(collection.COUPON_COLLECTION).deleteOne({_id:ObjectId(couponId)}).then(()=>{
-                    resolve()
-                }).catch((error)=>{
-                    
-                })
-            });
-            
-       
-    },
-    getCoupon:(couponId)=>{  
-            
-            return new Promise(async(resolve, reject) => {
-                db.get().collection(collection.COUPON_COLLECTION).findOne({_id:ObjectId(couponId)}).then((response)=>{
-                    resolve(response)
-                }).catch((error)=>{
-                    
-                })
-            });
-       
-    },
-    validateCoupon:async(data,userID,totalAmount)=>{
-            return new Promise(async(resolve, reject) => {
-                    
-                    obj={}
-                    let date = new Date()
-                    date = moment(date).format('YYYY-MM-DD')
-                    let coupon = await db.get().collection(collection.COUPON_COLLECTION).findOne({coupon:data.coupon,Available:true})
-                    
-                    if (coupon) {
-                        let users = coupon.users
-                        let userCheck = users.includes(userID)
-                        
-                        if (userCheck) {
-                            
-                            obj.couponUsed = true
-                            resolve(obj)
-                        }else{   
-                            let discountValue,total 
-                            total =parseInt(totalAmount)    
-                                        
-                            if (date <= coupon.expiry) {
-                                if (total >= coupon?.minPurchase) {
-                                    
-                                    let percentage = parseInt(coupon.offer)
-                                    discountValue = ((total*percentage)/100).toFixed()
-                                    
-        
-                                    if (discountValue > coupon?.maxDiscountValue ) {
-                                        discountValue = coupon?.maxDiscountValue
-                                        
-                                    }
-                                }
-                                obj.CouponName = coupon.coupon
-                                obj.total = parseInt(total-discountValue)
-                                obj.success = true
-                                obj.discountValue=discountValue
-                                
-                                
-                                resolve(obj)
-                            }else if(date > coupon.expiry){
-                                
-                                obj.couponExpired = true
-                                resolve(obj)
-                            }
-                        }
-                    }else{
-                        
-                        obj.invalidCoupon=true
-                        resolve(obj)
-                    }
-            }).catch((error)=>{
-                
-            })
-            
-    
-    },
-    startCouponOffer:async(date)=>{
-        
-            let couponStartDate = new Date(date)
-            
-            return new Promise(async(resolve, reject) => {
-                    let data = await db.get().collection(collection.COUPON_COLLECTION).find({startDateIso:{$lte:couponStartDate}}).toArray()
-                    if (data) {
-                        
-                        
-                        await data.map(async(data)=>{
-                           await db.get().collection(collection.COUPON_COLLECTION).updateOne({_id:ObjectId(data._id)},
-                            {
-                                $set:{
-                                    Available:true
-                                }
-                            }).then((response)=>{
-                                resolve(response)
-                            }).catch((error)=>{
-                                
-                            })
-                        })
-                    }else{
-                        
-                        resolve(0)
-                    }
-                
-            }).catch((error)=>{
-                
-            })
+            }
 
-    },
-    upDateCoupon:async(data,userID,coupon)=>{    
-            return new Promise(async(resolve, reject) => {
-                
-                db.get().collection(collection.COUPON_COLLECTION).updateOne({coupon:data.coupon,Available:true},
-                {
-                     $push: { users: { $each: [userID] } }
-                }
-                )
-            }).catch((error)=>{
-                
-            })
-            
-        
-    },
-    couponOrderUpdate: async (orderID, CouponName, discountValue,couponTotal) => {
-        return new Promise(async (resolve, reject) => {
-          try {
-            const collection = db.get().collection('order'); // Assuming the collection name is 'order'
-            const result = await collection.updateOne(
-              { _id: ObjectId(orderID) },
+            obj.CouponName = coupon.coupon;
+            obj.total = parseInt(total - discountValue);
+            obj.success = true;
+            obj.discountValue = discountValue;
+          } else if (formattedDate > coupon.expiry) {
+            obj.couponExpired = true;
+          }
+        }
+      } else {
+        obj.invalidCoupon = true;
+      }
+
+      return obj;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  startCouponOffer: async (date) => {
+    try {
+      const couponStartDate = new Date(date);
+      const data = await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .find({ startDateIso: { $lte: couponStartDate } })
+        .toArray();
+
+      if (data) {
+        data.forEach(async (coupon) => {
+          await db
+            .get()
+            .collection(collection.COUPON_COLLECTION)
+            .updateOne(
+              { _id: ObjectId(coupon._id) },
               {
                 $set: {
-                  CouponName: CouponName,
-                  discountValue: discountValue,
-                  couponTotal:couponTotal
-                }
+                  Available: true,
+                },
               }
             );
-            resolve();
-          } catch (error) {
-            reject(error);
-          }
         });
       }
-      
-}
+
+      return;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  upDateCoupon: async (data, userID, coupon) => {
+    try {
+      await db
+        .get()
+        .collection(collection.COUPON_COLLECTION)
+        .updateOne(
+          { coupon: data.coupon, Available: true },
+          { $push: { users: { $each: [userID] } } }
+        );
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  couponOrderUpdate: async (orderID, CouponName, discountValue, couponTotal) => {
+    try {
+      const collection = db.get().collection('order');
+      await collection.updateOne(
+        { _id: ObjectId(orderID) },
+        {
+          $set: {
+            CouponName: CouponName,
+            discountValue: discountValue,
+            couponTotal: couponTotal,
+          },
+        }
+      );
+    } catch (error) {
+      throw error;
+    }
+  },
+};

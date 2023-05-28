@@ -27,7 +27,11 @@
     "nodemon": "^2.0.20",
     "razorpay": "^2.8.6",
     "referral-code-generator": "^1.0.8",
+    "requirejs": "^2.3.6",
     "twilio": "^2.5.2",
     "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "madge": "^6.0.0"
   }
 }

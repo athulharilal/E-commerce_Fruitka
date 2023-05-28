@@ -1,86 +1,80 @@
-const {
-    response
-} = require('../app')
-const bannerHelpers = require('../helpers/banner-helpers')
+const bannerHelpers = require('../helpers/banner-helpers');
 
 module.exports = {
-    getBannerManagement: (req, res) => {
-        try {
-            bannerHelpers.getAllBanners().then((allbanners) => {
-                res.render('admin/banner-management', {
-                    allbanners,
-                    login: req.session.adminLoggedIn
-                })
-            })
-
-        } catch (error) {
-
-        }
-    },
-    getAddBanner: (req, res) => {
-        try {
-            res.render('admin/add-banner', {
-                login: req.session.adminLoggedIn
-            })
-
-        } catch (error) {
-
-        }
-    },
-    postAddbanner: (req, res) => {
-        try {
-
-
-
-            let images = req.files.map(files => files.filename)
-            req.body.images = images
-            bannerHelpers.addBanner(req.body).then(() => {
-                res.redirect('/admin/banner-management')
-            }).catch(() => {
-                req.sesion.bannerRpeatError = "Banner already Added!!"
-                res.redirect('/admin/banner-management')
-            })
-        } catch (error) {
-
-        }
-    },
-    getEditBanner: (req, res) => {
-        try {
-            let admin = req.sesion.admin
-            let id = req.params.id
-            bannerHelpers.getBannerDetaisl(id).then((bannerDetails) => {
-                res.render('admin/edit-banner', {
-                    bannerDetails,
-                    admin
-                })
-            })
-
-        } catch (error) {
-
-        }
-    },
-    postEditBanner: (req, res) => {
-        try {
-            let id = req.body._id
-            bannerHelpers.editBanner(req.body).then(() => {
-                if (req.files.image) {
-                    let image = req.files.image
-                    image.mv('./public/asse')
-                }
-            })
-
-        } catch (error) {
-
-        }
-    },
-    deleteBanner: (req, res) => {
-
-        let bannerId = req.params.id
-        bannerHelpers.deleteBanner(bannerId).then((response) => {
-            res.redirect('/admin/banner-management')
-
-        })
+  getBannerManagement: async (req, res) => {
+    try {
+      const allBanners = await bannerHelpers.getAllBanners();
+      res.render('admin/banner-management', {
+        allBanners,
+        login: req.session.adminLoggedIn,
+      });
+    } catch (error) {
+      // Properly handle the error, such as logging or sending an error response
+      console.log(error);
     }
+  },
 
+  getAddBanner: (req, res) => {
+    try {
+      res.render('admin/add-banner', {
+        login: req.session.adminLoggedIn,
+      });
+    } catch (error) {
+      // Properly handle the error, such as logging or sending an error response
+      console.log(error);
+    }
+  },
 
-}
+  postAddBanner: async (req, res) => {
+    try {
+      const images = req.files.map((file) => file.filename);
+      req.body.images = images;
+      await bannerHelpers.addBanner(req.body);
+      res.redirect('/admin/banner-management');
+    } catch (error) {
+      req.session.bannerRepeatError = 'Banner already added!!';
+      res.redirect('/admin/banner-management');
+    }
+  },
+
+  getEditBanner: async (req, res) => {
+    try {
+      const admin = req.session.admin;
+      const id = req.params.id;
+      const bannerDetails = await bannerHelpers.getBannerDetails(id);
+      res.render('admin/edit-banner', {
+        bannerDetails,
+        admin,
+      });
+    } catch (error) {
+      // Properly handle the error, such as logging or sending an error response
+      console.log(error);
+    }
+  },
+
+  postEditBanner: async (req, res) => {
+    try {
+      const id = req.body._id;
+      await bannerHelpers.editBanner(req.body);
+      if (req.files.image) {
+        const image = req.files.image;
+        image.mv('./public/asse');
+      }
+      res.redirect('/admin/banner-management');
+    } catch (error) {
+      // Properly handle the error, such as logging or sending an error response
+      console.log(error);
+    }
+  },
+
+  deleteBanner: async (req, res) => {
+    try {
+      const bannerId = req.params.id;
+      await bannerHelpers.deleteBanner(bannerId);
+      res.redirect('/admin/banner-management');
+    } catch (error) {
+      // Properly handle the error, such as logging or sending an error response
+      console.log(error);
+    }
+  },
+};

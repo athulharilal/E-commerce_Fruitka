@@ -11,17 +11,12 @@ const db = require('./config/connection');
 const session = require('express-session');
 const Handlebars = require('handlebars');
 
-const crypto = require('crypto');
-
-const secret = crypto.randomBytes(32).toString('hex');
-console.log(secret);
-
 // For indexing
-Handlebars.registerHelper("inc", function(value, options) {
+Handlebars.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
 });
 
-Handlebars.SafeString.prototype._checkPropertyAccess = function() {};
+Handlebars.SafeString.prototype._checkPropertyAccess = function () { };
 
 Handlebars.registerHelper('currentPageEquals', function (value, options) {
   const currentPage = parseInt(getParameterByName('page', options.hash.url));
@@ -60,20 +55,14 @@ const hbsInstance = hbs.create({
 });
 
 app.engine("hbs", hbsInstance.engine);
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  secret: secret,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 6000000 }
-}));
-
-
+app.use(session({ secret: 'key', cookie: { maxAge: 6000000 } }));
 
 db.connect((err) => {
   if (err) {
@@ -83,7 +72,7 @@ db.connect((err) => {
   }
 });
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.getParameterByName = function (name) {
     return getParameterByName(name, req.url);
   };
@@ -94,12 +83,12 @@ app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -110,4 +99,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-

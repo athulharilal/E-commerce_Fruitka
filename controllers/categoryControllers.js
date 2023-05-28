@@ -1,97 +1,70 @@
-const {
-  response
-} = require('../app');
-const adminHelpers = require('../helpers/admin-helpers')
-let categoryHelpers = require("../helpers/category-helpers");
-
-
+const adminHelpers = require('../helpers/admin-helpers');
+const categoryHelpers = require('../helpers/category-helpers');
 
 module.exports = {
   getAddCategories: async (req, res) => {
     try {
-      let admin = req.session.admin
-
+      const admin = req.session.admin;
       res.render("admin/add-categories", {
         catAddErr: req.session.catAddErr,
         admin: true,
         login: req.session.adminLoggedIn
       });
-      req.session.catAddErr = false
-
+      req.session.catAddErr = false;
     } catch (error) {
-
+      // Handle errors
     }
   },
+
   postAddCategories: async (req, res) => {
-
-    categoryHelpers.addcategories(req.body).then((response) => {
-
-      res.redirect('/admin/view-category')
-      // if (response.status) {
-      //   categoryHelpers.viewCategory().then((category) => {
-      //       //resolve from products helpers ln:21 is used in then
-      //       
-      //       res.render("admin/view-category", {
-      //         admin: true,
-      //         category,
-      //         login: req.session.adminLoggedIn,
-      //       });
-      //     }).catch((error)=>{
-      //       
-      //     })
-      // }else{
-      //   req.session.catAddErr = "Category Already Exist"
-      //   res.redirect('/admin/add-categories')
-      // }
-    }).catch((error) => {
-      req.session.catAddErr = " Category Already Exists"
-
-      res.redirect('/admin/add-categories')
-    })
+    try {
+      await categoryHelpers.addcategories(req.body);
+      res.redirect('/admin/view-category');
+    } catch (error) {
+      req.session.catAddErr = "Category Already Exists";
+      res.redirect('/admin/add-categories');
+    }
   },
-  getViewCategory: (req, res) => {
 
-    categoryHelpers.viewCategory().then((category) => {
-      //resolve from products helpers ln:21 is used in then
-
+  getViewCategory: async (req, res) => {
+    try {
+      const category = await categoryHelpers.viewCategory();
       res.render("admin/view-category", {
         admin: true,
         category,
         login: req.session.adminLoggedIn,
       });
-    }).catch((error) => {
-
-    })
-
-
+    } catch (error) {
+      // Handle errors
+    }
   },
+
   getEditCategory: async (req, res) => {
     try {
-      // let users = await userhelpers.getOneUsers(req.params.id)
-      let category = await categoryHelpers.getOneCategory(req.params.id);
+      const category = await categoryHelpers.getOneCategory(req.params.id);
       res.render("admin/edit-category", {
         admin: true,
         category,
         login: req.session.adminLoggedIn,
       });
-
     } catch (error) {
-
+      // Handle errors
     }
   },
+
   postEditCategory: async (req, res) => {
-    await categoryHelpers.getOneCategory(req.params.id);
-    categoryHelpers.updateCategory(req.body).then(() => {
+    try {
+      await categoryHelpers.updateCategory(req.body);
       res.redirect("/admin/view-category");
-    }).catch((error) => {
-    })
+    } catch (error) {
+      // Handle errors
+    }
   },
+
   getDeleteCategories: async (req, res) => {
     try {
-      const response = await categoryHelpers.viewCategory();
-      let catId = req.params.id;
+      const catId = req.params.id;
       const deleteResponse = await categoryHelpers.deleteCategory(catId);
-      // Check the resolved message
       let message = deleteResponse.message;
       if (deleteResponse.message === "There are products under this category") {
         message = "Cannot delete category. There are products under this category.";
@@ -103,6 +76,5 @@ module.exports = {
         message: error.message
       });
     }
-  }
-  ,
-}
+  },
+};

@@ -1,223 +1,128 @@
-//admin login verification
-let admindetails = require("../config/admin-details");
-let db = require("../config/connection");
-let collection = require("../config/collection");
+const admindetails = require("../config/admin-details");
+const db = require("../config/connection");
+const collection = require("../config/collection");
 const bcrypt = require("bcrypt");
-const {
-  response
-} = require("../app");
-const {
-  ObjectId,
-  ReturnDocument
-} = require("mongodb");
-let objectId = require("mongodb").ObjectId;
-const moment = require('moment')
-
-
-// var data = connection.userId
+const { ObjectId } = require("mongodb");
+const moment = require('moment');
 
 module.exports = {
   doLogin: async (userData) => {
-    //data entered in browser
     return new Promise(async (resolve, reject) => {
-      if (admindetails.Email == userData.Email) {
-        bcrypt
-          .compare(userData.Password, admindetails.Password)
+      if (admindetails.Email === userData.Email) {
+        bcrypt.compare(userData.Password, admindetails.Password)
           .then((loginTrue) => {
-            //comparing user password with stored password as bcrypt
             let response = {};
             if (loginTrue) {
-              
-              response.admin = admindetails; //response after login success
+              response.admin = admindetails;
               response.status = true;
-              //  response.time=new Date;
-              resolve(response); //response has both status and data
+              resolve(response);
             } else {
-              
-              resolve({
-                status: false
-              });
+              resolve({ status: false });
             }
           });
       } else {
-        
-        resolve({
-          status: false
-        });
+        resolve({ status: false });
       }
-    }).catch(() => {
-      
-    })
+    }).catch((error) => {});
   },
-  blockUser: async (userId) => {
-    const response = await new Promise((resolve, reject) => {
-      db.get()
-        .collection(collection.USER_COLLECTION)
-        .updateOne(
-          {
-            _id: objectId(userId)
-          },
-          {
-            $set: {
-              isBlocked: true
-            }
-          }
-        )
-        .then((response) => {
-          resolve(response);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
   
+  blockUser: async (userId) => {
+    const response = await db.get().collection(collection.USER_COLLECTION).updateOne(
+      { _id: ObjectId(userId) },
+      { $set: { isBlocked: true } }
+    );
     return response;
   },
-  unblockUser: async(userId) => {
-    console.log(userId," userId");
-    return new Promise((resolve, reject) => {
-      db.get()
-        .collection(collection.USER_COLLECTION)
-        .updateOne({
-          _id: objectId(userId)
-        }, {
-          $set: {
-            isBlocked: false,
-          },
-        });
-    }).then((response) => {
-      resolve(response);
-    }).catch((error) => {
-      console.log(" an error occured ",error)
-    })
+
+  unblockUser: async (userId) => {
+    const response = await db.get().collection(collection.USER_COLLECTION).updateOne(
+      { _id: ObjectId(userId) },
+      { $set: { isBlocked: false } }
+    );
+    return response;
   },
-  changeOrderStatus: (data, OrderId) => {
+
+  changeOrderStatus: (data, orderId) => {
     return new Promise((resolve, reject) => {
-      if (data.status == 'Shipped') {
-        db.get().collection(collection.ORDER_COLLECTION).updateOne({
-          _id: objectId(data.OrderId)
-        }, {
-          $set: {
-            status: data.status,
-            is_shipped: true
-          }
-        }).then((response) => {
-          resolve()
-        }).catch((error) => {
-          
-        })
-      } else if (data.status == 'Delivered') {
-        db.get().collection(collection.ORDER_COLLECTION).updateOne({
-          _id: objectId(data.OrderId)
-        }, {
-          $set: {
-            status: data.status,
-            is_delivered: true,
-            deliveredDate: new Date()
-          }
-        }).then((response) => {
-          resolve()
-          
-        }).catch((error) => {
-          
-        })
-      } else if (data.status == 'Cancelled') {
-        db.get().collection(collection.ORDER_COLLECTION).updateOne({
-          _id: objectId(data.OrderId)
-        }, {
-          $set: {
-            status: data.status,
-            is_Cancelled: true
-          }
-        }).then((response) => {
-          resolve()
-        }).catch((error) => {
-          
-        })
+      if (data.status === 'Shipped') {
+        db.get().collection(collection.ORDER_COLLECTION).updateOne(
+          { _id: ObjectId(data.OrderId) },
+          { $set: { status: data.status, is_shipped: true } }
+        ).then(() => {
+          resolve();
+        }).catch((error) => {});
+      } else if (data.status === 'Delivered') {
+        db.get().collection(collection.ORDER_COLLECTION).updateOne(
+          { _id: ObjectId(data.OrderId) },
+          { $set: { status: data.status, is_delivered: true, deliveredDate: new Date() } }
+        ).then(() => {
+          resolve();
+        }).catch((error) => {});
+      } else if (data.status === 'Cancelled') {
+        db.get().collection(collection.ORDER_COLLECTION).updateOne(
+          { _id: ObjectId(data.OrderId) },
+          { $set: { status: data.status, is_Cancelled: true } }
+        ).then(() => {
+          resolve();
+        }).catch((error) => {});
       } else {
-        db.get().collection(collection.ORDER_COLLECTION).updateOne({
-          _id: objectId(data.OrderId)
-        }, {
-          $set: {
-            status: data.status
-          }
-        }).then((response) => {
-
-          resolve()
-        }).catch((error) => {
-          
-        })
+        db.get().collection(collection.ORDER_COLLECTION).updateOne(
+          { _id: ObjectId(data.OrderId) },
+          { $set: { status: data.status } }
+        ).then(() => {
+          resolve();
+        }).catch((error) => {});
       }
-
     });
   },
-  userOrderDetails: async (userID) => {
+
+  userOrderDetails: async (userId) => {
     return new Promise(async (resolve, reject) => {
-      let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
-          $match: {
-            userId: objectId(userID)
-          }
-        },
+      let orderItems = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+        { $match: { userId: ObjectId(userId) } },
+        { $unwind: "$products" },
+        { $project: { item: '$products.item', quantity: "$products.quantity" } },
         {
-          $unwind: "$products"
-        },
-        {
-          $project: {
-            item: '$products.item',
-            quantity: "$products.quantity"
-          }
-        }, {
           $lookup: {
             from: collection.PRODUCT_COLLECTION,
             localField: 'item',
             foreignField: '_id',
             as: 'product'
           }
-        }, {
+        },
+        {
           $project: {
             item: 1,
             quantity: 1,
-            product: {
-              $arrayElemAt: ['$product', 0]
-            }
+            product: { $arrayElemAt: ['$product', 0] }
           }
         }
-      ]).toArray()
-      resolve(orderItems)
-      
-
-    }).catch((error) => {
-      
-    });
-
-
-
+      ]).toArray();
+      resolve(orderItems);
+    }).catch((error) => {});
   },
-  getSalesReport: async () => {
 
+  getSalesReport: async () => {
     return new Promise(async (resolve, reject) => {
-      let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([{
+      let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+        {
           $lookup: {
             from: "user",
             localField: "userId",
             foreignField: "_id",
             as: "user"
-          },
+          }
         },
-        {
-          $unwind: '$user',
-        },
+        { $unwind: '$user' },
         {
           $lookup: {
             from: 'product',
             localField: 'products.item',
             foreignField: '_id',
             as: 'product'
-          },
+          }
         },
-        {
-          $unwind: "$product"
-        },
+        { $unwind: "$product" },
         {
           $project: {
             _id: 1,
@@ -235,135 +140,105 @@ module.exports = {
             is_delivered: 1,
           }
         }
-      ]).sort({
-        date: -1
-      }).toArray()
+      ]).sort({ date: -1 }).toArray();
       if (orders) {
         for (let index = 0; index < orders.length; index++) {
-          orders[index].date = moment(orders[index].date).format('DD-MM-YYYY')
+          orders[index].date = moment(orders[index].date).format('DD-MM-YYYY');
         }
-        resolve(orders)
+        resolve(orders);
       } else {
-        resolve(0)
+        resolve(0);
       }
-    }).catch((error) => {
-      
-    });
-
-
+    }).catch((error) => {});
   },
+
   salesReport: (searchCriterias) => {
     return new Promise(async (resolve, reject) => {
       let startDate, endDate, orders;
       if (searchCriterias.fromDate) {
-        startDate = new Date(searchCriterias.fromDate)
-        endDate = new Date(searchCriterias.toDate)
-        if (searchCriterias.modeOfPayment == 'Show all') {
+        startDate = new Date(searchCriterias.fromDate);
+        endDate = new Date(searchCriterias.toDate);
+        if (searchCriterias.modeOfPayment === 'Show all') {
           orders = await db.get().collection(collection.ORDER_COLLECTION).find({
             orderStatus: 'Delivered',
-            dated: {
-              $gte: startDate,
-              $lte: endDate
-            }
-          }).sort({
-            dated: -1
-          }).toArray()
+            dated: { $gte: startDate, $lte: endDate }
+          }).sort({ dated: -1 }).toArray();
         } else {
           orders = await db.get().collection(collection.ORDER_COLLECTION).find({
             orderStatus: 'Delivered',
             modeOfPayment: (searchCriterias.modeOfPayment),
-            dated: {
-              $gte: startDate,
-              $lte: endDate
-            }
-          }).sort({
-            dated: -1
-          }).toArray()
+            dated: { $gte: startDate, $lte: endDate }
+          }).sort({ dated: -1 }).toArray();
         }
       } else {
         orders = await db.get().collection(collection.ORDER_COLLECTION).find({
           orderStatus: 'Delivered'
-        }).sort({
-          dated: -1
-        }).toArray()
+        }).sort({ dated: -1 }).toArray();
       }
       for (let i = 0; i < orders.length; i++) {
-        orders[i].dated = moment(orders[i].dated).format('Do MMM YYYY')
+        orders[i].dated = moment(orders[i].dated).format('Do MMM YYYY');
       }
-      resolve(orders)
-    })
+      resolve(orders);
+    });
   },
+
   getSalesFilter: async (startDate, endDate) => {
     return new Promise(async (resolve, reject) => {
-      startDate = new Date(startDate)
-      endDate = new Date(endDate)
-      
-      let orders = await db
-        .get()
-        .collection(collection.ORDER_COLLECTION)
-        .aggregate([{
-            $match: {
-              date: {
-                $gte: startDate,
-                $lte: endDate,
-              },
-            },
-          },
-          {
-            $lookup: {
-              from: "user",
-              localField: "userId",
-              foreignField: "_id",
-              as: "user"
-            }
-          },
-          {
-            $unwind: "$user"
-          },
-          {
-            $lookup: {
-              from: "product",
-              localField: "products.item",
-              foreignField: "_id",
-              as: "product"
-            }
-          },
-          {
-            $unwind: "$product"
-          },
-          {
-            $project: {
-              _id: 1,
-              userId: 1,
-              "user.Name": 1,
-              "user.Email": 1,
-              "product.Name": 1,
-              "product.Price": 1,
-              "products.quantity": 1,
-              totalAmount: 1,
-              PaymentMethod: 1,
-              status: 1,
-              date: 1,
-              deliveredDate: 1,
-              is_delivered: 1,
+      startDate = new Date(startDate);
+      endDate = new Date(endDate);
+      let orders = await db.get().collection(collection.ORDER_COLLECTION).aggregate([
+        {
+          $match: {
+            date: {
+              $gte: startDate,
+              $lte: endDate
             }
           }
-
-        ]).sort({
-          date: -1
-        }).toArray()
+        },
+        {
+          $lookup: {
+            from: "user",
+            localField: "userId",
+            foreignField: "_id",
+            as: "user"
+          }
+        },
+        { $unwind: "$user" },
+        {
+          $lookup: {
+            from: "product",
+            localField: "products.item",
+            foreignField: "_id",
+            as: "product"
+          }
+        },
+        { $unwind: "$product" },
+        {
+          $project: {
+            _id: 1,
+            userId: 1,
+            "user.Name": 1,
+            "user.Email": 1,
+            "product.Name": 1,
+            "product.Price": 1,
+            "products.quantity": 1,
+            totalAmount: 1,
+            PaymentMethod: 1,
+            status: 1,
+            date: 1,
+            deliveredDate: 1,
+            is_delivered: 1
+          }
+        }
+      ]).sort({ date: -1 }).toArray();
       if (orders) {
         for (let index = 0; index < orders.length; index++) {
-          orders[index].date = moment(orders[index].date).format('DD-MM-YYYY')
+          orders[index].date = moment(orders[index].date).format('DD-MM-YYYY');
         }
-        resolve(orders)
-        
+        resolve(orders);
       } else {
-        resolve(0)
+        resolve(0);
       }
-    }).catch((error) => {
-      
-    });
-
+    }).catch((error) => {});
   }
 };
