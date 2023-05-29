@@ -4,10 +4,8 @@ let categoryHelpers = require("../helpers/category-helpers");
 let adminHelpers = require("../helpers/admin-helpers");
 let orderHelpers = require("../helpers/order-Helpers");
 let bannerHelpers = require("../helpers/banner-helpers");
-const moment = require('moment');
 const cartHelpers = require("../helpers/cart-helpers");
 const whishlistHelpers = require("../helpers/whishlistHelpers");
-const multer = require("multer");
 
 module.exports = {
   getAddProducts: async (req, res) => {

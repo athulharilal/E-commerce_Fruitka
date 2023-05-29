@@ -62,7 +62,13 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({ secret: 'key', cookie: { maxAge: 6000000 } }));
+app.use(session({
+  secret: 'key',
+  resave: true, // Add this line to enable the resave option
+  saveUninitialized: true, // Add this line to enable the saveUninitialized option
+  cookie: { maxAge: 6000000 }
+}));
+
 
 db.connect((err) => {
   if (err) {
