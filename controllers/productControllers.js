@@ -5,7 +5,7 @@ let adminHelpers = require("../helpers/admin-helpers");
 let orderHelpers = require("../helpers/order-Helpers");
 let bannerHelpers = require("../helpers/banner-helpers");
 const cartHelpers = require("../helpers/cart-helpers");
-const whishlistHelpers = require("../helpers/whishlistHelpers");
+const wishlistHelpers = require("../helpers/wishlistHelpers");
 
 module.exports = {
   getAddProducts: async (req, res) => {
@@ -144,7 +144,7 @@ module.exports = {
       }
       let category = await categoryHelpers.getAllCategories();
       let count = await cartHelpers.getCartCount(user._id);
-      let wishlistCount = await whishlistHelpers.getWishlistCount(user._id);
+      let wishlistCount = await wishlistHelpers.getWishlistCount(user._id);
       let pageNumber = 1;
       if (req.query.page > 1) {
         pageNumber = parseInt(req.query.page);

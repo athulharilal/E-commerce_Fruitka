@@ -37,12 +37,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: generateSecretKey,
-  resave: true, // Add this line to enable the resave option
-  saveUninitialized: true, // Add this line to enable the saveUninitialized option
+  secret: generateSecretKey(), // Invoke the generateSecretKey function
+  resave: true,
+  saveUninitialized: true,
   cookie: { maxAge: 6000000 }
 }));
-
 
 db.connect((err) => {
   if (err) {
