@@ -229,7 +229,7 @@ module.exports = {
   postEditProduct: async (req, res) => {
     try {
       let id = req.params.id;
-      await productsHelpers.updateproduct(id, req.body);
+      await productsHelpers.updateProduct(id, req.body);
       res.redirect("/admin");
     } catch (error) {
       // Handle error

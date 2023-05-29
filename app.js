@@ -10,7 +10,11 @@ const app = express();
 const db = require('./config/connection');
 const session = require('express-session');
 const Handlebars = require('handlebars');
+const crypto = require('crypto');
 
+const generateSecretKey = () => {
+  return crypto.randomBytes(32).toString('hex');
+};
 // For indexing
 Handlebars.registerHelper("inc", function (value, options) {
   return parseInt(value) + 1;
@@ -63,7 +67,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'key',
+  secret: generateSecretKey,
   resave: true, // Add this line to enable the resave option
   saveUninitialized: true, // Add this line to enable the saveUninitialized option
   cookie: { maxAge: 6000000 }
