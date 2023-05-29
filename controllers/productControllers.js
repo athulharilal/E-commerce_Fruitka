@@ -5,7 +5,7 @@ let adminHelpers = require("../helpers/admin-helpers");
 let orderHelpers = require("../helpers/order-Helpers");
 let bannerHelpers = require("../helpers/banner-helpers");
 const cartHelpers = require("../helpers/cart-helpers");
-const wishlistHelpers = require("../helpers/wishlistHelpers");
+const wishlistHelpers = require("../helpers/whishlistHelpers");
 
 module.exports = {
   getAddProducts: async (req, res) => {
