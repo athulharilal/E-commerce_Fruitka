@@ -62,7 +62,7 @@ router.get('/Order-management', auth.admin, productControllers.getOrderManagemen
 // Banner management routes
 router.get('/banner-management', auth.admin, bannerControllers.getBannerManagement);
 router.get('/add-banner', auth.admin, bannerControllers.getAddBanner);
-router.post('/add-banner', auth.admin, imgupload.uploads2, bannerControllers.postAddbanner);
+router.post('/add-banner', auth.admin, imgupload.uploads2, bannerControllers.postAddBanner);
 router.get('/edit-banner/:id', auth.admin, bannerControllers.getEditBanner);
 router.post('/edit-banner', auth.admin, bannerControllers.postEditBanner);
 router.get('/delete-banner/:id', auth.admin, bannerControllers.deleteBanner);

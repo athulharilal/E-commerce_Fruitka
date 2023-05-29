@@ -1,7 +1,4 @@
-// const adminHelpers = require('../helpers/admin-helpers')
 const adminHelpers = require('../helpers/admin-helpers');
-const userHelpers = require('../helpers/user-helpers');
-const adminHelpers = require('../helpers/admin-helpers')
 const userHelpers = require('../helpers/user-helpers')
 const productsHelpers = require('../helpers/products-helpers')
 const dashboardHelpers = require('../helpers/dashboard-helpers')
@@ -152,7 +149,7 @@ module.exports = {
     }
   },
 
-  ggetProducts: async function (req, res) {
+  getProducts: async function (req, res) {
     try {
       if (req.session.adminLoggedIn) {
         const products = await productsHelpers.getAllProducts();
@@ -198,7 +195,7 @@ module.exports = {
       console.log(error);
     }
   },
-  
+
   getEditUsers: async (req, res) => {
     try {
       if (req.session.adminLoggedIn) {

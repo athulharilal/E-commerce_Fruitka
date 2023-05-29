@@ -6,7 +6,7 @@ let orderHelpers = require("../helpers/order-Helpers");
 let bannerHelpers = require("../helpers/banner-helpers");
 const moment = require('moment');
 const cartHelpers = require("../helpers/cart-helpers");
-const whishlistHelpers = require("../helpers/wishlist-helpers");
+const whishlistHelpers = require("../helpers/whishlistHelpers");
 const multer = require("multer");
 
 module.exports = {

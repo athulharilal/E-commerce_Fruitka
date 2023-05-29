@@ -30,11 +30,11 @@ router.get("/otp-login", userControllers.getOtp);
 router.post("/otp-login", userControllers.postOtp);
 
 // Cart routes
-router.get("/add-to-cart/:id", auth.user, auth.userCheck, cartControllers.getAddtocart);
-router.get("/add-to-cart-fromWishlist/:id", auth.user, auth.userCheck, cartControllers.getAddtoCartFromWishlist);
+router.get("/add-to-cart/:id", auth.user, auth.userCheck, cartControllers.getAddToCart);
+router.get("/add-to-cart-fromWishlist/:id", auth.user, auth.userCheck, cartControllers.getAddToCartFromWishlist);
 router.get("/cart", auth.user, auth.userCheck, cartControllers.getCart);
 router.get("/delete-cart-item/:proId/:cartId", auth.user, auth.userCheck, cartControllers.getDeleteCartItems);
-router.post("/change-product-quantity", auth.user, auth.userCheck, cartControllers.postChangeproductquant);
+router.post("/change-product-quantity", auth.user, auth.userCheck, cartControllers.postChangeProductQuantity);
 
 // Wishlist routes
 router.get("/add-to-wishlist/:id", auth.user, auth.userCheck, wishListControllers.getAddToWishlist);
@@ -62,7 +62,7 @@ router.post("/add-address", auth.user, auth.userCheck, userControllers.postAddAd
 router.post("/placeorder-add-address", auth.user, auth.userCheck, userControllers.postPlaceOrderAddAddrress);
 router.post("/edit-address", auth.user, auth.userCheck, userControllers.postEditAddress);
 router.post("/place-order-edit-address", auth.user, auth.userCheck, userControllers.postEditAddress);
-router.get("/deleteAddrsess/:addressId", auth.user, auth.userCheck, userControllers.PostDeleteAddress);
+router.get("/deleteAddrsess/:addressId", auth.user, auth.userCheck, userControllers.postDeleteAddress);
 router.get("/view-products/:id", auth.user, auth.userCheck, productControllers.getViewSingleProducts);
 router.get("/changePassword", auth.user, auth.userCheck, userControllers.getChangepassword);
 router.post("/change-password", auth.user, auth.userCheck, userControllers.postChangePassword);
