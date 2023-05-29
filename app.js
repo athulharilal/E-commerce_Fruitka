@@ -15,36 +15,6 @@ const crypto = require('crypto');
 const generateSecretKey = () => {
   return crypto.randomBytes(32).toString('hex');
 };
-// For indexing
-Handlebars.registerHelper("inc", function (value, options) {
-  return parseInt(value) + 1;
-});
-
-Handlebars.SafeString.prototype._checkPropertyAccess = function () { };
-
-Handlebars.registerHelper('currentPageEquals', function (value, options) {
-  const currentPage = parseInt(getParameterByName('page', options.hash.url));
-  return currentPage === value;
-});
-
-Handlebars.registerHelper('getURLWithPage', function (pageNumber, options) {
-  const url = new URL(options.hash.url, 'http://localhost:3001/');
-  url.searchParams.set('page', pageNumber);
-  return url.href;
-});
-
-// Function to extract query parameters from the URL
-function getParameterByName(name, url) {
-  url = url || '';
-  name = name.replace(/[\[\]]/g, '\\$&');
-  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-  const results = regex.exec(url);
-  if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
-}
-
-// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
@@ -107,5 +77,35 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+// For indexing
+Handlebars.registerHelper("inc", function (value, options) {
+  return parseInt(value) + 1;
+});
+
+Handlebars.SafeString.prototype._checkPropertyAccess = function () { };
+
+Handlebars.registerHelper('currentPageEquals', function (value, options) {
+  const currentPage = parseInt(getParameterByName('page', options.hash.url));
+  return currentPage === value;
+});
+
+Handlebars.registerHelper('getURLWithPage', function (pageNumber, options) {
+  const url = new URL(options.hash.url, 'http://localhost:3001/');
+  url.searchParams.set('page', pageNumber);
+  return url.href;
+});
+
+// Function to extract query parameters from the URL
+function getParameterByName(name, url) {
+  url = url || '';
+  name = name.replace(/[\[\]]/g, '\\$&');
+  const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+  const results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+// View engine setup
 
 module.exports = app;
