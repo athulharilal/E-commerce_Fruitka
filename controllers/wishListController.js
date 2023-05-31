@@ -1,5 +1,4 @@
 const whishlistHelpers = require('../helpers/whishlistHelpers');
-const userHelpers = require('../helpers/user-helpers');
 
 module.exports = {
   getAddToWishlist: (req, res) => {
@@ -23,7 +22,6 @@ module.exports = {
     try {
       let cartCount = null;
       let whishlistCount = null;
-      // cartCount = await userHelpers.getCartCount(req.session.user._id);
       whishlistCount = await whishlistHelpers.getWishlistCount(req.session.user._id);
       const user = req.session.user;
       const products = await whishlistHelpers.getWishlists(req.session.user._id);

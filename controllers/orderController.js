@@ -1,7 +1,7 @@
 
-const userHelpers = require('../helpers/user-helpers');
-const orderHelpers = require('../helpers/order-Helpers')
-const cartHelpers = require('../helpers/cart-helpers');
+const userHelpers = require('../helpers/userHelpers');
+const orderHelpers = require('../helpers/orderHelpers')
+const cartHelpers = require('../helpers/cartHelpers');
 
 module.exports = {
   getOrders: async (req, res) => {

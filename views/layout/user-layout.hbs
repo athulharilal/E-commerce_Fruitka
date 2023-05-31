@@ -12,20 +12,18 @@
 	<title>Fruitkha - Slider Version</title>
 
 	<!-- favicon -->
+
 	<link rel="shortcut icon" type="image/png" href="assets/img/favicon.png">
 	<!-- google font -->
 	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
 	<!-- fontawesome -->
 	<link rel="stylesheet" href="/assets/css/all.min.css">
 	<!-- bootstrap -->
-
 	<link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-
-
-
-	{{!-- <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css" /> --}}
-
 	<!-- owl carousel -->
 	<link rel="stylesheet" href="/assets/css/owl.carousel.css">
 	<!-- magnific popup -->
@@ -37,61 +35,63 @@
 	<!-- main style -->
 	<link rel="stylesheet" href="/assets/css/main.css">
 	<!-- responsive -->
-	<link rel="stylesheet" href="/assets/css/responsive.css">
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+	<link rel="stylesheet" href="/assets/css/responsive.css">
+	<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 	<script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-
-	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>  
+	<script src="/javascripts/script.js"></script>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
 
 </head>
 
 <body>
 	<!-- Topbar Start -->
-	{{>user-header}}
+	<div class="top-header-area" id="sticker">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-sm-12 text-center">
+					<div class="main-menu-wrap">
+						<!-- logo -->
+						<div class="site-logo">
+							<a href="/">
+								<!-- Add your logo here -->
+							</a>
+						</div>
+						<!-- logo -->
+						<div class="menu-right pull-right">
+							<!-- Add your menu items here -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Topbar End -->
+
+	{{> user-header}}
+
 	{{{body}}}
+
 	{{>user-footer}}
-
-	<!-- JavaScript Libraries -->
-	<script>
-		// Initialize lazysizes lazy loading
-		window.lazySizesConfig = window.lazySizesConfig || {};
-		window.lazySizesConfig.init = false; // Disable automatic initialization
-		window.lazySizesConfig.expand = 200; // Load images 200px before they enter the viewport
-		window.lazySizes.init(); // Manually initialize lazysizes
-	</script>
-	<script src="/assets/js/jquery-1.11.3.min.js"></script>
-	<!-- bootstrap -->
+	<!-- User Footer -->
+	<!-- jQuery -->
+	<!-- Bootstrap -->
 	<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
-
-	<!-- count down -->
-	{{!-- <script src="/assets/js/jquery.countdown.js"></script> --}}
-	<!-- isotope -->
-	<script src="/assets/js/jquery.isotope-3.0.6.min.js"></script>
-	<!-- waypoints -->
-	<script src="/assets/js/waypoints.js"></script>
-	<!-- owl carousel -->
+	<!-- Owl Carousel -->
 	<script src="/assets/js/owl.carousel.min.js"></script>
-	<!-- magnific popup -->
+	<!-- Magnific Popup -->
 	<script src="/assets/js/jquery.magnific-popup.min.js"></script>
-	<!-- mean menu -->
+	<!-- Mean Menu -->
 	<script src="/assets/js/jquery.meanmenu.min.js"></script>
-	<!-- sticker js -->
+	<!-- Sticker -->
 	<script src="/assets/js/sticker.js"></script>
-	<!-- main js -->
-
+	<!-- Main JS -->
 	<script src="/assets/js/main.js"></script>
-
-	{{!-- <script src="/js/zoomsl.min.js"></script> --}}
-
-	<script src="/javascripts/script.js"></script>
-
 
 </body>
 

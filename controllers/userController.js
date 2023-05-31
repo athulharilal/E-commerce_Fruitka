@@ -1,7 +1,10 @@
-const userHelpers = require("../helpers/user-helpers");
-const productsHelpers = require("../helpers/products-helpers");
-const cartHelpers = require("../helpers/cart-helpers");
-const bannerHelpers = require("../helpers/banner-helpers");
+const userHelpers = require("../helpers/userHelpers");
+const productsHelpers = require("../helpers/productsHelpers");
+const cartHelpers = require("../helpers/cartHelpers");
+const bannerHelpers = require("../helpers/bannerHelpers");
+const couponHelpers = require("../helpers/couponHelpers");
+const whishlistHelpers = require("../helpers/whishlistHelpers");
+const orderHelpers = require("../helpers/orderHelpers");
 
 module.exports = {
   home: async (req, res) => {
@@ -21,7 +24,7 @@ module.exports = {
       const result = await productsHelpers.paginateData(products, pageNumber, perPage);
       const pageCount = Math.ceil(result.totalCount / perPage);
 
-      res.render("user/user-home", {
+      res.render("user/userHome", {
         data: result.data,
         pageCount,
         currentPage: pageNumber,
@@ -52,8 +55,9 @@ module.exports = {
 
   getLogin: (req, res) => {
     try {
+    
       if (req.session.loggedIn) {
-        res.render("user/user-home");
+        res.render("user/userHome");
       } else {
         res.render("user/login", {
           loginError: req.session.loginErr
@@ -61,6 +65,7 @@ module.exports = {
         req.session.loginErr = false;
       }
     } catch (error) {
+      console.log(error);
       res.render('user/404', {
         user: true
       });
@@ -122,10 +127,12 @@ module.exports = {
 
     getLogout: (req, res) => {
       try {
-        req.session.loggedIn = false;
-        req.session.user = null;
+        req.session.destroy();
+        // req.session.loggedIn = false;
+        // req.session.user = null;
         res.redirect("/");
       } catch (error) {
+        console.log(error);
         res.render('user/404', {
           user: true
         });
@@ -181,7 +188,7 @@ module.exports = {
         const wallet = await userHelpers.findWallet(userID);
         const walletStatus = wallet.wallet > totalValue;
   
-        res.render('user/placeorder', {
+        res.render('user/placeOrder', {
           products,
           totalValue,
           user: req.session.user,
@@ -201,17 +208,18 @@ module.exports = {
   
     postPlaceOrders: async (req, res) => {
       try {
+        console.log(req.session.user," user");
         const user = req.session.user._id;
         const products = await cartHelpers.getCartProductList(user);
         let totalPrice = await cartHelpers.getTotalAmount(user);
         const wallet = await userHelpers.findWalletAmount(user);
-  
+        
         if (req.session.couponTotal) {
           totalPrice = req.session.couponTotal;
         }
-  
+        
         const orderID = await orderHelpers.placeOrder(req.body, products, totalPrice, user);
-  
+        
         if (req.body['PaymentMethod'] === 'COD') {
           req.session.couponTotal = null;
           res.json({
@@ -279,7 +287,7 @@ module.exports = {
     getViewOrderedProducts: async (req, res) => {
       try {
         const products = await userHelpers.getUserOrderProducts(req.params.id);
-        res.render("user/vieworderproducts", {
+        res.render("user/viewOrderProducts", {
           user: true,
           products
         });
@@ -292,7 +300,7 @@ module.exports = {
   
     getMyProfile: async (req, res) => {
       try {
-        res.render('user/my-profile', {
+        res.render('user/myProfile', {
           user: req.session.user
         });
       } catch (error) {
@@ -306,7 +314,7 @@ module.exports = {
     try {
       const userDetails = await userHelpers.getOneUserDetails(req.session.user._id);
 
-      res.render('user/edit-Personal-details', {
+      res.render('user/editPersonalDetails', {
         user: req.session.user._id,
         userDetails
       });
@@ -320,7 +328,7 @@ module.exports = {
   postEditPersonalDetails: async (req, res) => {
     try {
       await userHelpers.editMyprofile(req.body, req.session.user._id);
-      res.redirect('/edit-Personal-details');
+      res.redirect('/editPersonalDetails');
     } catch (error) {
       res.render('user/404', {
         user: true
@@ -357,7 +365,7 @@ module.exports = {
   postPlaceOrderAddAddrress: async (req, res) => {
     try {
       await userHelpers.addAddress(req.body, req.session.user._id);
-      res.redirect('/placeorder');
+      res.redirect('/placeOrder');
     } catch (error) {
       res.render('user/404', {
         user: true
@@ -368,7 +376,7 @@ module.exports = {
   postAddAddrress: async (req, res) => {
     try {
       await userHelpers.addAddress(req.body, req.session.user._id);
-      res.redirect('/my-profile');
+      res.redirect('/myProfile');
     } catch (error) {
       res.render('user/404', {
         user: true
@@ -415,7 +423,7 @@ module.exports = {
 
   getChangepassword: (req, res) => {
     try {
-      res.render('user/changepassword', {
+      res.render('user/changePassword', {
         user: true
       });
     } catch (error) {
@@ -436,7 +444,7 @@ module.exports = {
           res.redirect('/');
         } else {
           const userDetails = await userHelpers.getOneUserDetails(req.session.user._id);
-          res.render('user/changepassword', {
+          res.render('user/changePassword', {
             user: true,
             userDetails,
             message: 'Incorrect Password'
@@ -444,7 +452,7 @@ module.exports = {
         }
       } else {
         const userDetails = await userHelpers.getOneUserDetails(req.session.user._id);
-        res.render('user/changepassword', {
+        res.render('user/changePassword', {
           user: true,
           userDetails,
           message: 'Enter the same Password'
@@ -482,7 +490,7 @@ module.exports = {
     try {
       const userDetails = await userHelpers.getOneUserDetails(req.session.user._id);
 
-      res.render('user/loginnsecurity', {
+      res.render('user/loginNSecurity', {
         user: true,
         userDetails
       });
@@ -503,9 +511,10 @@ module.exports = {
       req.session.couponTotal = response.total;
       req.session.discountValue = response.discountValue;
 
+      console.log(response," response");
+
       if (response.success) {
         couponHelpers.upDateCoupon(req.body, id, coupon);
-
         res.json({
           couponSuccess: true,
           total: response.total,

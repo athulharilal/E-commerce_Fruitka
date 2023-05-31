@@ -1,10 +1,11 @@
 {{#if orderData}}
-<div class="cart-section  mt-100 mb-100 align-items-center">
+<div class="cart-section mt-100 mb-100 align-items-center">
     <div class="container d-flex justify-content-center">
-        <h3>Your <span class="orange-text text-center  border mt-2 ml-auto mr-auto ">Orders</span></h3>
+        <h3>Your <span class="orange-text text-center border mt-2 ml-auto mr-auto ">Orders</span></h3>
     </div>
 </div>
-<table class="table table-striped table-bordered" id="orderTable" style="width: 90%; margin-left: 5rem;">
+<div class="table-responsive">
+    <table class="table table-striped table-bordered" id="orderTable" style="width: 90%; margin-left: 5rem;">
     <thead class="thead-dark">
         <tr>
             <th>No</th>
@@ -23,7 +24,7 @@
         {{#each orderData}}
         <tr>
             <td>{{inc @index}}</td>
-            <td>{{this.date}}</td>
+            <td style="white-space: nowrap;" >{{this.date}}</td>
             <td>
                 <strong>Name: </strong>{{this.deliveryDetails.name}}<br>
                 <strong>Delivery Address: </strong>{{this.deliveryDetails.deliveryAddress}}<br>
@@ -60,6 +61,7 @@
         {{/each}}
     </tbody>
 </table>
+</div>
 {{else}}
 <div class="cart-section mt-150 mb-150 align-items-center">
     <div class="container d-flex justify-content-center flex-column align-items-center">

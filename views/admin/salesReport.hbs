@@ -1,0 +1,135 @@
+<div class="container-fluid position-relative mt-4" id="sales-report" style="padding-left: 15rem;">
+  <div class="container-fluid" style="margin-top: 5rem;">
+    <div class="text-end bg-light p-3">
+      <div class="text-center">
+        <h3><b>SALES REPORT</b></h3>
+      </div>
+    </div>
+   <div class="d-flex justify-content-between">
+  <div class="dropdown">
+    <button class="btn btn-info dropdown-toggle" type="button" id="downloadDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Download
+    </button>
+    <div class="dropdown-menu" aria-labelledby="downloadDropdown">
+      <a class="dropdown-item" href="#" onclick="downloadFile('pdf')">PDF</a>
+      <a class="dropdown-item" href="#" onclick="downloadFile('excel')">Excel</a>
+      <a class="dropdown-item" href="#" onclick="downloadFile('csv')">CSV</a>
+    </div>
+  </div>
+  <form action="/admin/sales-report-date" method="POST" class="d-flex align-items-center">
+  <div class="row">
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="startdate">From:</label>
+        <input type="date" name="startdate" id="startdate" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="enddate">Till:</label>
+        <input type="date" name="enddate" id="enddate" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="form-group">
+        <button class="btn btn-success mt-2" type="submit">Submit</button>
+        <a href="/admin/sales-report" class="btn btn-danger mt-2">Reset</a>
+      </div>
+    </div>
+  </div>
+</form>
+
+</div>
+
+  </div>
+  <div class="mt-4">
+    <div class="table-responsive">
+      <table class="table" id="container_content">
+        <thead class="bg-light">
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">OrderID</th>
+            <th scope="col">Date</th>
+            <th scope="col">Name</th>
+            <th scope="col">Products</th>
+            <th scope="col">Price</th>
+            <th scope="col" style="white-space: nowrap;" >Total Amount</th>
+            <th scope="col">Payment</th>
+            <th scope="col">Status</th>
+            <th scope="col">Contact</th>
+          </tr>
+        </thead>
+        <tbody id="myTable" class="text-50">
+          {{#each salesReport}}
+          <tr>
+            <th scope="row" class="fs-bold">{{inc @index}}</th>
+            <td>{{this._id}}</td>
+            <td class="text-center" style="white-space: nowrap;" >{{this.date}}</td>
+            <td style="white-space: nowrap;" >{{this.user.Name}}</td>
+            <td>{{this.product.Name}}</td>
+            <td>{{this.product.Price}}</td>
+            <td>{{this.totalAmount}}</td>
+            <td>{{this.PaymentMethod}}</td>
+            <td style="white-space: nowrap;" >{{this.status}}</td>
+            <td>{{this.user.Email}}</td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<!-- Include necessary CSS and JavaScript libraries -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#container_content').DataTable();
+  });
+
+  function downloadFile(type) {
+    if (type === 'pdf') {
+      var element = document.getElementById('container_content');
+      let randomNumber = Math.floor(Math.random() * (10000000000 - 1)) + 1;
+      var opt = {
+        margin: 0,
+        filename: 'SalesReport' + randomNumber + '.pdf',
+        html2canvas: {
+          scale: 10
+        },
+        jsPDF: {
+          unit: 'in',
+          format: 'letter',
+          orientation: 'portrait'
+        }
+      };
+      html2pdf().set(opt).from(element).save();
+    } else if (type === 'excel') {
+      export_data();
+    } else if (type === 'csv') {
+      // Handle CSV download logic here
+    }
+  }
+
+  function export_data() {
+    let data = document.getElementById('container_content');
+    var wb = XLSX.utils.table_to_book(data, {
+      sheet: 'Sheet JS'
+    });
+    var wbout = XLSX.write(wb, {
+      bookType: 'xlsx',
+      type: 'array'
+    });
+    saveAs(new Blob([wbout], {
+      type: 'application/octet-stream'
+    }), 'sales_report.xlsx');
+  }
+</script>

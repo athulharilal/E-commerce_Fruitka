@@ -11,12 +11,23 @@ const db = require('./config/connection');
 const session = require('express-session');
 const Handlebars = require('handlebars');
 const crypto = require('crypto');
+const passport = require('passport')
 
-const generateSecretKey = () => {
-  return crypto.randomBytes(32).toString('hex');
-};
+
+// app.use(passport.authenticate())
+// app.use(passport.session())
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
+
+
+const secretKey = crypto.randomBytes(32).toString('hex');
+
+app.use(session({
+  secret: secretKey,
+  resave: false,
+  saveUninitialized: true
+}));
 
 // Configure Handlebars with the allowProtoPropertiesByDefault option
 const hbsInstance = hbs.create({
@@ -36,12 +47,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(session({
-  secret: generateSecretKey(), // Invoke the generateSecretKey function
-  resave: true,
-  saveUninitialized: true,
-  cookie: { maxAge: 6000000 }
-}));
+
 
 db.connect((err) => {
   if (err) {

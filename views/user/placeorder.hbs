@@ -1,741 +1,563 @@
-	<!-- check out section -->
-
-	<form action="" id="checkout-form">
-		<div class="checkout-section mt-150 mb-150">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-8">
-						<div class="checkout-accordion-wrap">
-							<div class="accordion" id="accordionExample">
-								<div class="card single-accordion">
-									<div class="card-header" id="headingOne">
-										<h5 class="mb-0">
-											<button class="btn btn-link" type="button" data-toggle="collapse"
-												data-target="#collapseOne" aria-expanded="true"
-												aria-controls="collapseOne">
-												Shipping Address
-											</button>
-										</h5>
-									</div>
-									<div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-										data-parent="#accordionExample">
-										<div class="card-body">
-											<div class="billing-address-form">
-												<h5>Choose the Address: </h5>
-												<div class="row">
-													{{#each userAddress.address}}
-													<div class="col-8">
-														<input type="radio" id="{{this._id}}-{{@index}}"
-															name="deliveryAddress" class="custom-control-input"
-															value="{{this._id}}" {{#if @first}}checked{{/if}}>
-														<label class="custom-control-label" for="{{this._id}}-{{@index}}">
-															<p class="">{{this.name}}</p>
-															<p class="">{{this.address}}, {{this.town}}, {{this.district}}
-																- {{this.pincode}}</p>
-														</label>
-													</div>
-													<div class="col-4">
-														<button class="btn btn-dark"
-															onclick="editAddress('{{this._id}}','{{this.name}}','{{this.address}}','{{this.town}}','{{this.district}}','{{this.state}}','{{this.pincode}}','{{this.phone}}')"
-															data-toggle="modal" data-target="#editAddress">Edit
-															Address</button>
-														<a class="mt-4" onclick="deleteAddress(event)"
-															href="/deleteAddress/{{this._id}}"><button
-																class="btn btn-danger">Delete</button></a>
-													</div>
-													{{/each}}
-												</div>
-												<div class="mt-4">
-													<button type="button"
-														class="btn btn-dark  text-light border ml-auto mr-auto "
-														data-toggle="modal" data-target="#addAddress">Add New Address
-													</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+<form action="" id="checkout-form">
+	<div class="checkout-section mt-150 mb-150">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="checkout-accordion-wrap">
+						<div class="accordion" id="accordionExample">
 							<div class="card single-accordion">
-								<div class="card-header" id="headingTwo">
+								<div class="card-header" id="headingOne">
 									<h5 class="mb-0">
-										<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
-											data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-											Billing Address
+										<button class="btn btn-link" type="button" data-toggle="collapse"
+											data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+											Shipping Address
 										</button>
 									</h5>
 								</div>
-								<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+								<div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
 									data-parent="#accordionExample">
 									<div class="card-body">
-										<div class="shipping-address-form">
-											<div class="bg-light p-30 mb-5">
-												<div class="row">
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="name-error"></div>
-														<label>Full Name</label>
-														<input class="form-control" id="name" type="text" name="firstName"
-															placeholder="First Name" required oninput="validate(this)"
-															data-validate="name">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="phone-error"></div>
-														<label>Mobile No</label>
-														<input class="form-control" type="text" id="phone" name="mobile"
-															placeholder="Mobile No" required oninput="validate(this)"
-															data-validate="phone">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="address-error"></div>
-														<label>Address Line</label>
-														<input class="form-control" type="text" id="billingaddress"
-															name="billingaddress" placeholder="Address" required
-															oninput="validate(this)" data-validate="billingaddress">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="district-error"></div>
-														<label>District</label>
-														<input class="form-control" type="text" id="district"
-															name="district" placeholder="District" required
-															oninput="validate(this)" data-validate="district">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="town-error"></div>
-														<label>Town</label>
-														<input class="form-control" id="town" type="text" name="town"
-															placeholder="" required oninput="validate(this)"
-															data-validate="town">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="state-error"></div>
-														<label>State</label>
-														<input class="form-control" id="state" type="text" name="state"
-															placeholder="" required oninput="validate(this)"
-															data-validate="state">
-													</div>
-													<div class="col-md-6 form-group">
-														<div class="text-danger" id="pincode-error"></div>
-														<label>PIN Code</label>
-														<input class="form-control" type="text" id="pincode" name="pincode"
-															placeholder="" required oninput="validate(this)"
-															data-validate="pincode">
-													</div>
-													<div>
-														<input type="text" name="user_id" id="" value="{{user._id}}"
-															hidden>
-													</div>
+										<div class="billing-address-form">
+											<h5>Choose the Address:</h5>
+											<div class="row">
+												{{#each userAddress.address}}
+												<div class="col-8">
+													<input type="radio" id="{{this._id}}-{{@index}}"
+														name="deliveryAddress" class="custom-control-input"
+														value="{{this._id}}" {{#if @first}}checked{{/if}}>
+													<label class="custom-control-label" for="{{this._id}}-{{@index}}">
+														<p class="">{{this.name}}</p>
+														<p class="">{{this.address}}, {{this.town}}, {{this.district}}
+															- {{this.pincode}}</p>
+													</label>
 												</div>
+												<div class="col-4">
+													<button class="btn btn-dark"
+														onclick="editAddress('{{this._id}}','{{this.name}}','{{this.address}}','{{this.town}}','{{this.district}}','{{this.state}}','{{this.pincode}}','{{this.phone}}')"
+														data-toggle="modal" data-target="#editAddress">Edit
+														Address</button>
+													<a class="mt-4" onclick="deleteAddress(event)"
+														href="/deleteAddress/{{this._id}}"><button
+															class="btn btn-danger">Delete</button></a>
+												</div>
+												{{/each}}
+											</div>
+											<div class="mt-4">
+												<button type="button"
+													class="btn btn-dark  text-light border ml-auto mr-auto "
+													data-toggle="modal" data-target="#addAddress">Add New Address
+												</button>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div> 
-						  
+						</div>
 					</div>
-
-
-					<div class="col-lg-4">
-						<div class="order-details-wrap">
-							<table class="order-details">
-								<thead>
-									<tr>
-										<th>Your order Details</th>
-										<th>Price</th>
-									</tr>
-								</thead>
-								<tbody class="order-details-body">
-									<tr>
-										<td>Product</td>
-										<td>Total</td>
-									</tr>
-									{{#each products}}
-
-									<tr>
-										<td>{{this.product.Name}}</td>
-										<td>Rs.{{this.product.Price}}</td>
-									</tr>
-									{{/each}}
-								</tbody>
-								<tbody class="checkout-details">
-
-									<tr>
-										<td>SubTotal</td>
-										<td>Rs.{{totalValue}}</td>
-									</tr>
-									<tr>
-										<td>Shipping</td>
-										<td>Free Shipping</td>
-									</tr>
-									<tr class="discount">
-
-										<td>Discount:</td>
-										<td id="discount"><i class="fa fa-light fa-indian-rupee-sign"></i>0.000</td>
-									</tr>
-									<tr class="summary-total">
-										<td>Total:</td>
-										<td id=""><i class="fa fa-light fa-indian-rupee-sign"></i><span
-												id="total">{{totalValue}}</span></td>
-									</tr><!-- End .summary-total -->
-								</tbody>
-							</table>
-							<div class="d-flex justify-content-end " style="width: 82%;">
-								<form action="">
-									<div class="input-group">
-										<input type="text" id="coupon" name="coupon" class="form-control border-0 p-4"
-											placeholder="Coupon Code">
-										<div class="input-group-append">
-											<a class="btn btn-block btn-light font-weight-bold py-3"
-												onclick="couponApply()">Apply Coupon</a>
+					<div class="card single-accordion">
+						<div class="card-header" id="headingTwo">
+							<h5 class="mb-0">
+								<button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+									data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									Billing Address
+								</button>
+							</h5>
+						</div>
+						<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+							data-parent="#accordionExample">
+							<div class="card-body">
+								<div class="shipping-address-form">
+									<div class="bg-light p-30 mb-5">
+										<div class="row">
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="name-error"></div>
+												<label>Full Name</label>
+												<input class="form-control" id="name" type="text" name="firstName"
+													placeholder="First Name" required oninput="validateName()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="phone-error"></div>
+												<label>Mobile No</label>
+												<input class="form-control" type="text" id="phone" name="mobile"
+													placeholder="Mobile No" required oninput="validatePhone()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="address-error"></div>
+												<label>Address Line</label>
+												<input class="form-control" type="text" id="billingaddress"
+													name="billingaddress" placeholder="Address" required
+													oninput="validateAddress()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="district-error"></div>
+												<label>District</label>
+												<input class="form-control" type="text" id="district" name="district"
+													placeholder="District" required oninput="validateDistrict()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="town-error"></div>
+												<label>Town</label>
+												<input class="form-control" id="town" type="text" name="town"
+													placeholder="" required oninput="validateTown()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="state-error"></div>
+												<label>State</label>
+												<input class="form-control" id="state" type="text" name="state"
+													placeholder="" required oninput="validateState()">
+											</div>
+											<div class="col-md-6 form-group">
+												<div class="error-text" id="pincode-error"></div>
+												<label>PIN Code</label>
+												<input class="form-control" type="text" id="pincode" name="pincode"
+													placeholder="" required oninput="validatePincode()">
+											</div>
+											<div>
+												<input type="text" name="user_id" id="" value="{{user._id}}" hidden>
+											</div>
 										</div>
 									</div>
-								</form>
-							</div>
-							<div class="card-body">
-								<h5>Payment Method</h5>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="PaymentMethod" id="paymentMethodCOD"
-										value="COD">
-									<label class="form-check-label" for="paymentMethodCOD">
-										Cash On Delivery
-									</label>
-								</div>
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="PaymentMethod" value="Razorpay"
-										id="paymentMethodRazorpay" checked>
-									<label class="form-check-label" for="paymentMethodRazorpay">
-										RazorPay
-									</label>
-								</div>
-								{{#if walletStatus}}
-								<div class="form-check">
-									<input class="form-check-input" type="radio" name="paymentMethod" value="Wallet"
-										id="paymentMethodWallet" checked>
-									<label class="form-check-label" for="paymentMethodWallet">
-										Wallet
-									</label>
-								</div>
-								{{/if}}
-								<div>
-									<img style="height: 5rem; width: 7rem;"
-										src="https://p.kindpng.com/picc/s/279-2797767_consumer-payment-hd-png-download.png"
-										alt="payments cards">
 								</div>
 							</div>
-							<button onsubmit="validateForm()" type="submit"
-								class="btn btn-block btn-dark font-weight-bold py-3" style="width: 80%; color: ;">Proceed
-								To Payment</button>
 						</div>
-						{{!-- <a href="#" class="boxed-btn">Place Order</a> --}}
+
 					</div>
 				</div>
-			</div>
-		</div>
-		</div>
-	</form>
-	<!-- end check out section -->
-	<!--Add Address Modal -->
-	<div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-dark">
-					<h5 class="modal-title text-white text-center" id="exampleModalLabel">Add Address</h5>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
+				<div class="col-md-4 mt-2">
+					<div class="col-md">
+						<table class="order-details">
+							<thead>
+								<tr>
+									<th>Your Order Details</th>
+									<th>Price</th>
+								</tr>
+							</thead>
+							<tbody class="order-details-body">
+								{{#each products}}
+								<tr>
+									<td>{{this.product.Name}}</td>
+									<td>Rs.{{this.product.Price}}</td>
+								</tr>
+								{{/each}}
+							</tbody>
+							<tbody class="checkout-details">
+								<tr>
+									<td>SubTotal</td>
+									<td>Rs.{{totalValue}}</td>
+								</tr>
+								<tr class="discount">
+									<td>Discount:</td>
+									<td id="discount"><i class="fa fa-light fa-indian-rupee-sign"></i>Rs.0.000</td>
+								</tr>
+								<tr>
+									<td>Shipping</td>
+									<td>Free Shipping</td>
+								</tr>
+								<tr class="summary-total">
+									<td>Total:</td>
+									<td id=""><i class="fa fa-light fa-indian-rupee-sign"></i><span
+											id="total">Rs.{{totalValue}}</span></td>
+								</tr><!-- End .summary-total -->
+								<tr>
+									<td colspan="2">
+										<div class="d-flex justify-content-end">
+											<form action="">
+												<div class="input-group">
+													<input type="text" id="coupon" name="coupon"
+														class="form-control border-0 p-4" placeholder="Coupon Code">
+													<div class="input-group-append">
+														<a class="btn btn-block btn-light font-weight-bold py-3"
+															onclick="couponApply()">Apply Coupon</a>
+													</div>
+												</div>
+											</form>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div class="card-body">
+							<h5>Payment Method</h5>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="PaymentMethod" id="paymentMethodCOD"
+									value="COD">
+								<label class="form-check-label" for="paymentMethodCOD">
+									Cash On Delivery
+								</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="PaymentMethod" value="Razorpay"
+									id="paymentMethodRazorpay" checked>
+								<label class="form-check-label" for="paymentMethodRazorpay">
+									RazorPay
+								</label>
+							</div>
+							{{#if walletStatus}}
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="paymentMethod" value="Wallet"
+									id="paymentMethodWallet" checked>
+								<label class="form-check-label" for="paymentMethodWallet">
+									Wallet
+								</label>
+							</div>
+							{{/if}}
+							<div>
+								<img style="height: 5rem; width: 7rem;"
+									src="https://p.kindpng.com/picc/s/279-2797767_consumer-payment-hd-png-download.png"
+									alt="payments cards">
+							</div>
+						</div>
+
+						<button type="submit" class="btn btn-block btn-dark font-weight-bold py-3"
+							style="width: 80%; color: ;" onclick="validateForm()">Proceed To Payment</button>
+					</div>
+
 				</div>
-				<div class="modal-body">
-					<form action="/placeorder-add-address" method="post" id="addAddressForm">
-						<div class="form-group">
-							<label for="name">Name</label>
-							<input type="text" class="form-control" id="name" name="name" placeholder="Name">
-						</div>
-						<div class="form-group">
-							<label for="address">Address</label>
-							<input type="text" class="form-control" id="address" name="address" placeholder="Address">
-						</div>
-						<div class="form-group">
-							<label for="town">Town</label>
-							<input type="text" class="form-control" id="town" name="town" placeholder="Town">
-						</div>
-						<div class="form-group">
-							<label for="district">District</label>
-							<input type="text" class="form-control" id="district" name="district" placeholder="District">
-						</div>
-						<div class="form-group">
-							<label for="state">State</label>
-							<input type="text" class="form-control" id="state" name="state" placeholder="State">
-						</div>
-						<div class="form-group">
-							<label for="pincode">Pin Code</label>
-							<input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code">
-						</div>
-						<div class="form-group">
-							<label for="phone">Phone No</label>
-							<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone No">
-						</div>
-						<button type="submit" class="btn btn-dark w-100">Add Address</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
-	{{!-- edit address modal --}}
-	<div class="modal fade" id="editAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-dark  ">
-					<h5 class="modal-title text-white text-center " id="exampleModalLabel">Edit Address
-					</h5>
-					<button type="submit" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<form action="/place-order-edit-address" method="post" id="edit-address">
-						<div class="row">
-							<div class="col-md-12 mb-3">
-								<input type="text" class="form-control mb-3 d-none" name="id" id="id1" value=""
-									placeholder="Name">
-							</div>
-							<div class="col-md-12 mb-3">
-								<input type="text" class="form-control mb-3" name="name" id="name1" value=""
-									placeholder="Name" required>
-							</div>
-							<div class="col-12 mb-3">
-								<input type="text" class="form-control mb-3" name="billingaddress" id="address1"
-									placeholder="Address" value="" required>
-							</div>
-							<div class="col-12 mb-3">
-								<input type="text" class="form-control mb-3" name="town" id="town1" placeholder="Town"
-									value="" required>
-							</div>
-							<div class="col-12 mb-3">
-								<input type="text" class="form-control mb-3" name="district" id="district1"
-									placeholder="District" value="">
-							</div>
-							<div class="col-12 mb-3">
-								<input type="text" class="form-control mb-3" name="state" id="state1" placeholder="State"
-									value="">
-							</div>
-							<div class="col-md-6 mb-3">
-								<input type="text" class="form-control mb-3" id="pincode1" name="pincode"
-									placeholder="Pin Code" value="" required>
-							</div>
-							<div class="col-md-6 mb-3">
-								<input type="text" class="form-control mb-3" name="phone" id="phone1" min="0"
-									placeholder="Phone No" value="" minlength="10" maxlength="10" required>
-							</div>
-						</div>
-						<div>
-							<button class="btn btn-outline-dark w-100" type="submit">Edit & Update</button>
-						</div>
-					</form>
-				</div>
+
 			</div>
 		</div>
 	</div>
-	{{!-- End --}}
+</form>
 
 
-	<script>
-		{
-			{
-			 // Get references to the input fields
-				const nameInput = document.getElementById("name");
-				const phoneInput = document.getElementById("phone");
-				const billingaddressInput = document.getElementById("billingaddress");
-				const districtInput = document.getElementById("district");
-				const townInput = document.getElementById("town");
-				const stateInput = document.getElementById("state");
-				const pincodeInput = document.getElementById("pincode");
-				const paymentMethodCODInput = document.getElementById("paymentMethodCOD");
-				const paymentMethodRazorpayInput = document.getElementById("paymentMethodRazorpay");
-				const paymentMethodWalletInput = document.getElementById("paymentMethodWallet");
 
-				const couponInput = document.getElementById("coupon");
+<!-- end check out section -->
+<!--Add Address Modal -->
+<div class="modal fade" id="addAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-dark">
+				<h5 class="modal-title text-white text-center" id="exampleModalLabel">Add Address</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="/placeorder-add-address" method="post" id="addAddressForm">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" class="form-control" id="name" name="name" placeholder="Name">
+					</div>
+					<div class="form-group">
+						<label for="address">Address</label>
+						<input type="text" class="form-control" id="address" name="address" placeholder="Address">
+					</div>
+					<div class="form-group">
+						<label for="town">Town</label>
+						<input type="text" class="form-control" id="town" name="town" placeholder="Town">
+					</div>
+					<div class="form-group">
+						<label for="district">District</label>
+						<input type="text" class="form-control" id="district" name="district" placeholder="District">
+					</div>
+					<div class="form-group">
+						<label for="state">State</label>
+						<input type="text" class="form-control" id="state" name="state" placeholder="State">
+					</div>
+					<div class="form-group">
+						<label for="pincode">Pin Code</label>
+						<input type="text" class="form-control" id="pincode" name="pincode" placeholder="Pin Code">
+					</div>
+					<div class="form-group">
+						<label for="phone">Phone No</label>
+						<input type="text" class="form-control" id="phone" name="phone" placeholder="Phone No">
+					</div>
+					<button type="submit" class="btn btn-dark w-100">Add Address</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{!-- edit address modal --}}
+<div class="modal fade" id="editAddress" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+	aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header bg-dark  ">
+				<h5 class="modal-title text-white text-center " id="exampleModalLabel">Edit Address
+				</h5>
+				<button type="submit" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form action="/place-order-edit-address" method="post" id="edit-address">
+					<div class="row">
+						<div class="col-md-12 mb-3">
+							<input type="text" class="form-control mb-3 d-none" name="id" id="id1" value=""
+								placeholder="Name">
+						</div>
+						<div class="col-md-12 mb-3">
+							<input type="text" class="form-control mb-3" name="name" id="name1" value=""
+								placeholder="Name" required>
+						</div>
+						<div class="col-12 mb-3">
+							<input type="text" class="form-control mb-3" name="billingaddress" id="address1"
+								placeholder="Address" value="" required>
+						</div>
+						<div class="col-12 mb-3">
+							<input type="text" class="form-control mb-3" name="town" id="town1" placeholder="Town"
+								value="" required>
+						</div>
+						<div class="col-12 mb-3">
+							<input type="text" class="form-control mb-3" name="district" id="district1"
+								placeholder="District" value="">
+						</div>
+						<div class="col-12 mb-3">
+							<input type="text" class="form-control mb-3" name="state" id="state1" placeholder="State"
+								value="">
+						</div>
+						<div class="col-md-6 mb-3">
+							<input type="text" class="form-control mb-3" id="pincode1" name="pincode"
+								placeholder="Pin Code" value="" required>
+						</div>
+						<div class="col-md-6 mb-3">
+							<input type="text" class="form-control mb-3" name="phone" id="phone1" min="0"
+								placeholder="Phone No" value="" minlength="10" maxlength="10" required>
+						</div>
+					</div>
+					<div>
+						<button class="btn btn-outline-dark w-100" type="submit">Edit & Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{{!-- End --}}
 
-				// Add event listeners to each input field
-				nameInput.addEventListener("input", validateName);
-				phoneInput.addEventListener("input", validatePhone);
-				billingaddressInput.addEventListener("input", validateAddress);
-				districtInput.addEventListener("input", validateDistrict);
-				townInput.addEventListener("input", validateTown);
-				stateInput.addEventListener("input", validateState);
-				pincodeInput.addEventListener("input", validatePincode);
+<script>
+	// Get references to the input fields
+	const nameInput = document.getElementById("name");
+	const phoneInput = document.getElementById("phone");
+	const billingaddressInput = document.getElementById("billingaddress");
+	const districtInput = document.getElementById("district");
+	const townInput = document.getElementById("town");
+	const stateInput = document.getElementById("state");
+	const pincodeInput = document.getElementById("pincode");
+	const paymentMethodCODInput = document.getElementById("paymentMethodCOD");
+	const paymentMethodRazorpayInput = document.getElementById("paymentMethodRazorpay");
+	const paymentMethodWalletInput = document.getElementById("paymentMethodWallet");
 
-				// Define validation functions for each input field
-				function validateName() {
-					const name = nameInput.value.trim();
-					if (name === "") {
-						setError(nameInput, "Please enter your name");
-					} else {
-						setSuccess(nameInput);
-					}
-				}
+	const couponInput = document.getElementById("coupon");
 
-				function validatePhone() {
-					const phone = phoneInput.value.trim();
-					const phonePattern = /^\d{10}$/;
-					if (phone === "") {
-						setError(phoneInput, "Please enter your phone number");
-					} else if (!phonePattern.test(phone)) {
-						setError(phoneInput, "Please enter a valid phone number");
-					} else {
-						setSuccess(phoneInput);
-					}
-				}
 
-				function validateAddress() {
-					const address = billingaddressInput.value.trim();
-					if (address === "") {
-						setError(billingaddressInput, "Please enter your address");
-					} else {
-						setSuccess(billingaddressInput);
-					}
-				}
 
-				function validateDistrict() {
-					const district = districtInput.value.trim();
-					if (district === "") {
-						setError(districtInput, "Please enter your district");
-					} else {
-						setSuccess(districtInput);
-					}
-				}
+	// Define validation functions for each input field
+	function validateName() {
+		const name = nameInput.value.trim();
+		if (name === "") {
+			setError(nameInput, "Please enter your name");
+		} else {
+			setSuccess(nameInput);
+		}
+	}
 
-				function validateTown() {
-					const town = townInput.value.trim();
-					if (town === "") {
-						setError(townInput, "Please enter your town");
-					} else {
-						setSuccess(townInput);
-					}
-				}
+	function validatePhone() {
+		const phone = phoneInput.value.trim();
+		const phonePattern = /^\d{10}$/;
+		if (phone === "") {
+			setError(phoneInput, "Please enter your phone number");
+		} else if (!phonePattern.test(phone)) {
+			setError(phoneInput, "Please enter a valid phone number");
+		} else {
+			setSuccess(phoneInput);
+		}
+	}
 
-				function validateState() {
-					const state = stateInput.value.trim();
-					if (state === "") {
-						setError(stateInput, "Please enter your state");
-					} else {
-						setSuccess(stateInput);
-					}
-				}
+	function validateAddress() {
+		const address = billingaddressInput.value.trim();
+		if (address === "") {
+			setError(billingaddressInput, "Please enter your address");
+		} else {
+			setSuccess(billingaddressInput);
+		}
+	}
 
-				function validatePincode() {
-					const pincode = pincodeInput.value.trim();
-					const pincodePattern = /^\d{6}$/;
-					if (pincode === "") {
-						setError(pincodeInput, "Please enter your pincode");
-					} else if (!pincodePattern.test(pincode)) {
-						setError(pincodeInput, "Please enter a valid pincode");
-					} else {
-						setSuccess(pincodeInput);
-					}
-				}
+	function validateDistrict() {
+		const district = districtInput.value.trim();
+		if (district === "") {
+			setError(districtInput, "Please enter your district");
+		} else {
+			setSuccess(districtInput);
+		}
+	}
 
-				// Helper functions to set error/success states for input fields
-				function setError(input, message) {
-					const formGroup = input.parentElement;
-					const errorText = formGroup.querySelector(".error-text");
-					formGroup.classList.add("error");
-					errorText.innerText = message;
-				}
+	function validateTown() {
+		const town = townInput.value.trim();
+		if (town === "") {
+			setError(townInput, "Please enter your town");
+		} else {
+			setSuccess(townInput);
+		}
+	}
 
-				function setSuccess(input) {
-					const formGroup = input.parentElement;
-					formGroup.classList.remove("error");
-				}
+	function validateState() {
+		const state = stateInput.value.trim();
+		if (state === "") {
+			setError(stateInput, "Please enter your state");
+		} else {
+			setSuccess(stateInput);
+		}
+	}
 
-				// Submit form on checkout button click
-				document.getElementById("checkout-form").addEventListener("submit", (e) => {
-					e.preventDefault();
-					const deliveryAddressInput = document.querySelector(
-						'input[name="deliveryAddress"]:checked'
-					);
-					const deliveryAddress = deliveryAddressInput ? deliveryAddressInput.value : undefined;
+	function validatePincode() {
+		const pincode = pincodeInput.value.trim();
+		const pincodePattern = /^\d{6}$/;
+		if (pincode === "") {
+			setError(pincodeInput, "Please enter your pincode");
+		} else if (!pincodePattern.test(pincode)) {
+			setError(pincodeInput, "Please enter a valid pincode");
+		} else {
+			setSuccess(pincodeInput);
+		}
+	}
 
-					// Determine the selected payment method
-					let PaymentMethod;
-					if (paymentMethodCODInput.checked) {
-						PaymentMethod = paymentMethodCODInput.value;
-					} else if (paymentMethodRazorpayInput.checked) {
-						PaymentMethod = paymentMethodRazorpayInput.value;
-					} else if (paymentMethodWalletInput.checked) {
-						PaymentMethod = paymentMethodWalletInput.value;
-					}
+	// Helper functions to set error/success states for input fields
+	function setError(input, message) {
+		const formGroup = input.parentElement;
+		const errorText = formGroup.querySelector(".error-text");
+		formGroup.classList.add("error");
+		errorText.innerText = message;
+	}
 
-					// Include the deliveryAddress and paymentMethod in the form data
-					const formData = {
-						name: nameInput.value,
-						phone: phoneInput.value,
-						billingaddress: billingaddressInput.value,
-						district: districtInput.value,
-						town: townInput.value,
-						state: stateInput.value,
-						pincode: pincodeInput.value,
-						PaymentMethod: PaymentMethod,
-						deliveryAddress: deliveryAddress !== undefined ? deliveryAddress : ""
-					};
+	function setSuccess(input) {
+		const formGroup = input.parentElement;
+		formGroup.classList.remove("error");
+	}
 
-					// Convert the form data to a JSON string
-					const jsonData = JSON.stringify(formData);
+	// Add event listeners to each input field
+	nameInput.addEventListener("input", validateName);
+	phoneInput.addEventListener("input", validatePhone);
+	billingaddressInput.addEventListener("input", validateAddress);
+	districtInput.addEventListener("input", validateDistrict);
+	townInput.addEventListener("input", validateTown);
+	stateInput.addEventListener("input", validateState);
+	pincodeInput.addEventListener("input", validatePincode);
 
-					// Send the form data to the server
-					$.ajax({
-						url: '/place-order',
-						method: 'post',
-						data: jsonData,
-						contentType: 'application/json',
-						success: (response) => {
-							if (response.codSuccess) {
-								Swal.fire('Order placed').then(() => {
-									location.href = '/orders';
-								});
-							} else if (response.wallet) {
-								Swal.fire('Order placed').then(() => {
-									location.href = '/orders';
-								});
-							} else {
-								razorpayPayment(response);
-								console.log(response);
-							}
-						}
-					});
-				});
-			
+
+	function validateForm() {
+		validateName();
+		validatePhone();
+		validateAddress();
+		validateDistrict();
+		validateTown();
+		validateState();
+		validatePincode();
+
+		// Check if any input field has the "error" class
+		const errorInputs = document.querySelectorAll(".error");
+		if (errorInputs.length > 0) {
+			// At least one input has an error
+			return false;
+		} else {
+			// All inputs are valid
+			return true;
+		}
+	}
+
+	// Submit form on checkout button click
+	document.getElementById("checkout-form").addEventListener("submit", (e) => {
+		e.preventDefault();
+
+		if (validateForm()) {
+			const deliveryAddressInput = document.querySelector(
+				'input[name="deliveryAddress"]:checked'
+			);
+			const deliveryAddress = deliveryAddressInput ?
+				deliveryAddressInput.value :
+				undefined;
+
+			// Determine the selected payment method
+			let PaymentMethod;
+			if (paymentMethodCODInput.checked) {
+				PaymentMethod = paymentMethodCODInput.value;
+			} else if (paymentMethodRazorpayInput.checked) {
+				PaymentMethod = paymentMethodRazorpayInput.value;
+			} else if (paymentMethodWalletInput.checked) {
+				PaymentMethod = paymentMethodWalletInput.value;
 			}
-		}
-	</script>
-	<script>
-		function deleteAddress(event) {
-			event.preventDefault();
-			var link = event.currentTarget.href;
-			Swal.fire({
-				title: 'Are you sure?',
-				text: "Do you want to delete ",
-				icon: 'warning',
-				showCancelButton: true,
-				confirmButtonColor: '#3085d6',
-				cancelButtonColor: '#d33',
-				confirmButtonText: 'Yes'
-			}).then((result) => {
-				if (result.isConfirmed) {
-					Swal.fire(
-						'Deleted!',
-						'Item deleted.',
-						'success'
-					).then(() => {
-						location.reload()
-					})
-				} else {
-					return false;
-				}
-			})
-		}
-	</script>
 
-	<script>
-		function selectAddress(name, address, town, district, state, pincode, phone) {
-			document.getElementById('name').value = name
-			document.getElementById('address').value = address
-			document.getElementById('town').value = town
-			document.getElementById('district').value = district
-			document.getElementById('state').value = state
-			document.getElementById('pincode').value = pincode
-			document.getElementById('phone').value = phone
-		}
-	</script>
-	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+			// Include the deliveryAddress and paymentMethod in the form data
+			const formData = {
+				name: nameInput.value,
+				phone: phoneInput.value,
+				billingaddress: billingaddressInput.value,
+				district: districtInput.value,
+				town: townInput.value,
+				state: stateInput.value,
+				pincode: pincodeInput.value,
+				PaymentMethod: PaymentMethod,
+				deliveryAddress: deliveryAddress !== undefined ? deliveryAddress : "",
+			};
 
-	<script>
-		{{!-- $('#checkout-form').submit((e) => {
-			e.preventDefault();
+			// Convert the form data to a JSON string
+			const jsonData = JSON.stringify(formData);
 
-			const deliveryAddressInput = document.querySelector('input[name="deliveryAddress"]:checked');
-			const deliveryAddress = deliveryAddressInput ? deliveryAddressInput.value : '';
-			const formData = $('#checkout-form').serialize() + '&deliveryAddress=' + encodeURIComponent(
-				deliveryAddress);
+			// Send the form data to the server
 			$.ajax({
-				url: '/place-order',
-				method: 'post',
-				data: formData,
+				url: "/place-order",
+				method: "post",
+				data: jsonData,
+				contentType: "application/json",
 				success: (response) => {
 					if (response.codSuccess) {
-						Swal.fire('Order placed').then(() => {
-							location.href = '/orders';
+						Swal.fire("Order placed").then(() => {
+							location.href = "/orders";
 						});
 					} else if (response.wallet) {
-						Swal.fire('Order placed').then(() => {
-							location.href = '/orders';
+						Swal.fire("Order placed").then(() => {
+							location.href = "/orders";
 						});
 					} else {
-						razorpayPayment(response);
-						console.log(response);
+						// If the function is defined, call it with the response data
+						if (typeof razorpayPayment === "function") {
+							razorpayPayment(response);
+						} else {
+							console.log("razorpayPayment function not defined");
+						}
 					}
-				}
+				},
+				error: (error) => {
+					console.log(error);
+				},
 			});
-		}); --}}
-
-
-		function razorpayPayment(order) {
-			var options = {
-				"key": "rzp_test_AF9BQ131vX5VfH", // Enter the Key ID generated from the Dashboard
-				"amount": order
-					.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-				"currency": "INR",
-				"name": "Frutika Pvt Ltd",
-				"description": "Test Transaction",
-				"image": "https://example.com/your_logo",
-				"order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-				"handler": function (response) {
-
-					verifyPayment(response, order)
-				},
-				"prefill": {
-					"name": "Athul Harilal",
-					"email": "athul.harilal@example.com",
-					"contact": "9000090000"
-				},
-				"notes": {
-					"address": "Razorpay Corporate Office"
-				},
-				"theme": {
-					"color": "#3399cc"
-				}
-			};
-			var rzp1 = new Razorpay(options);
-			rzp1.open();
 		}
+	});
 
+	function razorpayPayment(order) {
+  var amountInSubunits = parseInt(order.amount * 100);
+  if (amountInSubunits < 1) {
+    console.log("Minimum 1 rupee is needed to process the payment");
+    return;
+  }
 
-		function verifyPayment(payment, order) {
-			$.ajax({
-				url: '/verify-payment',
-				data: {
-					payment,
-					order
-				},
-				method: 'post',
-				success: (response) => {
-					if (response.status) {
-						Swal.fire({
-							title: 'order placed successfully',
-							confirmButtonColor: '#3085d6',
-							cancelButtonColor: '#d33',
-							confirmButtonText: 'OK',
-							timer: 1000,
-							icon: 'success',
-							showConfirmButton: false
-						}).then(() => {
-							location.href = '/orders'
-						})
-					} else {
-						Swal.alert("Payment Failed")
-					}
-				}
-			})
-		}
-	</script>
-
-	<script>
-		function couponApply() {
-			console.log("entered")
-			let couponCode = document.getElementById('coupon').value
-			$.ajax({
-				url: '/coupon-apply',
-				data: {
-					coupon: couponCode,
-				},
-				method: 'post',
-				success: (response) => {
-					if (response.couponSuccess) {
-						console.log(response, "respones")
-						Swal.fire({
-							position: "center",
-							icon: "success",
-							title: "Coupon Applied Successfully",
-							showConfirmButton: false,
-							timer: 1000,
-						})
-						document.getElementById('total').innerHTML = (response.total)
-						document.getElementById('discount').innerHTML = response.discountValue
-						document.getElementById('CouponName').innerHTML = response.coupon
-						console.log(response.coupon)
-					} else if (response.couponUsed) {
-						Swal.fire({
-							position: "center",
-							icon: "warning",
-							title: "You are Already Used This Coupon",
-							showConfirmButton: false,
-							timer: 1000,
-						});
-					} else if (response.couponExpired) {
-						Swal.fire({
-							position: "center",
-							icon: "warning",
-							title: "Entered Coupon Expired",
-							showConfirmButton: false,
-							timer: 1000,
-						});
-					} else {
-						Swal.fire({
-							position: "center",
-							icon: "warning",
-							title: "Invalid Coupon",
-							showConfirmButton: false,
-							timer: 1000,
-						});
-					}
-				}
-			})
-		}
-	</script>
-
-	<script>
-		function editAddress(id, name, address, town, district, state, pincode, phone) {
-			document.getElementById('id1').value = id
-			document.getElementById('name1').value = name
-			document.getElementById('address1').value = address
-			document.getElementById('town1').value = town
-			document.getElementById('district1').value = district
-			document.getElementById('state1').value = state
-			document.getElementById('pincode1').value = pincode
-			document.getElementById('phone1').value = phone
-		}
-	</script>
-
-	<script>
-		$("#edit-address").submit((e) => {
-			e.preventDefault()
-			$.ajax({
-				url: '/edit-address',
-				method: 'post',
-				data: $('#edit-address').serialize(),
-				success: (response) => {
-					if (response.status) {
-						Swal.fire({
-							position: "",
-							icon: "success",
-							title: "Address Edited Successfully",
-							showConfirmButton: true,
-							confirmButtonColor: 'black',
-						}).then(() => {
-							location.reload()
-						})
-					} else {
-						location.reload()
-					}
-				}
-			})
-		})
-	</script>
-
-	<script>
-		< script src = "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js" >
-	</script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-	</script>
+  var options = {
+    key: "rzp_test_AF9BQ131vX5VfH", // Enter the Key ID generated from the Dashboard
+    amount: amountInSubunits, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    currency: "INR",
+    name: "Frutika Pvt Ltd",
+    description: "Test Transaction",
+    image: "https://example.com/your_logo",
+    order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    handler: function (response) {
+      verifyPayment(response, order);
+    },
+    prefill: {
+      name: "Athul Harilal",
+      email: "athul.harilal@example.com",
+      contact: "9000090000",
+    },
+    notes: {
+      address: "Razorpay Corporate Office",
+    },
+    theme: {
+      color: "#3399cc",
+    },
+  };
+  var rzp1 = new Razorpay(options);
+  rzp1.open();
+}
+</script>

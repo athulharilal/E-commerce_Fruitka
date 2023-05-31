@@ -1,13 +1,30 @@
+require('dotenv').config()
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/middleware");
 const userControllers = require("../controllers/userController");
-const cartControllers = require("../controllers/cart-Controllers");
+const cartControllers = require("../controllers/cartControllers");
 const orderControllers = require("../controllers/orderController");
 const wishListControllers = require("../controllers/wishListController");
 const productControllers = require("../controllers/productControllers");
+const passport = require('passport')
 
-// User home route
+
+
+
+//google authentication
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile'] }));
+ 
+  console.log(" callbackcall");
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
+//User home route
 router.get("/", userControllers.home);
 
 // About route
@@ -19,6 +36,7 @@ router.get("/contact", userControllers.getContact);
 // Signup routes
 router.get("/signup", userControllers.getSignup);
 router.post("/signup", userControllers.postSignup);
+
 
 // Login routes
 router.get("/login", userControllers.getLogin);

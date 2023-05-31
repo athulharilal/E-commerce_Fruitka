@@ -1,0 +1,168 @@
+<section>
+    <div class="container" style="margin: 17rem; margin-top: 8rem;">
+        <div>
+            <div class="text-center">
+                <h3><b>USER MANAGEMENT</b></h3>
+            </div>
+        </div>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." style="margin-bottom: 10px;">
+        <table id="myTable" class="table table-hover table-striped mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email-id</th>
+                    <th scope="col">View User Profile</th>
+                    <th scope="col">Block/Unblock User</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each user}}
+                <tr>
+                    <th scope="row">{{inc @index}}</th>
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>
+                        <a href="/admin/userProfile/{{this._id}}" class="btn btn-success">View User Profile</a>
+                    </td>
+                    <td>
+                        {{#if this.isBlocked}}
+                        <a href="/admin/unblock-user/{{this._id}}" class="btn btn-success unblock-user"
+                            data-id="{{this._id}}">Unblock</a>
+                        {{else}}
+                        <a href="/admin/block-user/{{this._id}}" class="btn btn-danger block-user"
+                            data-id="{{this._id}}">Block</a>
+                        {{/if}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+        {{!-- Display a message if no users are found --}}
+        {{#unless user}}
+        <p>No users found.</p>
+        {{/unless}}
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="https://cdn.datatables.net/1.11.0/js/jquery.dataTables.min.js"></script>
+
+<script>
+    // Initialize DataTable
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+
+    $(document).on("click", ".block-user", function (e) {
+        e.preventDefault(); // Prevent the default click behavior
+
+        const userId = $(this).data("id");
+
+        // Show confirmation dialog
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to block this user.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, block it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make a POST request to block the user
+                blockUser(userId);
+            }
+        });
+    });
+
+
+    $(document).on("click", ".unblock-user", function (e) {
+        e.preventDefault(); // Prevent the default click behavior
+
+        const userId = $(this).data("id");
+
+        // Show confirmation dialog
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You are about to unblock this user.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, unblock it!",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Make a POST request to unblock the user
+                unblockUser(userId);
+            }
+        });
+    });
+
+    // Function to block the user
+    function blockUser(userId) {
+        // Make a POST request to block the user
+        $.ajax({
+            url: "/admin/block-user/" + userId,
+            type: "POST",
+            success: function (response) {
+                // Handle the success response
+                // Refresh the page or update the table data
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle the error response
+                console.log("An error occurred while blocking the user: ", errorThrown);
+                // Display an error message to the user
+                Swal.fire("Error", "Failed to block the user. Please try again later.", "error");
+            },
+        });
+    }
+
+    // Function to unblock the user
+    function unblockUser(userId) {
+        // Make a POST request to unblock the user
+        $.ajax({
+            url: "/admin/unblock-user/" + userId,
+            type: "POST",
+            success: function (response) {
+                // Handle the success response
+                // Refresh the page or update the table data
+                location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                // Handle the error response
+                console.log("An error occurred while unblocking the user: ", errorThrown);
+                // Display an error message to the user
+                Swal.fire("Error", "Failed to unblock the user. Please try again later.", "error");
+            },
+        });
+    }
+</script>
+
+<!-- Search function -->
+<script>
+    function myFunction() {
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1]; // Index 1 for Name column
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>

@@ -3,8 +3,8 @@ const router = express.Router();
 const adminControllers = require("../controllers/adminControllers");
 const categoryControllers = require("../controllers/categoryControllers");
 const productControllers = require("../controllers/productControllers");
-const bannerControllers = require("../controllers/banner-controller");
-const couponControllers = require("../controllers/coupon-Controllers");
+const bannerControllers = require("../controllers/bannerController");
+const couponControllers = require("../controllers/couponControllers");
 const imgupload = require('../middleware/multer');
 const auth = require('../middleware/middleware');
 
@@ -23,8 +23,8 @@ router.get("/adminLogOut", adminControllers.getAdminLogout);
 // User management routes
 router.get("/allusers", auth.admin, adminControllers.getAllUsers);
 router.get('/userProfile/:id', auth.admin, adminControllers.getUserProfile);
-router.get("/block-user/:id", auth.admin, adminControllers.getBlockUser);
-router.get("/unblock-user/:id", adminControllers.getUnblockUser);
+router.post("/block-user/:id", auth.admin, adminControllers.getBlockUser);
+router.post("/unblock-user/:id", adminControllers.getUnblockUser);
 
 // Product management routes
 router.get("/add-product", auth.admin, productControllers.getAddProducts);
@@ -57,7 +57,7 @@ router.get('/view-orders/:id', auth.admin, productControllers.getViewProducts);
 router.get('/cancel-order/:id', auth.admin, adminControllers.getCancelOrders);
 router.get('/view-order-products/:id', auth.admin, adminControllers.getOrderProducts);
 router.post('/change-order-status', auth.admin, productControllers.postChangeOrderStatus);
-router.get('/Order-management', auth.admin, productControllers.getOrderManagement);
+router.get('/order-management', auth.admin, productControllers.getOrderManagement);
 
 // Banner management routes
 router.get('/banner-management', auth.admin, bannerControllers.getBannerManagement);
@@ -71,6 +71,5 @@ router.get('/delete-banner/:id', auth.admin, bannerControllers.deleteBanner);
 router.get('/sales-report', auth.admin, adminControllers.getSalesReport);
 router.post('/sales-report-date', auth.admin, adminControllers.postSalesDownload);
 router.get('/chart-data', auth.admin, adminControllers.getChartData);
-router.post('/salesReportDate', auth.admin, adminControllers.postSalesDownload);
 
 module.exports = router;

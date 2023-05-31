@@ -1,0 +1,106 @@
+<style>
+  .truncate-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    /* Adjust the max-width value as per your preference */
+  }
+</style>
+<div class="table-responsive" style="padding-left: 5rem;margin-left: 10rem; padding-top:8rem;">
+  <div>
+  <div class="text-center">
+    <h3><b>ORDER MANAGEMENT</b></h3>
+  </div>
+</div>
+  <table class="table" id="orderTable">
+    <thead class="thead-dark">
+      <tr>
+        <th class="align-middle text-center">No</th>
+        <th class="align-middle text-center">Date</th>
+        <th class="align-middle text-center">UserName</th>
+        <th class="align-middle text-center">Email</th>
+        <th class="align-middle text-center">Contactno.</th>
+        <th class="align-middle text-center">Delivery Address</th>
+        <th class="align-middle text-center">Billing Address</th>
+        <th class="align-middle text-center">Amount</th>
+        <th class="align-middle text-center">Payment</th>
+        <th class="align-middle text-center">Status</th>
+        <th class="align-middle text-center">Options</th>
+        <th class="align-middle text-center">Products</th>
+      </tr>
+    </thead>
+    {{#each allOrders}}
+    <tr>
+      <td class="align-middle text-center">{{inc @index}}</td>
+      <td class="align-middle text-center" style="white-space: nowrap;" >{{this.date}}</td>
+      <td class="align-middle text-center truncate-text">{{this.user.Name}}</td>
+      <td class="align-middle text-center truncate-text">{{this.user.Email}}</td>
+      <td class="align-middle text-center truncate-text">{{this.user.Number}}</td>
+      <td class="align-middle text-center truncate-text">{{this.deliveryDetails.deliveryAddress}}</td>
+      <td class="align-middle text-center truncate-text">{{this.billingaddress}}</td>
+      <td class="align-middle text-center">Rs.{{this.totalAmount}}</td>
+      <td class="align-middle text-center">{{this.PaymentMethod}}</td>
+      <td class="align-middle text-center">{{this.status}}</td>
+      <td>
+        {{#if this.is_Cancelled}}
+        <p class="text-danger font-weight-bold text-center">Cancelled Successfully</p>
+        {{else}}
+        {{#if this.is_delivered}}
+        <p class="text-success font-weight-bold text-center">Delivered Successfully</p>
+        {{else}}
+        <form action="/admin/change-order-status" method="post" id="orderStatusForm">
+          <input type="text" name="OrderId" value="{{this._id}}" hidden>
+          <select name="status" class="form-select" aria-label="Default select example" onchange="submitForm()">
+            <option selected>select status</option>
+            <option value="Shipped">shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Placed">placed</option>
+            <option value="Pending">Pending</option>
+          </select>
+          <input type="text" name="user" value="{{../this._id}}" hidden>
+        </form>
+        {{/if}}
+        {{/if}}
+      </td>
+      <td>
+        <a class="btn btn-dark" href="/admin/view-order-products/{{this._id}}">
+          <i class="fa fa-eye" aria-hidden="true"></i>
+        </a>
+      </td>
+    </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>
+<script>
+  function submitForm() {
+    document.getElementById('orderStatusForm').submit();
+  }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+<script type="text/javascript" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<!-- Add DataTables initialization script -->
+<script>
+  $(document).ready(function () {
+    $('#orderTable').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": true,
+      "responsive": true,
+      "language": {
+        "paginate": {
+          "first": "First",
+          "last": "Last",
+          "next": "Next",
+          "previous": "Previous"
+        }
+      }
+    });
+  });
+</script>

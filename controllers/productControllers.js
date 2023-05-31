@@ -1,23 +1,23 @@
-let userHelpers = require("../helpers/user-helpers");
-let productsHelpers = require("../helpers/products-helpers");
-let categoryHelpers = require("../helpers/category-helpers");
-let adminHelpers = require("../helpers/admin-helpers");
-let orderHelpers = require("../helpers/order-Helpers");
-let bannerHelpers = require("../helpers/banner-helpers");
-const cartHelpers = require("../helpers/cart-helpers");
+let userHelpers = require("../helpers/userHelpers");
+let productsHelpers = require("../helpers/productsHelpers");
+let categoryHelpers = require("../helpers/categoryHelpers");
+let adminHelpers = require("../helpers/adminHelpers");
+let orderHelpers = require("../helpers/orderHelpers");
+let bannerHelpers = require("../helpers/bannerHelpers");
+const cartHelpers = require("../helpers/cartHelpers");
 const wishlistHelpers = require("../helpers/whishlistHelpers");
 
 module.exports = {
   getAddProducts: async (req, res) => {
     try {
-      let category = await categoryHelpers.viewCategory();
-      res.render("admin/add-product", {
+      const category = await categoryHelpers.viewCategory();
+      res.render("admin/addProduct", {
         admin: true,
         category,
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
@@ -30,9 +30,9 @@ module.exports = {
       req.body.listed = true;
       req.body.count = 0;
       await productsHelpers.addProduct(req.body);
-      res.redirect('/admin/add-product');
+      res.redirect('/admin/addProduct');
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
@@ -40,7 +40,7 @@ module.exports = {
     try {
       if (req.session.adminLoggedIn) {
         let products = await productsHelpers.getOneProduct(req.params.id);
-        res.render("admin/edit-products", {
+        res.render("admin/editProducts", {
           admin: true,
           products,
           login: req.session.adminLoggedIn,
@@ -49,7 +49,7 @@ module.exports = {
         res.redirect("/admin");
       }
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
@@ -61,17 +61,19 @@ module.exports = {
       await productsHelpers.updateProductImage(id, req.body);
       res.redirect("/admin/products");
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
   postDeleteProdcuts: async (req, res) => {
     try {
-      let proId = req.params.id;
+      console.log("API call");
+      const proId = req.params.id;
       await productsHelpers.deleteProduct(proId);
-      res.redirect("/admin/products");
+      res.sendStatus(200); // Send a success response
     } catch (error) {
-      // Handle error
+      console.log("An error occurred: ", error);
+      res.sendStatus(500); // Send an error response
     }
   },
 
@@ -81,26 +83,26 @@ module.exports = {
       await productsHelpers.deleteProductImage(id, req.body);
       res.redirect("/admin/products");
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
   getViewSingleProducts: async (req, res) => {
     try {
       let products = await productsHelpers.getOneProduct(req.params.id);
-      res.render("user/view-product", {
+      res.render("user/viewProduct", {
         user: true,
         products,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
   getViewProducts: async (req, res) => {
     try {
-      let userDetails = await userHelpers.getOneUserDetails(req.params.id);
-      let orderData = await orderHelpers.getUserOrders(req.params.id);
+      const userDetails = await userHelpers.getOneUserDetails(req.params.id);
+      const orderData = await orderHelpers.getUserOrders(req.params.id);
       res.render("admin/view-orders", {
         admin: true,
         orderData,
@@ -108,14 +110,14 @@ module.exports = {
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
   postChangeOrderStatus: async (req, res) => {
     try {
       await adminHelpers.changeOrderStatus(req.body);
-      res.redirect("/admin/Order-management");
+      res.redirect("/admin/order-management");
     } catch (error) {
       // Handle error
     }
@@ -123,38 +125,38 @@ module.exports = {
 
   getOrderManagement: async (req, res) => {
     try {
-      let allOrders = await orderHelpers.getAllOrders();
-      res.render("admin/Order-management", {
+      const allOrders = await orderHelpers.getAllOrders();
+      res.render("admin/orderManagement", {
         admin: true,
         allOrders,
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
   getSearch: async (req, res) => {
     try {
-      let banners = await bannerHelpers.getAllBanners();
-      let user = req.session.user;
+      const banners = await bannerHelpers.getAllBanners();
+      const user = req.session.user;
       let cartCount = null;
       if (user) {
-        cartCount = await cartHelpers.getCartCount(req.session.user._id);
+        cartCount = await cartHelpers.getCartCount(user._id);
       }
-      let category = await categoryHelpers.getAllCategories();
-      let count = await cartHelpers.getCartCount(user._id);
-      let wishlistCount = await wishlistHelpers.getWishlistCount(user._id);
+      const category = await categoryHelpers.getAllCategories();
+      const count = await cartHelpers.getCartCount(user._id);
+      const wishlistCount = await wishlistHelpers.getWishlistCount(user._id);
       let pageNumber = 1;
       if (req.query.page > 1) {
         pageNumber = parseInt(req.query.page);
       }
       const perPage = 3;
-
-      let products = await productsHelpers.search(req.body.search);
-      let result = await productsHelpers.paginateData(products, pageNumber, perPage);
+  
+      const products = await productsHelpers.search(req.body.search);
+      const result = await productsHelpers.paginateData(products, pageNumber, perPage);
       const pageCount = Math.ceil(result.totalCount / perPage);
-
+  
       res.render("user/user-home", {
         data: result.data,
         currentPage: pageNumber,
@@ -169,7 +171,7 @@ module.exports = {
         pageCount,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
@@ -180,13 +182,13 @@ module.exports = {
         pageNumber = parseInt(req.body.page);
       }
       const perPage = 3;
-      let user = req.session.user;
-      let count = await cartHelpers.getCartCount(user._id);
-      let category = await categoryHelpers.getAllCategories();
-      let data = await productsHelpers.sortProducts(req.body.selectedValue);
-      let result = await productsHelpers.paginateData(data, pageNumber, perPage);
+      const user = req.session.user;
+      const count = await cartHelpers.getCartCount(user._id);
+      const category = await categoryHelpers.getAllCategories();
+      const data = await productsHelpers.sortProducts(req.body.selectedValue);
+      const result = await productsHelpers.paginateData(data, pageNumber, perPage);
       const pageCount = Math.ceil(count / perPage);
-
+  
       res.render("user/sort", {
         user,
         data: result.data,
@@ -222,7 +224,7 @@ module.exports = {
         filter: true,
       });
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 
@@ -232,7 +234,7 @@ module.exports = {
       await productsHelpers.updateProduct(id, req.body);
       res.redirect("/admin");
     } catch (error) {
-      // Handle error
+      console.log("An error occured ",error);
     }
   },
 };

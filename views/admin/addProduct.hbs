@@ -1,0 +1,156 @@
+<section>
+  <div class="container d-flex justify-content-center align-items-center vh-100" style="margin: 30rem;margin-top: 9rem;">
+    <div class="col-md-6">
+      <h2 class="text-center text-primary mt-2">Add Products</h2>
+      <form action="/admin/add-product" method="post" enctype="multipart/form-data">
+        <div class="text-danger" id="product-error"></div>
+
+        <div class="form-group">
+          <label for="typeNameX">Name</label>
+          <input type="text" name="Name" id="typeNameX" class="form-control" onkeyup="validateName()" required />
+        </div>
+
+        <div class="text-danger" id="price-error"></div>
+
+        <div class="form-group">
+          <label for="typePriceX">Price</label>
+          <input type="number" name="Price" id="typePriceX" class="form-control" required min="0" />
+        </div>
+
+        <div class="form-group">
+          <label for="typeDescX">Description</label>
+          <input type="text" name="Description" id="typeDescX" class="form-control" required />
+        </div>
+
+        <div class="form-group">
+          <label for="typeOfferX">Offer Price</label>
+          <input type="number" name="Offerprice" id="typeOfferX" class="form-control" required min="0" pattern="[0-9]+" />
+        </div>
+
+        <div class="form-group">
+          <label for="typeStockX">Quantity</label>
+          <input type="number" name="Quantity" id="typeStockX" class="form-control" required min="0" pattern="[0-9]+" />
+        </div>
+
+        <div class="form-group">
+          <label for="typeCatX">Category</label>
+          <select name="category" id="typeCatX" class="form-control" required>
+            {{#each category}}
+            <option>{{this.category}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Image</label>
+          <div class="container">
+            <div class="row col-xs-2" style="margin: 2rem;">
+              <label for="imageInput1">Image 1:</label>
+              <input type="file" name="images" id="imageInput1" required>
+              <img id="preview1" style="display: none; width: 100px; height: 100px; margin-left: 10px;">
+            </div>
+            <div class="row col-xs-2" style="margin: 2rem;">
+              <label for="imageInput2">Image 2:</label>
+              <input type="file" name="images" id="imageInput2" required>
+              <img id="preview2" style="display: none; width: 100px; height: 100px; margin-left: 10px;">
+            </div>
+            <div class="row col-xs-2" style="margin: 2rem;">
+              <label for="imageInput3">Image 3:</label>
+              <input type="file" name="images" id="imageInput3" required>
+              <img id="preview3" style="display: none; width: 100px; height: 100px; margin-left: 10px;">
+            </div>
+          </div>
+        </div>
+
+                <div class="form-group">
+          <button type="submit" class="btn btn-success mt-4 mb-4">SUBMIT</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</section>
+
+<script>
+  let producterror = document.getElementById('product-error');
+
+  function validateName() {
+    let name = document.getElementById('typeNameX').value;
+
+    if (name.length == "") {
+      producterror.innerHTML = "This field is required";
+      return false;
+    }
+    if (name.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      producterror.innerHTML = "Invalid";
+      return false;
+    }
+    producterror.innerHTML = '';
+    return true;
+  }
+
+  let priceerror = document.getElementById('price-error');
+
+  function validatePrice() {
+    let price = document.getElementById('typePriceX').value;
+
+    if (price.length == "") {
+      priceerror.innerHTML = "This field is required";
+      return false;
+    }
+    // Add your price validation logic here
+    // Example: if (!isValidPrice(price)) {
+    //   priceerror.innerHTML = "Invalid price";
+    //   return false;
+    // }
+    priceerror.innerHTML = '';
+    return true;
+  }
+
+  function validateForm() {
+    if (!validateName() || !validatePrice()) {
+      return false;
+    }
+  }
+</script>
+
+<script>
+  // function to update the preview image
+  function updatePreviewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const file = input.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      preview.src = e.target.result;
+      preview.style.display = "inline";
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = "";
+      preview.style.display = "none";
+    }
+  }
+
+  // listen for change events on the file input elements
+  const imageInput1 = document.getElementById("imageInput1");
+  imageInput1.addEventListener("change", function () {
+    updatePreviewImage(this, "preview1");
+  });
+
+  const imageInput2 = document.getElementById("imageInput2");
+  imageInput2.addEventListener("change", function () {
+    updatePreviewImage(this, "preview2");
+  });
+
+  const imageInput3 = document.getElementById("imageInput3");
+  imageInput3.addEventListener("change", function () {
+    updatePreviewImage(this, "preview3");
+
+
+   <script defer src="https://cdn.crop.guide/loader/l.js?c=CFJHHV"></script>
+
+
+

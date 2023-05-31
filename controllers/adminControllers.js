@@ -1,13 +1,13 @@
-const adminHelpers = require('../helpers/admin-helpers');
-const userHelpers = require('../helpers/user-helpers')
-const productsHelpers = require('../helpers/products-helpers')
-const dashboardHelpers = require('../helpers/dashboard-helpers')
+const adminHelpers = require('../helpers/adminHelpers');
+const userHelpers = require('../helpers/userHelpers')
+const productsHelpers = require('../helpers/productsHelpers')
+const dashboardHelpers = require('../helpers/dashboardHelpers')
 const {
   Db
 } = require('mongodb')
-const couponHelpers = require('../helpers/coupon-helpers')
-const categoryHelpers = require('../helpers/category-helpers')
-const orderHelpers = require('../helpers/order-Helpers')
+const couponHelpers = require('../helpers/couponHelpers')
+const categoryHelpers = require('../helpers/categoryHelpers')
+const orderHelpers = require('../helpers/orderHelpers')
 
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
       const productCount = await dashboardHelpers.totalProducts();
       const userCount = await dashboardHelpers.getUserCount();
       const orderCount = await dashboardHelpers.totalOrders();
-      const category = await categoryHelpers.getAllCategoriesforchart();
+      const category = await categoryHelpers.getAllCategoriesForChart();
       const cancelCount = await dashboardHelpers.canelTotal();
       const totalCoupon = await couponHelpers.getAllCoupons();
       const totalRevenue = await dashboardHelpers.totalRevenue();
@@ -38,7 +38,7 @@ module.exports = {
         totalCoupon
       });
     } catch (error) {
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },  
 
@@ -52,7 +52,7 @@ module.exports = {
           login: req.session.adminLoggedIn,
         });
       } else {
-        res.render("admin/adminlogin", {
+        res.render("admin/adminLogin", {
           admin: true,
           loginErr: req.session.loginErr,
         });
@@ -60,7 +60,8 @@ module.exports = {
       req.session.loginErr = false;
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
+
     }
   },
 
@@ -72,7 +73,7 @@ module.exports = {
       res.redirect("/admin");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -83,7 +84,7 @@ module.exports = {
       const userAddress = await userHelpers.getUserData(user);
       const userDetails = await userHelpers.getOneUserDetails(user);
   
-      res.render("admin/user-profile", {
+      res.render("admin/userProfile", {
         admin: true,
         login: req.session.adminLoggedIn,
         userDetails,
@@ -92,7 +93,7 @@ module.exports = {
       });
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -100,17 +101,17 @@ module.exports = {
     try {
       if (req.session.adminLoggedIn) {
         const user = await userHelpers.getAllUsers();
-        res.render("admin/all-users", {
+        res.render("admin/allUsers", {
           admin: true,
           user,
           login: req.session.adminLoggedIn,
         });
       } else {
-        res.redirect("/admin/adminlogin");
+        res.redirect("/admin/adminLogin");
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -131,7 +132,7 @@ module.exports = {
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -141,11 +142,11 @@ module.exports = {
         await userHelpers.addUser(req.body);
         res.redirect("/admin/allusers");
       } else {
-        res.render("admin/adminlogin");
+        res.render("admin/adminLogin");
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -153,17 +154,17 @@ module.exports = {
     try {
       if (req.session.adminLoggedIn) {
         const products = await productsHelpers.getAllProducts();
-        res.render("admin/view-product", {
+        res.render("admin/viewProduct", {
           admin: true,
           products,
           login: req.session.adminLoggedIn,
         });
       } else {
-        res.redirect("/admin/adminlogin");
+        res.redirect("/admin/adminLogin");
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -175,7 +176,7 @@ module.exports = {
       res.redirect("/admin");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
     // req.session.destroy();
   },
@@ -192,7 +193,7 @@ module.exports = {
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
@@ -211,7 +212,7 @@ module.exports = {
       }
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
@@ -221,31 +222,31 @@ module.exports = {
       res.redirect("/admin");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
   getCancelOrders: async (req, res) => {
     try {
       await adminHelpers.cancelOrders(req.params.id);
-      res.redirect("/view-orders");
+      res.redirect("/viewOrders");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
   getOrderProducts: async (req, res) => {
     try {
       const products = await userHelpers.getUserOrderProducts(req.params.id);
-      res.render("admin/view-order-products", {
+      res.render("admin/viewOrderProducts", {
         admin: true,
         products,
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
@@ -255,7 +256,7 @@ module.exports = {
       res.redirect("/admin/allusers");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
@@ -265,7 +266,7 @@ module.exports = {
       res.redirect("/admin/allusers");
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
   
@@ -291,28 +292,28 @@ module.exports = {
   getSalesReport: async (req, res) => {
     try {
       const salesReport = await adminHelpers.getSalesReport();
-      res.render("admin/sales-report", {
+      res.render("admin/salesReport", {
         admin: true,
         salesReport,
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   },
 
   postSalesDownload: async (req, res) => {
     try {
       const salesReport = await adminHelpers.getSalesFilter(req.body.startdate, req.body.enddate);
-      res.render("admin/sales-report", {
+      res.render("admin/salesReport", {
         admin: true,
         salesReport,
         login: req.session.adminLoggedIn,
       });
     } catch (error) {
       // Properly handle the error, such as logging or sending an error response
-      console.log(error);
+      console.log("An error occured ",error);
     }
   }
 }  
