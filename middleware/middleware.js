@@ -3,34 +3,7 @@ const db = require("../config/connection");
 const collection = require("../config/collection");
 const ObjectId = require('mongodb').ObjectId;
 
-// const passport = require('passport');
-// const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
-// passport.serializeUser(function (user, done) {
-//   // Store the user ID in the session
-//   done(null, user.id);
-// });
-
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await db.get().collection(collection.USER_COLLECTION).findOne({
-//       _id: ObjectId(id)
-//     });
-//     done(null, user); // Pass the user object to the done callback
-//   } catch (error) {
-//     done(error, null); // Pass the error to the done callback
-//   }
-// });
-
-// passport.use(new GoogleStrategy({
-//   clientID: process.env.GOOOGLE_ClIENT_ID,
-//   clientSecret: process.env.GOOOGLE_ClIENT_SECRET,
-//   callbackURL: process.env.GOOOGLE_CALLBACK_URL,
-//   passReqToCallback: true
-// }, function (request, accessToken, refreshToken, profile, done) {
-//   console.log(profile);
-//   return done(null, profile);
-// }));
 
 module.exports = {
   admin: (req, res, next) => {
@@ -93,9 +66,5 @@ module.exports = {
       res.redirect('/login');
     }
   },
-//   googleAuth: passport.authenticate('google', { scope: ['email', 'profile'] }),
-//   googleAuthCallback: passport.authenticate('google', {
-//     successRedirect: '/',
-//     failureRedirect: '/login'
-//  })
+
 };

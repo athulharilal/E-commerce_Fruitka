@@ -10,7 +10,7 @@ const productControllers = require("../controllers/productControllers");
 
 
 
-
+//Userr-home
 router.get("/", userControllers.home);
 
 // About route
