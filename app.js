@@ -11,11 +11,9 @@ const db = require('./config/connection');
 const session = require('express-session');
 const Handlebars = require('handlebars');
 const crypto = require('crypto');
-const passport = require('passport')
 
 
-// app.use(passport.authenticate())
-// app.use(passport.session())
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -40,6 +38,9 @@ const hbsInstance = hbs.create({
 });
 
 app.engine("hbs", hbsInstance.engine);
+
+
+
 
 app.use(logger('dev'));
 app.use(express.json());

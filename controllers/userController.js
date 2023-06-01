@@ -127,9 +127,9 @@ module.exports = {
 
     getLogout: (req, res) => {
       try {
-        req.session.destroy();
-        // req.session.loggedIn = false;
-        // req.session.user = null;
+        // req.session.destroy();
+        req.session.loggedIn = false;
+        req.session.user = null;
         res.redirect("/");
       } catch (error) {
         console.log(error);
