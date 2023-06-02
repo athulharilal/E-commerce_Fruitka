@@ -30,7 +30,7 @@ module.exports = {
       req.body.listed = true;
       req.body.count = 0;
       await productsHelpers.addProduct(req.body);
-      res.redirect('/admin/addProduct');
+      res.redirect('/admin/add-product');
     } catch (error) {
       console.log("An error occured ",error);
     }
@@ -216,7 +216,8 @@ module.exports = {
       let result = await productsHelpers.paginateData(data, pageNumber, perPage);
       const pageCount = Math.ceil(count / perPage);
 
-      res.render("user/user-home", {
+      console.log("api call");
+      res.render("user/userHome", {
         user,
         pageCount,
         currentPage: pageNumber,

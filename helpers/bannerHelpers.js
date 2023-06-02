@@ -38,11 +38,11 @@ module.exports = {
   editBanner: async (data) => {
     try {
       await db.get().collection(collection.BANNER_COLLECTION).updateOne(
-        { _id: ObjectId(data._id) },
+        { _id: ObjectId(data.id) },
         {
           $set: {
             name: data.name,
-            subname: data.subname,
+            suBname: data.suBname,
             offer: data.offer,
           },
         }

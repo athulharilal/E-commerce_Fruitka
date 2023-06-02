@@ -46,7 +46,7 @@ function addToCart(proId) {
         }
       },
       error: (xhr, status, error) => {
-        console.log(xhr.responseText);
+        console.log(xhr.responseText,error);
         swal.fire({
           icon: "error",
           title: "Error",

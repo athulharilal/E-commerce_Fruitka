@@ -22,7 +22,7 @@ module.exports = {
       res.redirect('/admin/view-category');
     } catch (error) {
       req.session.catAddErr = "Category Already Exists";
-      res.redirect('/admin/addCategories');
+      res.redirect('/admin/add-categories');
     }
   },
 
@@ -55,7 +55,7 @@ module.exports = {
   postEditCategory: async (req, res) => {
     try {
       await categoryHelpers.updateCategory(req.body);
-      res.redirect("/admin/viewCategory");
+      res.redirect("/admin/view-category");
     } catch (error) {
       console.log("An error occured ",error);
     }
@@ -78,7 +78,7 @@ module.exports = {
       if (req.xhr) {
         res.json({ message: message }); // Send JSON response for AJAX request
       } else {
-        res.redirect("/admin/viewCategory?message=" + encodeURIComponent(message));
+        res.redirect("/admin/view-category?message=" + encodeURIComponent(message));
       }
     } catch (error) {
       res.render("error", {

@@ -1,30 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Change Password and Username</title>
+  <style>
+    .center-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    
+    .form-table {
+      width: 50%;
+    }
+    
+    .form-group {
+      text-align: left;
+    }
+    
+    .nowrap-label {
+      white-space: nowrap;
+    }
+  </style>
+</head>
 <body>
-  <div class="container mb-150 mt-150 text-center">
-    <h3>Change <span class="orange-text text-center border mt-2 ml-auto mr-auto">Password and Username</span></h3>
+  <div class="center-content">
+    <h3>Change <span class="orange-text border mt-2">Password and Username</span></h3>
     <!-- Change Password Form -->
     <form action="/change-password" method="post">
-      <table>
+      <table class="form-table">
         <tr>
           <td>
             <div class="form-group">
-              <label for="currentPassword">Current Password: </label>
+              <label for="currentPassword" class="nowrap-label">Current Password:</label>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <input type="password" class="form-control" id="currentPassword" name="currentPassword" required style="width: 50%;">
+              <input type="password" class="form-control" id="currentPassword" name="currentPassword" required>
             </div>
           </td>
         </tr>
         <tr>
           <td>
             <div class="form-group">
-              <label for="newPassword">New Password: </label>
+              <label for="newPassword" class="nowrap-label">New Password:</label>
             </div>
           </td>
           <td>
             <div class="form-group">
-              <input type="password" class="form-control" id="newPassword" name="newPassword" required style="width: 50%;">
+              <input type="password" class="form-control" id="newPassword" name="newPassword" required>
             </div>
           </td>
         </tr>
@@ -36,43 +62,9 @@
       </table>
     </form>
     <hr>
-    <!-- Change Username Form -->
-    <form action="/change-username" method="post">
-      <table>
-        <tr>
-          <td>
-            <div class="form-group">
-              <label for="currentUsername">Current Username: </label>
-            </div>
-          </td>
-          <td>
-            <div class="form-group">
-              <input type="text" class="form-control" id="currentUsername" name="currentUsername" required style="width: 50%;">
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <div class="form-group">
-              <label for="newUsername">New Username: </label>
-            </div>
-          </td>
-          <td>
-            <div class="form-group">
-              <input type="text" class="form-control" id="newUsername" name="newUsername" required style="width: 50%;">
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">
-            <button type="submit" class="btn btn-primary">Change Username</button>
-          </td>
-        </tr>
-      </table>
-    </form>
   </div>
   <!-- Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 </body>

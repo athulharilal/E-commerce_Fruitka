@@ -327,8 +327,8 @@ module.exports = {
 
   postEditPersonalDetails: async (req, res) => {
     try {
-      await userHelpers.editMyprofile(req.body, req.session.user._id);
-      res.redirect('/editPersonalDetails');
+      await userHelpers.editMyProfile(req.body, req.session.user._id);
+      res.redirect('/edit-Personal-details');
     } catch (error) {
       res.render('user/404', {
         user: true

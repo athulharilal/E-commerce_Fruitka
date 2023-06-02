@@ -54,7 +54,6 @@ module.exports = {
 
   editCoupon: async (data) => {
     try {
-      console.log(data," data");
       const startDateIso = new Date(data.starting);
       const endDateIso = new Date(data.expiry);
 

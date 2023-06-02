@@ -23,7 +23,6 @@ module.exports = {
 
   getAddToCart: async (req, res) => {
     try {
-      console.log(" api call")
       const userId = req.session.user._id;
       const productId = req.params.id;
       const count = await userHelpers.findProCount(userId, productId);

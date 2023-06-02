@@ -3,38 +3,35 @@
         <div class="row">
             <div class="col-md-6 justify-content-center">
                 <h2>Edit Banner</h2>
-                <form action="/admin/edit-coupon" method="post">
-                    <input type="text" value="{{coupon._id}}" name="id" hidden>
-                    <label for="coupon">Banner Name</label>
-                    <input type="text" id="coupon" name="coupon" onkeyup="validateCoupon()" value="{{bannerDetails.name}}" class="form-control">
-                     <div id="couponError"></div>
+                <form action="/admin/edit-banner" method="post">
+                    <input type="text" value="{{bannerDetails._id}}" name="id" hidden>
+                    <label for="name">Banner Name</label>
+                    <input type="text" id="name" name="name" onkeyup="validateName()" value="{{bannerDetails.name}}" class="form-control">
+                    <div id="nameError"></div>
 
-                    <label for="starting">Sub Name: </label>
-                    <input type="text" id="startDate" name="starting" value="{{bannerDetails.suBname}}" class="form-control">
-                     <div id="startDateError"></div>
- 
-                    <label for="expiry">Offer: </label>
-                    <input type="text" id="endDate" name="expiry" value="{{bannerDetails.offer}}" class="form-control">
-                     <div id="endDateError"></div>
+                    <label for="suBname">Sub Name: </label>
+                    <input type="text" id="suBname" name="suBname" value="{{bannerDetails.suBname}}" class="form-control">
+                    <div id="suBnameError"></div>
 
-                    <label for="offer">Image: </label>
-                    <img class="" style="width:100px; height:100px;margin: 2rem;" src="/product-images/{{bannerDetails.images.[0]}} " alt="Image">
+                    <label for="offer">Offer: </label>
+                    <input type="text" id="offer" name="offer" value="{{bannerDetails.offer}}" class="form-control">
                     <div id="offerError"></div>
 
-                    <button type="submit" class="btn btn-success mt-4">submit</button>
+                    <label for="image">Image: </label>
+                    <img class="" style="width:100px; height:100px;margin: 2rem;" src="/product-images/{{bannerDetails.images.[0]}} " alt="Image">
+
+                    <button type="submit" class="btn btn-success mt-4">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
 
-
-{{!-- date validation --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
+<!-- Date validation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        let today = new Date()
+        let today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1;
         var yyyy = today.getFullYear();
@@ -45,95 +42,84 @@
             mm = '0' + mm;
         }
         today = yyyy + '-' + mm + '-' + dd;
-        $('#startDate').attr('min', today)
+        $('#startDate').attr('min', today);
         $('#startDate').change(function () {
-            let date = document.getElementById('startDate').value
-            $('#endDate').attr('min', date)
-        })
-    })
+            let date = document.getElementById('startDate').value;
+            $('#endDate').attr('min', date);
+        });
+    });
 </script>
 
-{{!-- coupon validation --}}
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- Form validation -->
 <script>
-    var couponError = document.getElementById('couponError')
-    var percentageError = document.getElementById('percentageError')
-    var startDateError = document.getElementById('startDateError')
-    var endDateError = document.getElementById('endDateError')
-    function validateCoupon(){
-        var coupon = document.getElementById('coupon').value.trim()
-        if(coupon.length < 4 ){
-            couponError.innerHTML = "need minimum 4 characters"
-            couponError.style.color = "red"
-            return false;
-        }
-        console.log(coupon)
-        couponError.innerHTML = 'valid';
-        couponError.style.color = 'green'
-        return true;
-    }
-    
-    function validatePercentage(){
-        var percentage = document.getElementById('offer').value.trim();
-        if(percentage > 95 || percentage.length == 0){
-            percentageError.innerHTML = "Value must be less than 90"
-            percentageError.style.color = "red";
-            return false;
-        }
-        console.log(percentage)
-        percentageError.innerHTML = 'valid';
-        percentageError.style.color = 'green'
-        return true;
-    }
-    function validateStartDate(){
-        var startDate =document.getElementById('startDate').value.trim();
-        if(startDate  == null){
-            startDateError.innerHTML = 'this field is required'
-            startDateError.style.clor = 'red';
-            return false;
-        }
-                console.log(startDate)
+    var nameError = document.getElementById('nameError');
+    var suBnameError = document.getElementById('suBnameError');
+    var offerError = document.getElementById('offerError');
 
-        startDateError.innerHTML ='valid'
-        startDateError.style.color = 'green'
-        return true;
-    }
-    function validateEndDate(){
-        var endDate =document.getElementById('endDate').value.trim();
-        if(endDate  == null){
-            endDateError.innerHTML = 'this field is required'
-            endDateError.style.clor = 'red';
+    function validateName() {
+        var name = document.getElementById('name').value.trim();
+        if (name.length < 4) {
+            nameError.innerHTML = "Minimum 4 characters required";
+            nameError.style.color = "red";
             return false;
         }
-                        console.log(endDate)
-
-        endDateError.innerHTML ='valid'
-        endDateError.style.color = 'green'
+        console.log(name);
+        nameError.innerHTML = 'Valid';
+        nameError.style.color = 'green';
         return true;
     }
-    function validateOffer(){
-        var offer =document.getElementById('offer').value.trim();
-        if(offer  == null){
-            offerError.innerHTML = 'this field is required'
-            offerError.style.clor = 'red';
+
+    function validateSubName() {
+        var suBname = document.getElementById('suBname').value.trim();
+        if (suBname.length < 4) {
+            suBnameError.innerHTML = "Minimum 4 characters required";
+            suBnameError.style.color = "red";
             return false;
         }
-                        console.log(offer)
-
-        offerError.innerHTML ='valid'
-        offerError.style.color = 'green'
+        console.log(suBname);
+        suBnameError.innerHTML = 'Valid';
+        suBnameError.style.color = 'green';
         return true;
     }
+
+    function validateOffer() {
+        var offer = document.getElementById('offer').value.trim();
+        if (offer.length === 0 || offer > 90) {
+            offerError.innerHTML = "Value must be less than 90";
+            offerError.style.color = "red";
+            return false;
+        }
+        console.log(offer);
+        offerError.innerHTML = 'Valid';
+        offerError.style.color = 'green';
+        return true;
+    }
+
     $(document).on("submit", "form", function (e) {
-        validateCoupon()
-        validatePercentage()
-        validateStartDate()
-        validateEndDate()
-        if(validatePercentage() && validateCoupon() && validateStartDate() && validateEndDate()){
-           alert('coupon added')
-        }else{
+        if (validateName() && validateSubName() && validateOffer()) {
+            // Form inputs are valid, proceed with AJAX request
+            e.preventDefault(); // Prevent the default form submission
+
+            var formData = $(this).serialize(); // Serialize the form data
+
+            $.ajax({
+                url: $(this).attr("action"), // Get the form action URL
+                method: $(this).attr("method"), // Get the form HTTP method
+                data: formData, // Set the serialized form data
+                success: function (response) {
+                    // Handle the success response here
+                    alert("Banner updated successfully");
+                    // Optionally, you can redirect the user to another page:
+                    // window.location.href = "/success-page";
+                },
+                error: function (xhr, status, error) {
+                    // Handle the error response here
+                    alert("An error occurred while updating the banner");
+                }
+            });
+        } else {
             e.preventDefault();
             return false;
         }
-    })
+    });
 </script>

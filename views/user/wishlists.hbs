@@ -1,22 +1,13 @@
 <main class="main" style="margin-top: 4rem;">
+			{{#if products.length}}
 	<div class="page-header text-center"
 		style="margin-bottom: 5rem; height:20px;background-image: url('/assets/images/page-header-bg.jpg')">
 		<div class="container">
 			<h2 class="page-title">Wishlists</h2>
 		</div><!-- End .container -->
 	</div><!-- End .page-header -->
-	<nav aria-label="breadcrumb" class="breadcrumb-nav">
-		<div class="container">
-			<ol class="breadcrumb">
-				<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-				<li class="breadcrumb-item"><a href="#">Shop</a></li>
-				<li class="breadcrumb-item active" aria-current="page">Wishlist</li>
-			</ol>
-		</div><!-- End .container -->
-	</nav><!-- End .breadcrumb-nav -->
 	<div class="page-content">
 		<div class="container">
-			{{#if products.length}}
 			<table class="table table-wishlist table-mobile">
 				<thead>
 					<tr>

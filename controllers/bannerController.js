@@ -55,7 +55,7 @@ module.exports = {
 
   postEditBanner: async (req, res) => {
     try {
-      const id = req.body._id;
+   
       await bannerHelpers.editBanner(req.body);
       if (req.files.image) {
         const image = req.files.image;

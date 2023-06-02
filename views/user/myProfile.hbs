@@ -18,9 +18,163 @@
             <a href="/edit-Personal-details" class="list-group-item list-group-item-action"><b>Personal Details</b></a>
             <a href="/orders" class="list-group-item list-group-item-action"><b>Orders</b></a>
             <a href="/wishlists" class="list-group-item list-group-item-action"><b>WishList</b></a>
-            <a href="/loginnsecurity" class="list-group-item list-group-item-action"><b>Login & Security</b></a>
+            <a href="javascript:void(0);" id="loginSecurityBtn" class="list-group-item list-group-item-action"><b>Login
+                    & Security</b></a>
 
         </div>
     </div>
 </div>
+
+<div id="loginSecurityModal" class="modal text-center">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="section-title">
+            <h3>Login <span class="orange-text">and Security</span></h3>
+        </div>
+        <form id="loginSecurityForm">
+  <div class="input-group text-center">
+    <label for="currentPassword">Current Password : </label>
+    <input type="password" id="currentPassword" required>
+  </div>
+
+  <div class="input-group text-center">
+    <label for="newPassword">New Password : </label>
+    <input type="password" id="newPassword" required>
+  </div>
+
+  <div class="submit-group">
+    <button type="submit">Change Password</button>
+  </div>
+</form>
+
+    </div>
+</div>
+<style>
+    /* Modal Styling */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 40%;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    /* Custom CSS styles */
+    .input-group {
+        margin-bottom: 15px;
+    }
+
+    .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .input-group input[type="password"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .submit-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .submit-group button {
+        padding: 10px 20px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .submit-group button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+<script>
+    // Get the modal element
+    var modal = document.getElementById('loginSecurityModal');
+
+    // Get the button that opens the modal
+    var btn = document.getElementById('loginSecurityBtn');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName('close')[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function () {
+        modal.style.display = 'block';
+    };
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+        modal.style.display = 'none';
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Handle form submission
+    var loginSecurityForm = document.getElementById('loginSecurityForm');
+    loginSecurityForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        var currentPasswordInput = document.getElementById('currentPassword');
+        var newPasswordInput = document.getElementById('newPassword');
+
+        var currentPassword = currentPasswordInput.value;
+        var newPassword = newPasswordInput.value;
+
+        currentPasswordInput.value = '';
+        newPasswordInput.value = '';
+
+        // Validate current password
+        // Replace this with your own validation logic
+        if (currentPassword !== 'currentPassword') {
+            alert('Incorrect current password');
+            return;
+        }
+
+        // Perform password change
+        // Replace this with your own password change logic
+        alert('Password changed successfully');
+
+        modal.style.display = 'none';
+    });
+</script>
 <!-- end team section -->
