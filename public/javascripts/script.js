@@ -254,7 +254,6 @@ $("#edit-address").submit((e) => {
 })
 
 function couponApply() {
-    console.log("entered")
     let couponCode = document.getElementById('coupon').value
     $.ajax({
         url: '/coupon-apply',
@@ -275,7 +274,6 @@ function couponApply() {
                 document.getElementById('total').innerHTML = (response.total)
                 document.getElementById('discount').innerHTML = response.discountValue
                 document.getElementById('CouponName').innerHTML = response.coupon
-                console.log(response.coupon)
             } else if (response.couponUsed) {
                 Swal.fire({
                     position: "center",

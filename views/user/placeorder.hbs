@@ -22,10 +22,10 @@
 											<div class="row">
 												{{#each userAddress.address}}
 												<div class="col-8">
-													<input type="radio" id="{{this._id}}-{{@index}}"
+													<input type="radio" id="{{this.id}}-{{@index}}"
 														name="deliveryAddress" class="custom-control-input"
-														value="{{this._id}}" {{#if @first}}checked{{/if}}>
-													<label class="custom-control-label" for="{{this._id}}-{{@index}}">
+														value="{{this.id}}" {{#if @first}}checked{{/if}}>
+													<label class="custom-control-label" for="{{this.id}}-{{@index}}">
 														<p class="">{{this.name}}</p>
 														<p class="">{{this.address}}, {{this.town}}, {{this.district}}
 															- {{this.pincode}}</p>
@@ -33,11 +33,11 @@
 												</div>
 												<div class="col-4">
 													<button class="btn btn-dark"
-														onclick="editAddress('{{this._id}}','{{this.name}}','{{this.address}}','{{this.town}}','{{this.district}}','{{this.state}}','{{this.pincode}}','{{this.phone}}')"
+														onclick="editAddress('{{this.id}}','{{this.name}}','{{this.address}}','{{this.town}}','{{this.district}}','{{this.state}}','{{this.pincode}}','{{this.phone}}')"
 														data-toggle="modal" data-target="#editAddress">Edit
 														Address</button>
 													<a class="mt-4" onclick="deleteAddress(event)"
-														href="/deleteAddress/{{this._id}}"><button
+														href="/deleteAddress/{{this.id}}"><button
 															class="btn btn-danger">Delete</button></a>
 												</div>
 												{{/each}}
@@ -76,7 +76,7 @@
 													placeholder="First Name" required oninput="validateName()">
 											</div>
 											<div class="col-md-6 form-group">
-												<div class="error-text" id="phone-error"></div>
+												<div class="error-text text-danger" id="phone-error"></div>
 												<label>Mobile No</label>
 												<input class="form-control" type="text" id="phone" name="mobile"
 													placeholder="Mobile No" required oninput="validatePhone()">
@@ -176,19 +176,18 @@
 								</tr>
 							</tbody>
 						</table>
-
 						<div class="card-body">
 							<h5>Payment Method</h5>
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="PaymentMethod" id="paymentMethodCOD"
+								<input class="form-check-input" type="radio" name="paymentMethod" id="paymentMethodCOD"
 									value="COD">
 								<label class="form-check-label" for="paymentMethodCOD">
 									Cash On Delivery
 								</label>
 							</div>
 							<div class="form-check">
-								<input class="form-check-input" type="radio" name="PaymentMethod" value="Razorpay"
-									id="paymentMethodRazorpay" checked>
+								<input class="form-check-input" type="radio" name="paymentMethod" value="Razorpay"
+									id="paymentMethodRazorpay">
 								<label class="form-check-label" for="paymentMethodRazorpay">
 									RazorPay
 								</label>
@@ -196,7 +195,7 @@
 							{{#if walletStatus}}
 							<div class="form-check">
 								<input class="form-check-input" type="radio" name="paymentMethod" value="Wallet"
-									id="paymentMethodWallet" checked>
+									id="paymentMethodWallet">
 								<label class="form-check-label" for="paymentMethodWallet">
 									Wallet
 								</label>
@@ -208,13 +207,10 @@
 									alt="payments cards">
 							</div>
 						</div>
-
 						<button type="submit" class="btn btn-block btn-dark font-weight-bold py-3"
 							style="width: 80%; color: ;" onclick="validateForm()">Proceed To Payment</button>
 					</div>
-
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -342,6 +338,18 @@
 	const paymentMethodWalletInput = document.getElementById("paymentMethodWallet");
 
 	const couponInput = document.getElementById("coupon");
+	console.log(nameInput, " nameInput")
+	console.log(phoneInput, " phoneInput")
+	console.log(billingaddressInput, " billingaddressInput")
+	console.log(districtInput, " districtInput")
+	console.log(townInput, " townInput")
+	console.log(stateInput, " stateInput")
+	console.log(pincodeInput, " pincodeInput")
+	console.log(paymentMethodCODInput, " paymentMethodCODInput")
+	console.log(paymentMethodRazorpayInput, " paymentMethodRazorpayInput")
+	console.log(paymentMethodWalletInput, " paymentMethodWalletInput")
+
+
 
 
 
@@ -437,7 +445,6 @@
 	stateInput.addEventListener("input", validateState);
 	pincodeInput.addEventListener("input", validatePincode);
 
-
 	function validateForm() {
 		validateName();
 		validatePhone();
@@ -449,10 +456,14 @@
 
 		// Check if any input field has the "error" class
 		const errorInputs = document.querySelectorAll(".error");
+		console.log(errorInputs, " errorInputs")
 		if (errorInputs.length > 0) {
+			console.log(" error")
 			// At least one input has an error
 			return false;
 		} else {
+			console.log(" sucess")
+
 			// All inputs are valid
 			return true;
 		}
@@ -527,37 +538,38 @@
 		}
 	});
 
-	function razorpayPayment(order) {
-  var amountInSubunits = parseInt(order.amount * 100);
-  if (amountInSubunits < 1) {
-    console.log("Minimum 1 rupee is needed to process the payment");
-    return;
-  }
 
-  var options = {
-    key: "rzp_test_AF9BQ131vX5VfH", // Enter the Key ID generated from the Dashboard
-    amount: amountInSubunits, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    currency: "INR",
-    name: "Frutika Pvt Ltd",
-    description: "Test Transaction",
-    image: "https://example.com/your_logo",
-    order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    handler: function (response) {
-      verifyPayment(response, order);
-    },
-    prefill: {
-      name: "Athul Harilal",
-      email: "athul.harilal@example.com",
-      contact: "9000090000",
-    },
-    notes: {
-      address: "Razorpay Corporate Office",
-    },
-    theme: {
-      color: "#3399cc",
-    },
-  };
-  var rzp1 = new Razorpay(options);
-  rzp1.open();
-}
+	function razorpayPayment(order) {
+		var amountInSubunits = parseInt(order.amount * 100);
+		if (amountInSubunits < 1) {
+			console.log("Minimum 1 rupee is needed to process the payment");
+			return;
+		}
+
+		var options = {
+			key: "rzp_test_AF9BQ131vX5VfH", // Enter the Key ID generated from the Dashboard
+			amount: amountInSubunits, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			currency: "INR",
+			name: "Frutika Pvt Ltd",
+			description: "Test Transaction",
+			image: "https://example.com/your_logo",
+			order_id: order.id, // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			handler: function (response) {
+				verifyPayment(response, order);
+			},
+			prefill: {
+				name: "Athul Harilal",
+				email: "athul.harilal@example.com",
+				contact: "9000090000",
+			},
+			notes: {
+				address: "Razorpay Corporate Office",
+			},
+			theme: {
+				color: "#3399cc",
+			},
+		};
+		var rzp1 = new Razorpay(options);
+		rzp1.open();
+	}
 </script>

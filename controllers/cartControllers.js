@@ -5,7 +5,6 @@ const whishlistHelpers = require('../helpers/whishlistHelpers');
 module.exports = {
   getCart: async (req, res) => {
     try {
-      console.log("api call");
       const products = await cartHelpers.getCartProducts(req.session.user._id);
       const totalValue = await cartHelpers.getTotalAmount(req.session.user._id);
       res.render('user/cart', {
@@ -14,7 +13,6 @@ module.exports = {
         totalValue,
       });
     } catch (error) {
-      console.log(error," error");
       res.render('user/404', {
         user: true,
       });

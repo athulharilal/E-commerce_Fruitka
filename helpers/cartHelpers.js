@@ -236,31 +236,33 @@ module.exports = {
     }
   },
 
-  getTotalAmount: async (userId) => {
-    try {
-      const cart = await db.get().collection(collection.CART_COLLECTION).findOne({
-        user: ObjectId(userId),
-      });
-      if (cart) {
-        let total = 0;
-        for (let product of cart.products) {
-          const prodPrice = await db
-            .get()
-            .collection(collection.PRODUCT_COLLECTION)
-            .findOne({
-              _id: product.item
-            });
 
-          total += prodPrice.Price * product.quantity;
-        }
-        return total;
-      } else {
-        return 0;
+
+getTotalAmount: async (userId) => {
+  try {
+    const cart = await db.get().collection(collection.CART_COLLECTION).findOne({
+      user: ObjectId(userId),
+    });
+    if (cart) {
+      let total = 0;
+      for (let product of cart.products) {
+        const prodPrice = await db
+          .get()
+          .collection(collection.PRODUCT_COLLECTION)
+          .findOne({
+            _id: ObjectId(product.item)
+          });
+        total += parseInt(prodPrice.Price) * product.quantity; // Convert Price to number before multiplication
       }
-    } catch (error) {
-      throw error;
+      console.log(total + " total");
+      return total;
+    } else {
+      return 0;
     }
-  },
+  } catch (error) {
+    throw error;
+  }
+},
 
   placeOrder: async (order, products, total) => {
     try {
@@ -297,15 +299,22 @@ module.exports = {
       throw error;
     }
   },
-  getCartProductList: async (userId) =>
-    new Promise(async (resolve) => {
+  getCartProductList: async (userId) => {
+    try {
       const cart = await db.get().collection(collection.CART_COLLECTION).findOne({
         user: ObjectId(userId),
       });
-      resolve(cart.products);
-    }).catch((error) => {
+
+      if (cart && cart.products) {
+        return cart.products;
+      } else {
+        return []; // Return an empty array if the cart or products are null
+      }
+    } catch (error) {
       console.error('An error occurred:', error);
-    }),
+      throw error; // Rethrow the error to be handled by the caller
+    }
+  },
 
   findCartQuantity: async (userId, productId) => {
     try {

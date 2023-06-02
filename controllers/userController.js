@@ -208,7 +208,6 @@ module.exports = {
   
     postPlaceOrders: async (req, res) => {
       try {
-        console.log(req.session.user," user");
         const user = req.session.user._id;
         const products = await cartHelpers.getCartProductList(user);
         let totalPrice = await cartHelpers.getTotalAmount(user);
@@ -376,7 +375,7 @@ module.exports = {
   postAddAddrress: async (req, res) => {
     try {
       await userHelpers.addAddress(req.body, req.session.user._id);
-      res.redirect('/myProfile');
+      res.redirect('/my-profile');
     } catch (error) {
       res.render('user/404', {
         user: true
@@ -503,6 +502,7 @@ module.exports = {
 
   postCouponApply: async (req, res) => {
     try {
+      console.log(req.body," req.body,");
       const id = req.session.user._id;
       const coupon = req.body.coupon;
       const totalAmount = await cartHelpers.getTotalAmount(req.session.user._id);

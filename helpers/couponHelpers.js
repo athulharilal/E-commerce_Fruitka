@@ -36,7 +36,7 @@ module.exports = {
           expiry: expiry,
           startDateIso: startDateIso,
           endDateIso: endDateIso,
-          Available: true,
+          isAvailable: true,
           users: [],
         };
 
