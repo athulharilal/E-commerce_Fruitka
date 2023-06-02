@@ -19,7 +19,7 @@ module.exports = {
     try {
       
       await categoryHelpers.addCategory(req.body);
-      res.redirect('/admin/viewCategory');
+      res.redirect('/admin/view-category');
     } catch (error) {
       req.session.catAddErr = "Category Already Exists";
       res.redirect('/admin/addCategories');
