@@ -32,6 +32,7 @@ module.exports={
             let proObj = {
                 item:ObjectId(proId)
             }
+            console.log(" pai call");
             return new Promise(async(resolve, reject) => {
                 let userWishlist = await db.get().collection(collection.WISHLIST_COLLECTION).findOne({user:ObjectId(userId)})
                 if (userWishlist) {
@@ -110,11 +111,13 @@ module.exports={
     },
     removeWishList:async(proId,userID)=>{
         return new Promise(async(resolve, reject) => {
-          await  db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:ObjectID(userID),'products.item':ObjectID(proId)},
-          {
+            console.log(proId," proId",userID," vuserID");
+            await  db.get().collection(collection.WISHLIST_COLLECTION).updateOne({user:ObjectID(userID),'products.item':ObjectID(proId)},
+            {
             $pull:{products:{item:ObjectId(proId)}}
-          }).then((reponse)=>{
-            resolve()
+        }).then((reponse)=>{
+              console.log(" inside remove ");
+            resolve(reponse)
           })
         }).catch((error)=>{
             

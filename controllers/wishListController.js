@@ -1,12 +1,16 @@
+const { response } = require('../app');
 const whishlistHelpers = require('../helpers/whishlistHelpers');
 
 module.exports = {
   getAddToWishlist: (req, res) => {
     const proId = req.params.id;
     const userId = req.session.user._id;
+    console.log(userId," userid");
+    console.log(proId," proId");
 
     whishlistHelpers.addToWishlist(userId, proId)
       .then(() => {
+        console.log(response," respone");
         res.json({
           status: true
         });
